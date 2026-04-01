@@ -1,0 +1,246 @@
+"use client";
+
+import type { SVGProps } from "react";
+
+const sizeDefault = 24;
+const Icon = ({
+  children,
+  size = sizeDefault,
+  className,
+  ...props
+}: SVGProps<SVGSVGElement> & { children: React.ReactNode; size?: number }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    {...props}
+  >
+    {children}
+  </svg>
+);
+
+export const Menu = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <line x1="4" x2="20" y1="12" y2="12" />
+    <line x1="4" x2="20" y1="6" y2="6" />
+    <line x1="4" x2="20" y1="18" y2="18" />
+  </Icon>
+);
+export const X = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M18 6 6 18" />
+    <path d="m6 6 12 12" />
+  </Icon>
+);
+export const Heart = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+  </Icon>
+);
+export const Gamepad2 = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <line x1="6" x2="10" y1="12" y2="12" />
+    <line x1="8" x2="8" y1="10" y2="14" />
+    <line x1="15" x2="15.01" y1="13" y2="13" />
+    <line x1="18" x2="18.01" y1="11" y2="11" />
+    <path d="M10.5 7.375a2.5 2.5 0 0 1-.5-4.375h3a2.5 2.5 0 0 1-.5 4.375" />
+    <path d="M12 3v5" />
+    <path d="M4.5 8v6a2.5 2.5 0 0 0 5 0v-4" />
+    <path d="M14.5 8v6a2.5 2.5 0 0 0 5 0v-4" />
+    <path d="M19.5 8a2.5 2.5 0 0 0-5 0v6a2.5 2.5 0 0 0 5 0V8Z" />
+    <path d="M4.5 8a2.5 2.5 0 0 1 5 0v6a2.5 2.5 0 0 1-5 0V8Z" />
+  </Icon>
+);
+export const GraduationCap = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+    <path d="M6 12v5c3 3 9 3 12 0v-5" />
+  </Icon>
+);
+export const Award = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <circle cx="12" cy="8" r="6" />
+    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
+  </Icon>
+);
+export const Smartphone = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+    <path d="M12 18h.01" />
+  </Icon>
+);
+export const BookOpen = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+  </Icon>
+);
+export const Puzzle = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M19.439 7.85c-.049.322.059.648.289.878l1.568 1.568c.47.47.706 1.087.706 1.704s-.235 1.233-.706 1.704l-1.611 1.611a.98.98 0 0 1-.837.276c-.47-.07-.802-.48-.968-.925a2.501 2.501 0 1 0-3.214 3.214c.446.166.855.497.925.968a.979.979 0 0 1-.276.837l-1.61 1.61a2.404 2.404 0 0 1-1.705.707 2.402 2.402 0 0 1-1.704-.706l-1.568-1.568a1.026 1.026 0 0 0-.877-.29c-.493.074-.84.504-1.017.968a2.5 2.5 0 1 1-3.237-3.237c.464-.176.894-.524.967-1.017a1.026 1.026 0 0 0-.289-.877l-1.568-1.568A2.404 2.404 0 0 1 1.998 12c0-.617.236-1.234.706-1.704L4.315 8.685a.98.98 0 0 1 .837-.276c.47.07.802.48.968.925a2.501 2.501 0 1 0 3.214-3.214c-.446-.166-.855-.497-.925-.968a.979.979 0 0 1 .276-.837l1.61-1.61a2.404 2.404 0 0 1 3.409 0l1.568 1.568c.23.23.556.338.877.29.493-.074.84-.504 1.017-.968a2.5 2.5 0 1 1 3.237 3.237c-.464.176-.894.524-.967 1.017Z" />
+  </Icon>
+);
+export const ChefHat = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M6 13.87V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v9.87" />
+    <path d="M6 13.87c-2.39 1.14-4 3.63-4 5.63 0 2.21 2.69 4 6 4s6-1.79 6-4c0-2-1.61-4.49-4-5.63" />
+    <path d="M6 13.87V9.87" />
+    <path d="M18 9.87V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v5.87" />
+    <path d="M10 13.87V9.87" />
+    <path d="M14 13.87V9.87" />
+  </Icon>
+);
+export const Activity = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+  </Icon>
+);
+export const Brain = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
+    <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
+    <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
+    <path d="M17.599 6.5a3 3 0 0 0 .399-1.375" />
+    <path d="M6.003 5.125A3 3 0 0 0 6.401 6.5" />
+    <path d="M3.477 10.896a4 4 0 0 1 .585-.396" />
+    <path d="M19.938 10.5a4 4 0 0 1 .585.396" />
+    <path d="M6 18a4 4 0 0 1-1.967-.516" />
+    <path d="M18 18a4 4 0 0 0 1.967-.516" />
+  </Icon>
+);
+export const Building2 = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" />
+    <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" />
+    <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" />
+    <path d="M10 6h4" />
+    <path d="M10 10h4" />
+    <path d="M10 14h4" />
+    <path d="M10 18h4" />
+  </Icon>
+);
+export const BarChart3 = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M3 3v18h18" />
+    <path d="M18 17V9" />
+    <path d="M13 17V5" />
+    <path d="M8 17v-3" />
+  </Icon>
+);
+export const Trophy = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+    <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+    <path d="M4 22h16" />
+    <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
+    <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
+    <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
+  </Icon>
+);
+export const University = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="m2 20 10-5 10 5" />
+    <path d="M2 12l10 5 10-5" />
+    <path d="M2 8l10 5 10-5" />
+    <path d="M12 3v17" />
+  </Icon>
+);
+export const Hospital = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M12 6v4" />
+    <path d="M14 14h-4" />
+    <path d="M14 18h-4" />
+    <path d="M14 8h-4" />
+    <path d="M18 22H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16Z" />
+    <path d="M18 22v-4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4" />
+    <path d="M18 2v4" />
+    <path d="M6 2v4" />
+  </Icon>
+);
+export const FlaskConical = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M10 2v7.31" />
+    <path d="M14 9.3V1.99" />
+    <path d="M8.5 2h7" />
+    <path d="M14 9.3a6.5 6.5 0 1 1-4 0" />
+    <path d="M5.52 16h12.96" />
+  </Icon>
+);
+export const Handshake = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="m11 17 2 2a1 1 0 1 0 3-3" />
+    <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-2.5-2.5" />
+    <path d="m19 13-2.5-2.5a1 1 0 0 0-3 3l2.5 2.5" />
+    <path d="m4 12 4-4" />
+    <path d="m8 8 2.5-2.5" />
+    <path d="m11 11 2.5-2.5" />
+    <path d="m16 16 4-4" />
+    <path d="m20 12-4 4" />
+    <path d="m3 21 4-4" />
+    <path d="m7 17 4 4" />
+    <path d="m17 17 4 4" />
+    <path d="m21 21-4-4" />
+  </Icon>
+);
+export const Instagram = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+  </Icon>
+);
+export const Globe = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+  </Icon>
+);
+export const Mail = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <rect width="20" height="16" x="2" y="4" rx="2" />
+    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+  </Icon>
+);
+
+export const ChevronLeft = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="m15 18-6-6 6-6" />
+  </Icon>
+);
+export const ChevronRight = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="m9 18 6-6-6-6" />
+  </Icon>
+);
+/** Para react-day-picker v9: recebe orientation e renderiza o chevron correspondente */
+export function Chevron({
+  orientation = "left",
+  size = 24,
+  className,
+  disabled,
+}: {
+  orientation?: "up" | "down" | "left" | "right";
+  size?: number;
+  className?: string;
+  disabled?: boolean;
+}) {
+  const style = disabled ? { opacity: 0.5 } : undefined;
+  if (orientation === "left")
+    return <ChevronLeft size={size} className={className} style={style} />;
+  if (orientation === "right")
+    return <ChevronRight size={size} className={className} style={style} />;
+  const rot = orientation === "up" ? -90 : orientation === "down" ? 90 : 0;
+  return (
+    <Icon size={size} className={className} style={{ transform: `rotate(${rot}deg)`, ...style }}>
+      <path d="m9 18 6-6-6-6" />
+    </Icon>
+  );
+}
