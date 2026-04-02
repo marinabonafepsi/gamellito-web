@@ -11,6 +11,7 @@ const navLinks = [
   { label: "Jogos", href: "/#jogos" },
   { label: "Experimente", href: "/jogos/experimente" },
   { label: "Soluções", href: "/#solucoes" },
+  { label: "Para Famílias", href: "/para-familias" },
   { label: "Prêmios", href: "/#premios" },
   { label: "Parceiros", href: "/#parceiros" },
   { label: "Contato", href: "/#contato" },
