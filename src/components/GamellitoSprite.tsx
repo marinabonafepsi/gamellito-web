@@ -2,12 +2,12 @@
 import { useState, useEffect } from "react";
 
 const FRAMES = [
-  "/assets/gamellito-empurrando-1.png",
-  "/assets/gamellito-empurrando-2.png",
-  "/assets/gamellito-empurrando-3.png",
-  "/assets/gamellito-empurrando-4.png",
-  "/assets/gamellito-empurrando-5.png",
-  "/assets/gamellito-empurrando-6.png",
+  "/assets/1.png",
+  "/assets/2.png",
+  "/assets/3.png",
+  "/assets/4.png",
+  "/assets/5.png",
+  "/assets/6.png",
 ];
 
 export function GamellitoSprite({ className = "" }: { className?: string }) {
