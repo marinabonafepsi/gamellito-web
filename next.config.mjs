@@ -1,20 +1,13 @@
 /** @type {import('next').NextConfig} */
-const gameApiBase = (
-  process.env.GAMELLITO_APP_API_URL || "http://localhost:3000/api"
-).replace(/\/$/, "");
+const isGitHubPages = process.env.GITHUB_ACTIONS === "true";
 
 const nextConfig = {
+  output: "export",
   reactStrictMode: true,
   transpilePackages: ["lucide-react"],
-  async rewrites() {
-    return [
-      {
-        source: "/api/jogo/:path*",
-        destination: `${gameApiBase}/:path*`,
-      },
-    ];
-  },
+  images: { unoptimized: true },
+  basePath: isGitHubPages ? "/gamellito-web" : "",
+  assetPrefix: isGitHubPages ? "/gamellito-web/" : "",
 };
 
 export default nextConfig;
-
