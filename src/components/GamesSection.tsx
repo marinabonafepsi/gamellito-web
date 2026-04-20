@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Smartphone, BookOpen, Puzzle, ChefHat } from "@/components/icons";
-import { AssetImage, siteAssets } from "@/components/SiteAssets";
+import { siteAssets } from "@/components/SiteAssets";
+import { GamellitoSprite } from "@/components/GamellitoSprite";
 
 const games = [
   {
@@ -91,11 +92,7 @@ const GamesSection = () => {
               alt="Controle de videogame - jogos Gamellito"
               className="w-32 md:w-40 h-auto opacity-90"
             />
-            <AssetImage
-              asset="gamellitoContente"
-              alt="Gamellito — mascote do jogo Gamellito Adventures"
-              className="w-64 md:w-80 h-auto drop-shadow-2xl animate-float"
-            />
+            <GamellitoSprite className="drop-shadow-2xl" />
           </motion.div>
 
           {/* Game cards */}
