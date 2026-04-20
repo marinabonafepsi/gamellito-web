@@ -42,6 +42,14 @@ export const siteAssets = {
   geladeira: "/assets/geladeira.svg",
   /** Soluções – monitoramento glicemia, família, cuidado em casa */
   maeGamellitoGlicemia: "/assets/mae-gamellito-glicemia.svg",
+  /** DM1 vs DM2 / "fique atento" – olho desconfiado */
+  olhoDesconfiado: "/assets/olho-desconfiado.svg",
+  /** Dica / pensamento – balão de fala */
+  balao: "/assets/balao-pensamento.svg",
+  /** Tratamento DM1 – seringa de insulina */
+  seringa: "/assets/app-ui/Seringa.png",
+  /** Tratamento DM1 – glicosímetro */
+  glicosimetro: "/assets/app-ui/Glicosimetro.png",
 } as const;
 
 export type SiteAssetKey = keyof typeof siteAssets;
