@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getGameBySlug } from "@/lib/games";
+import { games, getGameBySlug } from "@/lib/games";
+
+export function generateStaticParams() {
+  return games.map((game) => ({ slug: game.slug }));
+}
 
 type Props = {
   params: Promise<{ slug: string }>;
