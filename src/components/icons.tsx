@@ -310,6 +310,21 @@ export const ChevronRight = (p: SVGProps<SVGSVGElement> & { size?: number }) => 
     <path d="m9 18 6-6-6-6" />
   </Icon>
 );
+export const ShieldCheck = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="m9 12 2 2 4-4" />
+  </Icon>
+);
+
+export const Stethoscope = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3" />
+    <path d="M8 15v1a6 6 0 0 0 6 6v0a6 6 0 0 0 6-6v-4" />
+    <circle cx="20" cy="10" r="2" />
+  </Icon>
+);
+
 /** Para react-day-picker v9: recebe orientation e renderiza o chevron correspondente */
 export function Chevron({
   orientation = "left",
