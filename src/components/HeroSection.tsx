@@ -42,36 +42,38 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
           className="flex-1 text-center lg:text-left"
         >
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.5 }}
+            className="text-gamellito-orange font-body font-semibold text-sm uppercase tracking-wider mb-3"
+          >
+            Educação em saúde lúdica
+          </motion.p>
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
-            className="text-5xl md:text-7xl font-display font-bold text-primary-foreground mb-4"
+            className="text-4xl md:text-6xl font-display font-bold text-primary-foreground mb-4 leading-tight"
           >
-            Gamellito <span className="text-primary text-2xl md:text-4xl">Ltda.</span>
+            Cuidar do diabetes pode{" "}
+            <span className="text-primary">começar com um sorriso.</span>
           </motion.h1>
 
-          {/* Caixa do texto: fundo roxo claro, mesmos assets do hero para visibilidade */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             className="relative max-w-xl mb-8 rounded-3xl overflow-hidden"
           >
-            {/* Mesmo fundo do hero em baixa opacidade */}
-            <div
-              className="absolute inset-0 bg-cover bg-center opacity-[0.12]"
-              style={{ backgroundImage: "url('/hero-space-bg.jpg')" }}
-              aria-hidden
-            />
             <div className="absolute inset-0 bg-gamellito-hospital-purple/90" aria-hidden />
             <motion.p
               className="relative z-10 px-5 py-4 text-lg md:text-xl text-primary-foreground font-body"
               style={{ opacity: 1 }}
             >
-              Jogos educativos e soluções criativas para a saúde pública.
-              Transformamos o cuidado com o Diabetes Tipo 1 em uma aventura
-              lúdica e acolhedora.
+              Educação em saúde lúdica que transforma o cuidado de crianças,
+              adolescentes e famílias que convivem com o diabetes.
             </motion.p>
           </motion.div>
 
@@ -82,16 +84,16 @@ const HeroSection = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
           >
             <a
-              href="#jogos"
+              href="#solucoes"
               className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-primary text-primary-foreground font-display font-bold text-lg hover:opacity-90 transition-opacity animate-pulse-glow"
             >
-              🎮 Conheça os Jogos
+              🎮 Conheça os programas
             </a>
             <a
-              href="#solucoes"
+              href="#parceria"
               className="inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-primary-foreground bg-primary-foreground/20 backdrop-blur-md text-primary-foreground font-display font-semibold text-lg hover:bg-primary-foreground/30 transition-colors shadow-[0_0_0_1px_rgba(255,255,255,0.2)]"
             >
-              🏥 Soluções em Saúde
+              🤝 Seja um parceiro
             </a>
           </motion.div>
         </motion.div>
