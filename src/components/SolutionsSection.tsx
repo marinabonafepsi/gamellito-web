@@ -2,45 +2,133 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChefHat, Gamepad2, GraduationCap, BookOpen, X } from "@/components/icons";
+import {
+  ChefHat, Gamepad2, GraduationCap, BookOpen, X,
+  Users, School, Stethoscope, ShieldCheck,
+} from "@/components/icons";
 import { AssetImage, type SiteAssetKey } from "@/components/SiteAssets";
 import { track } from "@/lib/analytics";
 
+/* ══════════════════════════════════════════
+   O QUE FAZEMOS
+══════════════════════════════════════════ */
 const solutions: Array<{
   icon: typeof ChefHat;
   title: string;
   description: string;
   asset: SiteAssetKey;
-  cta?: { label: string; event: string };
+  cta?: { label: string };
 }> = [
   {
     icon: ChefHat,
     title: "Oficinas culinárias e alimentação",
     description:
-      "Oficinas que promovem aprendizado prático sobre alimentação saudável e contagem de carboidratos, com participação ativa das crianças na elaboração de receitas e reprodução em casa. Contribuem para a melhoria de parâmetros clínicos e maior conscientização sobre os cuidados com a alimentação.",
+      "Oficinas que promovem aprendizado prático sobre alimentação saudável e contagem de carboidratos, com participação ativa das crianças. Contribuem para melhoria de parâmetros clínicos e maior conscientização sobre os cuidados com a alimentação.",
     asset: "geladeira",
   },
   {
     icon: Gamepad2,
     title: "Jogos educativos e método Gamellito",
     description:
-      "Atividades com o método Gamellito: recursos lúdicos e interativos para facilitar a compreensão do manejo do DM1. Jogos educativos, dinâmicas em grupo e práticas recreativas que estimulam a autonomia e a adesão ao tratamento.",
+      "Atividades com o método Gamellito: recursos lúdicos e interativos para facilitar a compreensão do manejo do DM1. Jogos, dinâmicas em grupo e práticas recreativas que estimulam a autonomia e a adesão ao tratamento.",
     asset: "pancreasPreguicoso",
-    cta: { label: "🎮 Quero conhecer o jogo", event: "game_interest" },
+    cta: { label: "🎮 Quero conhecer o jogo" },
   },
   {
     icon: GraduationCap,
     title: "Rodas de conversa e equipe multidisciplinar",
     description:
-      "Rodas de conversa e intervenções que abordam adesão ao tratamento, reconhecimento de sinais de descompensação glicêmica e importância do monitoramento glicêmico. Equipe de nutrição, psicologia, artes cênicas, design gráfico, educação física, serviço social, odontologia, enfermagem e oftalmologia.",
+      "Intervenções que abordam adesão ao tratamento e reconhecimento de sinais de descompensação glicêmica. Equipe de nutrição, psicologia, artes cênicas, design, educação física, serviço social, odontologia, enfermagem e oftalmologia.",
     asset: "medicoMaeGamellito",
   },
   {
     icon: BookOpen,
     title: "Materiais educativos e alcance digital",
     description:
-      "Materiais educativos digitais e impressos: jogos, histórias em quadrinhos, vídeos e telenovela educativa, em linguagem acessível. Disponibilizados em plataformas digitais, redes sociais e canais institucionais da UEL para ampliar o acesso e reforçar os conteúdos das oficinas presenciais.",
+      "Jogos, histórias em quadrinhos, vídeos e telenovela educativa em linguagem acessível. Disponibilizados em plataformas digitais, redes sociais e canais institucionais da UEL para ampliar o acesso e reforçar os conteúdos.",
     asset: "maeGamellitoGlicemia",
+  },
+];
+
+/* ══════════════════════════════════════════
+   SETORES DE ATUAÇÃO
+══════════════════════════════════════════ */
+const setores = [
+  {
+    icon: Users,
+    emoji: "👨‍👩‍👧",
+    titulo: "Famílias e Pacientes",
+    fase: "Fase 1 — já disponível",
+    faseColor: "bg-gamellito-health-green",
+    descricao:
+      "Curso de acolhimento para diagnóstico recente de DM1, livros ilustrados, app e oficinas online de nutrição. Linguagem acolhedora, sem jargão — para que toda família navegue o diagnóstico com segurança.",
+    itens: [
+      "Curso Primeiros Passos — 6 aulas de acolhimento",
+      "Livro \"As Aventuras de Gamellito\"",
+      "Gadgets personalizados para o dia a dia",
+      "Comunidade de apoio para pais",
+    ],
+    cta: "Quero para minha família",
+    href: "/para-familias",
+    cor: "border-gamellito-health-green/40 hover:border-gamellito-health-green",
+    bg: "from-gamellito-health-green/10 to-transparent",
+  },
+  {
+    icon: School,
+    emoji: "🏫",
+    titulo: "Escolas Privadas",
+    fase: "Fase 1 — sem licitação",
+    faseColor: "bg-gamellito-blue",
+    descricao:
+      "Licença anual do método Gamellito + kits educativos + formação de professores. A escola torna-se um espaço de inclusão real para crianças com DM1, com protocolos de emergência e materiais lúdicos em sala.",
+    itens: [
+      "Licença anual do método Gamellito",
+      "Formação de professores e equipe",
+      "Kit de materiais impressos e digitais",
+      "Protocolo de emergência em sala de aula",
+    ],
+    cta: "Quero para minha escola",
+    href: "/para-familias#educadores",
+    cor: "border-gamellito-blue/40 hover:border-gamellito-blue",
+    bg: "from-gamellito-blue/10 to-transparent",
+  },
+  {
+    icon: Stethoscope,
+    emoji: "🏥",
+    titulo: "Clínicas e Operadoras de Saúde",
+    fase: "Fase 2 — B2B",
+    faseColor: "bg-gamellito-hospital-purple",
+    descricao:
+      "Programa completo de adesão ao tratamento para ambulatórios de pediatria e endocrinologia. Licença do sistema, treinamento de equipe e relatórios de impacto clínico (HbA1c, idas à emergência).",
+    itens: [
+      "Programa de adesão ao tratamento",
+      "Licença do sistema Gamellito",
+      "Treinamento da equipe multidisciplinar",
+      "Relatório de impacto clínico (HbA1c)",
+    ],
+    cta: "Solicitar demonstração",
+    href: "/para-familias#saude",
+    cor: "border-gamellito-hospital-purple/40 hover:border-gamellito-hospital-purple",
+    bg: "from-gamellito-hospital-purple/10 to-transparent",
+  },
+  {
+    icon: ShieldCheck,
+    emoji: "🏛️",
+    titulo: "Prefeituras e SUS",
+    fase: "Fase 3 — impacto máximo",
+    faseColor: "bg-gamellito-orange",
+    descricao:
+      "Programa municipal completo para redes escolares e UBS. Melhora o índice de hemoglobina glicada da população, reduz internações evitáveis e gera dados de impacto para secretarias de saúde apresentarem.",
+    itens: [
+      "Programa municipal para rede escolar e UBS",
+      "Capacitação de agentes de saúde e educadores",
+      "Dados de impacto para prestação de contas",
+      "Alinhamento ao ODS 3.4.1 da Agenda 2030 ONU",
+    ],
+    cta: "Quero para meu município",
+    href: "/parcerias-uel",
+    cor: "border-gamellito-orange/40 hover:border-gamellito-orange",
+    bg: "from-gamellito-orange/10 to-transparent",
   },
 ];
 
@@ -51,7 +139,9 @@ const resultados = [
   "Base para políticas públicas e alinhamento ao ODS 3.4.1 (Agenda 2030 ONU)",
 ];
 
-/* ── Modal jogo fake door ── */
+/* ══════════════════════════════════════════
+   MODAL JOGO FAKE DOOR
+══════════════════════════════════════════ */
 function GameInterestModal({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
@@ -95,6 +185,9 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+/* ══════════════════════════════════════════
+   COMPONENT
+══════════════════════════════════════════ */
 const SolutionsSection = () => {
   const [showGameModal, setShowGameModal] = useState(false);
 
@@ -109,6 +202,7 @@ const SolutionsSection = () => {
         {showGameModal && <GameInterestModal onClose={() => setShowGameModal(false)} />}
       </AnimatePresence>
 
+      {/* ── O que fazemos ── */}
       <section
         id="solucoes"
         data-track-section="solucoes"
@@ -157,12 +251,8 @@ const SolutionsSection = () => {
                   </div>
                   <AssetImage asset={sol.asset} alt="" className="w-20 h-auto flex-shrink-0 opacity-80" width={80} height={50} />
                 </div>
-                <h3 className="font-display font-bold text-xl text-foreground mb-3">
-                  {sol.title}
-                </h3>
-                <p className="text-muted-foreground font-body leading-relaxed">
-                  {sol.description}
-                </p>
+                <h3 className="font-display font-bold text-xl text-foreground mb-3">{sol.title}</h3>
+                <p className="text-muted-foreground font-body leading-relaxed">{sol.description}</p>
                 {sol.cta && (
                   <button
                     type="button"
@@ -176,6 +266,7 @@ const SolutionsSection = () => {
             ))}
           </div>
 
+          {/* resultados + parceria */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -196,12 +287,122 @@ const SolutionsSection = () => {
             <div className="bg-muted rounded-2xl p-8 border border-border">
               <h4 className="font-display font-bold text-xl text-foreground mb-4">Parceria UEL e AEHU</h4>
               <p className="text-muted-foreground font-body leading-relaxed mb-4">
-                O projeto é desenvolvido em parceria com a Universidade Estadual de Londrina (UEL) e o Ambulatório de Especialidades do Hospital Universitário (AEHU/UEL). São oferecidas 40 vagas mensais para crianças e adolescentes com DM1 e seus pais ou responsáveis.
+                O projeto é desenvolvido em parceria com a Universidade Estadual de Londrina (UEL) e o Ambulatório de
+                Especialidades do Hospital Universitário (AEHU/UEL). São oferecidas 40 vagas mensais para crianças e
+                adolescentes com DM1 e seus responsáveis.
               </p>
               <p className="text-sm text-muted-foreground font-body">
                 A iniciativa se alinha ao ODS 3.4.1 da Agenda 2030 da ONU.
               </p>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════
+          SETORES DE ATUAÇÃO
+      ══════════════════════════════════════════ */}
+      <section
+        id="setores"
+        data-track-section="setores"
+        className="py-24 bg-gamellito-space relative overflow-hidden"
+      >
+        {[...Array(10)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 rounded-full bg-gamellito-yellow animate-twinkle opacity-50"
+            style={{
+              top: `${((i * 19 + 37) % 95) + 2}%`,
+              left: `${((i * 31 + 53) % 95) + 2}%`,
+              animationDelay: `${((i * 67) % 280) / 100}s`,
+            }}
+          />
+        ))}
+
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-display font-bold text-primary mb-4">
+              🌎 Para quem atuamos
+            </h2>
+            <p className="text-lg text-primary-foreground/85 max-w-3xl mx-auto font-body">
+              Do diagnóstico na família ao programa municipal de saúde —
+              o ecossistema Gamellito atende todos os setores que precisam
+              levar educação em DM1 à vida real.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {setores.map((setor, i) => (
+              <motion.div
+                key={setor.titulo}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={`bg-gradient-to-br ${setor.bg} bg-primary-foreground/5 backdrop-blur-sm rounded-2xl p-7 border-2 ${setor.cor} transition-all`}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <span className={`${setor.faseColor} text-white font-display text-xs px-3 py-1 rounded-full`}>
+                      {setor.fase}
+                    </span>
+                    <div className="flex items-center gap-2 mt-3">
+                      <span className="text-2xl">{setor.emoji}</span>
+                      <h3 className="font-display font-bold text-xl text-primary-foreground">
+                        {setor.titulo}
+                      </h3>
+                    </div>
+                  </div>
+                  <setor.icon className="w-8 h-8 text-primary opacity-70 flex-shrink-0 mt-1" />
+                </div>
+
+                <p className="font-body text-primary-foreground/80 text-sm leading-relaxed mb-4">
+                  {setor.descricao}
+                </p>
+
+                <ul className="space-y-1.5 mb-5">
+                  {setor.itens.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-primary-foreground/70 font-body text-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <a
+                  href={setor.href}
+                  onClick={() => track("nav_click", window.location.pathname, { label: setor.cta, href: setor.href })}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors text-sm"
+                >
+                  {setor.cta} →
+                </a>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* números de impacto */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-14 grid grid-cols-2 md:grid-cols-4 gap-4"
+          >
+            {[
+              { numero: "2.000+", label: "crianças impactadas" },
+              { numero: "77%", label: "menos idas à emergência" },
+              { numero: "5", label: "prêmios internacionais" },
+              { numero: "12+", label: "anos de pesquisa" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center bg-primary-foreground/5 rounded-2xl p-5 border border-primary-foreground/10">
+                <p className="font-display text-3xl font-bold text-primary mb-1">{stat.numero}</p>
+                <p className="font-body text-primary-foreground/70 text-sm">{stat.label}</p>
+              </div>
+            ))}
           </motion.div>
         </div>
       </section>
