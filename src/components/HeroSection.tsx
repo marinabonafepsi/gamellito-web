@@ -57,8 +57,7 @@ const HeroSection = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-4xl md:text-6xl font-display font-bold text-primary-foreground mb-4 leading-tight"
           >
-            Cuidar do diabetes pode{" "}
-            <span className="text-primary">começar com um sorriso.</span>
+            Gamellito Ltda
           </motion.h1>
 
           <motion.div
