@@ -24,11 +24,24 @@ export default function DiarioPage() {
           <Link href="/diario/lancar" className="ds-btn ds-btn--lg w-full justify-center">
             + Registrar glicemia
           </Link>
+          <Link href="/diario/historico" className="ds-btn ds-btn--ghost w-full justify-center">
+            Ver histórico
+          </Link>
           <Link href="/diario/grafico" className="ds-btn ds-btn--ghost w-full justify-center">
             Ver gráfico
           </Link>
           <Link href="/diario/exportar" className="ds-btn ds-btn--ghost w-full justify-center">
             Exportar PDF
+          </Link>
+        </div>
+
+        <div className="mt-6">
+          <Link
+            href="/diario/conta"
+            className="text-sm font-body hover:underline"
+            style={{ color: "rgba(43,34,51,0.55)" }}
+          >
+            Minha conta
           </Link>
         </div>
       </div>
