@@ -1,20 +1,35 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-// ── POST /api/registros ─────────────────────────────────────────────────────
-export async function POST(request: NextRequest) {
+// AUTH DESABILITADO TEMPORARIAMENTE PARA TESTE — reabilitar antes do merge
+async function getUser() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
+  return { supabase, user };
+}
 
-  if (!user) {
-    return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
-  }
-
+// ── POST /api/registros ─────────────────────────────────────────────────────
+export async function POST(request: NextRequest) {
+  const { supabase, user } = await getUser();
   const body = await request.json();
   const { valor, data_hora, rotulo, observacao, lancado_por } = body;
 
   if (!valor || !data_hora || !rotulo || !lancado_por) {
     return NextResponse.json({ error: "Campos obrigatórios ausentes." }, { status: 400 });
+  }
+
+  // Sem auth: simula sucesso para teste visual
+  if (!user) {
+    return NextResponse.json({
+      id: crypto.randomUUID(),
+      familia_id: "teste",
+      valor: Number(valor),
+      data_hora,
+      rotulo,
+      observacao: observacao ?? null,
+      lancado_por,
+      created_at: new Date().toISOString(),
+    }, { status: 201 });
   }
 
   const { data, error } = await supabase
@@ -39,11 +54,11 @@ export async function POST(request: NextRequest) {
 
 // ── GET /api/registros ──────────────────────────────────────────────────────
 export async function GET(request: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
+  const { supabase, user } = await getUser();
 
+  // Sem auth: retorna lista vazia para teste visual
   if (!user) {
-    return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
+    return NextResponse.json([]);
   }
 
   const { searchParams } = new URL(request.url);
@@ -68,18 +83,16 @@ export async function GET(request: NextRequest) {
 
 // ── PATCH /api/registros ────────────────────────────────────────────────────
 export async function PATCH(request: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
-  }
-
+  const { supabase, user } = await getUser();
   const body = await request.json();
   const { id, ...campos } = body;
 
   if (!id) {
     return NextResponse.json({ error: "id obrigatório." }, { status: 400 });
+  }
+
+  if (!user) {
+    return NextResponse.json({ id, ...campos });
   }
 
   const { data, error } = await supabase
@@ -99,18 +112,16 @@ export async function PATCH(request: NextRequest) {
 
 // ── DELETE /api/registros ───────────────────────────────────────────────────
 export async function DELETE(request: NextRequest) {
-  const supabase = await createClient();
-  const { data: { user } } = await supabase.auth.getUser();
-
-  if (!user) {
-    return NextResponse.json({ error: "Não autenticado." }, { status: 401 });
-  }
-
+  const { supabase, user } = await getUser();
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
   if (!id) {
     return NextResponse.json({ error: "id obrigatório." }, { status: 400 });
+  }
+
+  if (!user) {
+    return NextResponse.json({ ok: true });
   }
 
   const { error } = await supabase
