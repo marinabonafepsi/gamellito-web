@@ -2,7 +2,6 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import GamesSection from "@/components/GamesSection";
-import AtividadesSection from "@/components/AtividadesSection";
 import SolutionsSection from "@/components/SolutionsSection";
 import AwardsSection from "@/components/AwardsSection";
 import PartnersSection from "@/components/PartnersSection";
@@ -19,9 +18,7 @@ export default function HomePage() {
       <AboutSection />
       {/* 3. Jogos — ecossistema lúdico */}
       <GamesSection />
-      {/* 4. Como funciona — 3 passos do método */}
-      <AtividadesSection />
-      {/* 5. O que fazemos (3 frentes) + Para quem é + Credibilidade */}
+      {/* 4. O que fazemos (3 frentes) + Para quem é + Credibilidade */}
       <SolutionsSection />
       {/* 5. Prêmios */}
       <AwardsSection />
