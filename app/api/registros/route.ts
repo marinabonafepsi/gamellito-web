@@ -1,21 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient, createAdminClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 // AUTH DESABILITADO TEMPORARIAMENTE PARA TESTE — reabilitar antes do merge
-const TEST_FAMILIA_ID = "00000000-0000-0000-0000-000000000001";
-
-async function getClientAndUser() {
+async function getUser() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (user) return { supabase, familiaId: user.id };
-  const admin = await createAdminClient();
-  return { supabase: admin, familiaId: TEST_FAMILIA_ID };
+  return { supabase, user };
 }
 
 // ── POST /api/registros ─────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
-  const { supabase, familiaId } = await getClientAndUser();
-
+  const { supabase, user } = await getUser();
   const body = await request.json();
   const { valor, data_hora, rotulo, observacao, lancado_por } = body;
 
@@ -23,10 +18,24 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Campos obrigatórios ausentes." }, { status: 400 });
   }
 
+  // Sem auth: simula sucesso para teste visual
+  if (!user) {
+    return NextResponse.json({
+      id: crypto.randomUUID(),
+      familia_id: "teste",
+      valor: Number(valor),
+      data_hora,
+      rotulo,
+      observacao: observacao ?? null,
+      lancado_por,
+      created_at: new Date().toISOString(),
+    }, { status: 201 });
+  }
+
   const { data, error } = await supabase
     .from("registros")
     .insert({
-      familia_id: familiaId,
+      familia_id: user.id,
       valor: Number(valor),
       data_hora,
       rotulo,
@@ -45,7 +54,12 @@ export async function POST(request: NextRequest) {
 
 // ── GET /api/registros ──────────────────────────────────────────────────────
 export async function GET(request: NextRequest) {
-  const { supabase, familiaId } = await getClientAndUser();
+  const { supabase, user } = await getUser();
+
+  // Sem auth: retorna lista vazia para teste visual
+  if (!user) {
+    return NextResponse.json([]);
+  }
 
   const { searchParams } = new URL(request.url);
   const periodo = searchParams.get("periodo") ?? "7";
@@ -56,7 +70,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await supabase
     .from("registros")
     .select("*")
-    .eq("familia_id", familiaId)
+    .eq("familia_id", user.id)
     .gte("data_hora", diasAtras.toISOString())
     .order("data_hora", { ascending: false });
 
@@ -69,8 +83,7 @@ export async function GET(request: NextRequest) {
 
 // ── PATCH /api/registros ────────────────────────────────────────────────────
 export async function PATCH(request: NextRequest) {
-  const { supabase, familiaId } = await getClientAndUser();
-
+  const { supabase, user } = await getUser();
   const body = await request.json();
   const { id, ...campos } = body;
 
@@ -78,11 +91,15 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "id obrigatório." }, { status: 400 });
   }
 
+  if (!user) {
+    return NextResponse.json({ id, ...campos });
+  }
+
   const { data, error } = await supabase
     .from("registros")
     .update(campos)
     .eq("id", id)
-    .eq("familia_id", familiaId)
+    .eq("familia_id", user.id)
     .select()
     .single();
 
@@ -95,8 +112,7 @@ export async function PATCH(request: NextRequest) {
 
 // ── DELETE /api/registros ───────────────────────────────────────────────────
 export async function DELETE(request: NextRequest) {
-  const { supabase, familiaId } = await getClientAndUser();
-
+  const { supabase, user } = await getUser();
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
 
@@ -104,11 +120,15 @@ export async function DELETE(request: NextRequest) {
     return NextResponse.json({ error: "id obrigatório." }, { status: 400 });
   }
 
+  if (!user) {
+    return NextResponse.json({ ok: true });
+  }
+
   const { error } = await supabase
     .from("registros")
     .delete()
     .eq("id", id)
-    .eq("familia_id", familiaId);
+    .eq("familia_id", user.id);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
