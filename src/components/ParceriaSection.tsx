@@ -68,13 +68,13 @@ const ParceriaSection = () => {
               <a
                 href="mailto:gamellitoltda@gmail.com?subject=Quero conversar sobre parceria com o Gamellito"
                 onClick={() => track("nav_click", "/", { label: "parceria_cta", href: "mailto" })}
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
               >
                 💬 Quero conversar
               </a>
               <a
                 href="/parcerias-uel"
-                className="inline-flex items-center gap-2 px-7 py-3.5 border-2 border-primary-foreground/30 text-primary-foreground font-body font-semibold rounded-xl hover:border-primary transition-colors"
+                className="inline-flex items-center gap-2 px-7 py-3.5 border-2 border-primary-foreground/30 text-primary-foreground font-body font-semibold rounded-full hover:border-primary transition-colors"
               >
                 Ver parceria UEL →
               </a>
