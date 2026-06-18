@@ -90,6 +90,14 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
+              <a
+                href="/diario"
+                onClick={() => handleNavClick("Diário", "/diario")}
+                className="font-body text-base font-bold py-3 px-4 rounded-full text-center mt-2"
+                style={{ background: "#FFC400", color: "#2B2233", border: "2px solid #2B2233", boxShadow: "3px 3px 0 #2B2233" }}
+              >
+                Diário
+              </a>
             </div>
           </motion.div>
         )}

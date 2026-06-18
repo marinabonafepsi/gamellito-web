@@ -7,12 +7,14 @@ import { RecompensaSalvar } from "@/components/diario/RecompensaSalvar";
 type Rotulo = "jejum" | "antes" | "depois" | "dormir" | "outro";
 
 const ROTULOS: { id: Rotulo; label: string }[] = [
-  { id: "jejum", label: "Jejum" },
-  { id: "antes", label: "Antes de comer" },
+  { id: "jejum",  label: "Jejum" },
+  { id: "antes",  label: "Antes de comer" },
   { id: "depois", label: "Depois de comer" },
   { id: "dormir", label: "Antes de dormir" },
-  { id: "outro", label: "Outro" },
+  { id: "outro",  label: "Outro" },
 ];
+
+const DOT_COLORS = ["#EE2B2B", "#37B6E6", "#8DC63F", "#F25CA2"];
 
 function hojeLocal(): string {
   const d = new Date();
@@ -23,13 +25,13 @@ function hojeLocal(): string {
 export default function LancarPage() {
   const router = useRouter();
 
-  const [valor, setValor] = useState("");
-  const [dataHora, setDataHora] = useState(hojeLocal());
-  const [rotulo, setRotulo] = useState<Rotulo | null>(null);
+  const [valor,      setValor]      = useState("");
+  const [dataHora,   setDataHora]   = useState(hojeLocal());
+  const [rotulo,     setRotulo]     = useState<Rotulo | null>(null);
   const [observacao, setObservacao] = useState("");
   const [lancadoPor, setLancadoPor] = useState("");
-  const [salvando, setSalvando] = useState(false);
-  const [erro, setErro] = useState<string | null>(null);
+  const [salvando,   setSalvando]   = useState(false);
+  const [erro,       setErro]       = useState<string | null>(null);
   const [recompensa, setRecompensa] = useState(false);
 
   const esconderRecompensa = useCallback(() => {
@@ -75,7 +77,7 @@ export default function LancarPage() {
       return;
     }
 
-    // Microcomemoração — celebra o ato de registrar, nunca o valor
+    // Microcomemoração — celebra o ato de registrar, nunca o valor (REGRA Nº 1)
     setRecompensa(true);
   }
 
@@ -84,22 +86,25 @@ export default function LancarPage() {
       <RecompensaSalvar visivel={recompensa} onFim={esconderRecompensa} />
 
       <div className="max-w-lg mx-auto">
-        <header className="mb-8">
-          <h1 className="text-3xl font-display font-bold text-primary-foreground">
+        <header className="mb-8 relative">
+          {/* Game-dots decorativos */}
+          <div className="ds-dots absolute top-0 right-0" aria-hidden="true">
+            {DOT_COLORS.map((c, i) => (
+              <span key={i} style={{ background: c }} />
+            ))}
+          </div>
+          <h1 className="text-3xl font-display font-bold" style={{ color: "#2B2233" }}>
             Registrar glicemia
           </h1>
-          <p className="text-sm text-primary-foreground/70 font-body mt-1">
+          <p className="text-sm font-body mt-1" style={{ color: "#6E59C9" }}>
             Preencha os campos e toque em Salvar.
           </p>
         </header>
 
-        <div className="flex flex-col gap-6">
+        <div className="ds-card p-6 flex flex-col gap-6">
           {/* Valor — campo grande, teclado numérico no mobile */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="valor"
-              className="text-sm font-body font-medium text-primary-foreground"
-            >
+            <label htmlFor="valor" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Valor da glicemia (mg/dL)
             </label>
             <input
@@ -107,19 +112,16 @@ export default function LancarPage() {
               type="number"
               inputMode="numeric"
               pattern="[0-9]*"
-              placeholder="Ex.: 120"
+              placeholder="120"
               value={valor}
               onChange={(e) => setValor(e.target.value)}
-              className="w-full rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-5 py-5 text-4xl font-display font-bold text-primary-foreground placeholder:text-primary-foreground/30 text-center focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="ds-input-number"
             />
           </div>
 
           {/* Data e hora */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="data_hora"
-              className="text-sm font-body font-medium text-primary-foreground"
-            >
+            <label htmlFor="data_hora" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Data e hora
             </label>
             <input
@@ -127,13 +129,13 @@ export default function LancarPage() {
               type="datetime-local"
               value={dataHora}
               onChange={(e) => setDataHora(e.target.value)}
-              className="w-full rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 font-body text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="ds-input"
             />
           </div>
 
-          {/* Rótulos — botões descritivos apenas, sem interpretação */}
+          {/* Rótulos — descritivos apenas, sem interpretação clínica */}
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-body font-medium text-primary-foreground">
+            <span className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Momento
             </span>
             <div className="flex flex-wrap gap-2">
@@ -142,11 +144,7 @@ export default function LancarPage() {
                   key={id}
                   type="button"
                   onClick={() => setRotulo(id)}
-                  className={`rounded-full px-4 py-2 text-sm font-body font-medium transition-colors
-                    ${rotulo === id
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-primary-foreground/10 text-primary-foreground/80 hover:bg-primary-foreground/20"
-                    }`}
+                  className={`ds-label ${rotulo === id ? "ds-label--active" : ""}`}
                 >
                   {label}
                 </button>
@@ -156,10 +154,7 @@ export default function LancarPage() {
 
           {/* Quem registra */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="lancado_por"
-              className="text-sm font-body font-medium text-primary-foreground"
-            >
+            <label htmlFor="lancado_por" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Registrado por
             </label>
             <input
@@ -168,18 +163,15 @@ export default function LancarPage() {
               placeholder="Ex.: mãe, pai, criança"
               value={lancadoPor}
               onChange={(e) => setLancadoPor(e.target.value)}
-              className="w-full rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 font-body text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="ds-input"
             />
           </div>
 
           {/* Observação opcional */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="observacao"
-              className="text-sm font-body font-medium text-primary-foreground"
-            >
+            <label htmlFor="observacao" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Observação{" "}
-              <span className="text-primary-foreground/50 font-normal">(opcional)</span>
+              <span className="font-normal" style={{ color: "rgba(43,34,51,0.5)" }}>(opcional)</span>
             </label>
             <textarea
               id="observacao"
@@ -187,12 +179,12 @@ export default function LancarPage() {
               placeholder="Ex.: após atividade física, mal-estar…"
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
-              className="w-full rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 font-body text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+              className="ds-textarea"
             />
           </div>
 
           {erro && (
-            <p className="text-sm text-destructive font-body bg-destructive/10 rounded-2xl px-4 py-3">
+            <p className="text-sm font-body rounded-ds-md px-4 py-3" style={{ background: "#FEE2E2", color: "#991B1B", border: "2px solid #991B1B", borderRadius: 16 }}>
               {erro}
             </p>
           )}
@@ -200,14 +192,15 @@ export default function LancarPage() {
           <button
             onClick={salvar}
             disabled={salvando}
-            className="w-full rounded-full bg-primary py-4 text-lg font-display font-bold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-60 mt-2"
+            className="ds-btn ds-btn--lg w-full mt-2"
           >
             {salvando ? "Salvando…" : "Salvar registro"}
           </button>
 
           <button
             onClick={() => router.back()}
-            className="text-sm text-primary-foreground/60 font-body hover:text-primary-foreground transition-colors text-center"
+            className="text-sm font-body text-center hover:underline"
+            style={{ color: "rgba(43,34,51,0.6)" }}
           >
             ← Cancelar
           </button>
