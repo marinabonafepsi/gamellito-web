@@ -3,11 +3,10 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-type Etapa = "consentimento" | "email" | "confirmacao";
+type Etapa = "form" | "confirmacao";
 
 export default function LoginPage() {
-  const [etapa, setEtapa] = useState<Etapa>("consentimento");
-  const [consentido, setConsentido] = useState(false);
+  const [etapa, setEtapa] = useState<Etapa>("form");
   const [email, setEmail] = useState("");
   const [carregando, setCarregando] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
@@ -55,77 +54,15 @@ export default function LoginPage() {
     <div className="min-h-[60vh] flex items-center justify-center">
       <div className="w-full max-w-md ds-card p-8 md:p-10">
 
-        {/* ── Etapa 1: Consentimento ── */}
-        {etapa === "consentimento" && (
-          <div className="flex flex-col gap-6">
+        {etapa === "form" && (
+          <div className="flex flex-col gap-5">
             <div className="text-center">
               <span className="text-5xl">📒</span>
               <h1 className="text-2xl font-display font-bold mt-3" style={{ color: "#2B2233" }}>
                 Diário do Gamellito
               </h1>
               <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
-                Antes de começar, leia como seus dados são usados.
-              </p>
-            </div>
-
-            <div className="rounded-2xl p-5 text-sm font-body leading-relaxed space-y-3"
-              style={{ background: "#FFF3C9", border: "2px solid #2B2233" }}>
-              <p style={{ color: "#2B2233" }}>
-                <strong>O que coletamos:</strong>{" "}
-                apenas o e-mail da conta e os registros de glicemia que você mesmo digitar
-                (valor, data/hora, rótulo e observação opcional).
-              </p>
-              <p style={{ color: "#2B2233" }}>
-                <strong>Para que serve:</strong>{" "}
-                guardar seus registros com segurança e mostrar o histórico organizado à consulta médica.
-              </p>
-              <p style={{ color: "#2B2233" }}>
-                <strong>O que não fazemos:</strong>{" "}
-                não interpretamos valores, não emitimos alertas clínicos, não compartilhamos seus dados.
-              </p>
-              <p style={{ color: "#2B2233" }}>
-                <strong>Seus direitos (LGPD):</strong>{" "}
-                você pode apagar todos os dados a qualquer momento em Conta → Apagar todos os dados.
-              </p>
-              <p className="text-xs pt-1" style={{ color: "rgba(43,34,51,0.5)", borderTop: "1px solid #2B2233" }}>
-                Política de privacidade completa: <em>[link pendente — validação jurídica em andamento]</em>
-              </p>
-            </div>
-
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={consentido}
-                onChange={(e) => setConsentido(e.target.checked)}
-                className="mt-1 h-5 w-5 shrink-0 rounded cursor-pointer"
-                style={{ accentColor: "#F26A00" }}
-              />
-              <span className="text-sm font-body leading-relaxed" style={{ color: "#2B2233" }}>
-                Li e aceito o uso dos meus dados conforme descrito acima para
-                utilizar o Diário do Gamellito.
-              </span>
-            </label>
-
-            <button
-              disabled={!consentido}
-              onClick={() => setEtapa("email")}
-              className="ds-btn w-full text-base font-display font-bold"
-            >
-              Continuar →
-            </button>
-          </div>
-        )}
-
-        {/* ── Etapa 2: Inserir e-mail ── */}
-        {etapa === "email" && (
-          <div className="flex flex-col gap-5">
-            <div className="text-center">
-              <span className="text-5xl">✉️</span>
-              <h1 className="text-2xl font-display font-bold mt-3" style={{ color: "#2B2233" }}>
-                Entrar
-              </h1>
-              <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
-                Escolha como prefere acessar o diário.
+                Entre para acessar os registros da sua família.
               </p>
             </div>
 
@@ -142,9 +79,7 @@ export default function LoginPage() {
                 minHeight: 44,
               }}
             >
-              {loadingGoogle ? (
-                "Conectando…"
-              ) : (
+              {loadingGoogle ? "Conectando…" : (
                 <>
                   <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
                     <path fill="#4285F4" d="M47.5 24.6c0-1.6-.1-3.1-.4-4.6H24v8.7h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.6 7.3-17.3z"/>
@@ -157,14 +92,12 @@ export default function LoginPage() {
               )}
             </button>
 
-            {/* Divisor */}
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.2 }} />
-              <span className="text-xs font-body" style={{ color: "rgba(43,34,51,0.5)" }}>ou por e-mail</span>
-              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.2 }} />
+              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
+              <span className="text-xs font-body" style={{ color: "rgba(43,34,51,0.45)" }}>ou por e-mail</span>
+              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
             </div>
 
-            {/* E-mail magic link */}
             <div className="flex flex-col gap-2">
               <label htmlFor="email" className="text-sm font-body font-medium" style={{ color: "#2B2233" }}>
                 E-mail da família
@@ -195,18 +128,9 @@ export default function LoginPage() {
             >
               {carregando ? "Enviando…" : "Enviar link mágico ✉️"}
             </button>
-
-            <button
-              onClick={() => setEtapa("consentimento")}
-              className="text-sm font-body text-center hover:underline"
-              style={{ color: "rgba(43,34,51,0.5)" }}
-            >
-              ← Voltar
-            </button>
           </div>
         )}
 
-        {/* ── Etapa 3: Confirmação ── */}
         {etapa === "confirmacao" && (
           <div className="flex flex-col items-center gap-5 text-center">
             <span className="text-6xl">🎉</span>
@@ -215,18 +139,14 @@ export default function LoginPage() {
             </h1>
             <p className="text-sm font-body leading-relaxed max-w-xs" style={{ color: "rgba(43,34,51,0.7)" }}>
               Verifique a caixa de entrada de{" "}
-              <strong style={{ color: "#2B2233" }}>{email}</strong> e clique no
-              link para entrar. Pode fechar esta aba.
+              <strong style={{ color: "#2B2233" }}>{email}</strong> e clique
+              no link para entrar.
             </p>
             <p className="text-xs font-body" style={{ color: "rgba(43,34,51,0.5)" }}>
               Não recebeu? Verifique o spam ou{" "}
-              <button
-                onClick={() => { setEtapa("email"); setErro(null); }}
-                className="underline"
-              >
+              <button onClick={() => { setEtapa("form"); setErro(null); }} className="underline">
                 tente novamente
-              </button>
-              .
+              </button>.
             </p>
           </div>
         )}
