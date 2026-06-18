@@ -46,7 +46,7 @@ function FakeDoorModal({ onClose }: { onClose: () => void }) {
           <div className="flex flex-col gap-3">
             <a
               href="mailto:gamellitoltda@gmail.com?subject=Quero saber quando o jogo lançar!"
-              className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+              className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
               onClick={onClose}
             >
               📧 Me avise quando lançar
@@ -54,7 +54,7 @@ function FakeDoorModal({ onClose }: { onClose: () => void }) {
             <button
               type="button"
               onClick={onClose}
-              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors"
+              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors"
             >
               Voltar para o preview
             </button>

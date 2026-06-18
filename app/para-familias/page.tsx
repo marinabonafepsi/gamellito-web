@@ -686,7 +686,7 @@ function TabFamilias() {
                   </li>
                 ))}
               </ul>
-              <a href="/jogos/experimente" className="inline-block mt-6 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors">
+              <a href="/jogos/experimente" className="inline-block mt-6 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors">
                 Experimente os jogos
               </a>
             </div>
@@ -896,7 +896,7 @@ function TabEducadores() {
             <button
               type="button"
               onClick={handleGuideClick}
-              className="px-8 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+              className="px-8 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
             >
               📥 Quero o Guia do Educador
             </button>
@@ -1009,13 +1009,13 @@ function TabEnfermagem() {
               <button
                 type="button"
                 onClick={handlePartnershipClick}
-                className="px-8 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+                className="px-8 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
               >
                 🩺 Solicitar demonstração
               </button>
               <a
                 href="mailto:gamellitoltda@gmail.com"
-                className="px-8 py-3 border border-white/20 text-primary-foreground font-body font-semibold rounded-xl hover:border-primary/40 transition-colors"
+                className="px-8 py-3 border border-white/20 text-primary-foreground font-body font-semibold rounded-full hover:border-primary/40 transition-colors"
               >
                 Fale com a equipe
               </a>
@@ -1149,11 +1149,11 @@ export default function ParaFamiliasPage() {
               Entre em contato com a equipe Gamellito. Podemos conversar sobre como levar o método para o ambulatório, escola ou comunidade da sua família.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="mailto:gamellitoltda@gmail.com" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors">
+              <a href="mailto:gamellitoltda@gmail.com" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors">
                 <Phone className="w-4 h-4" />
                 Fale conosco
               </a>
-              <a href="https://instagram.com/gamellito" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border text-foreground font-body font-semibold rounded-xl hover:border-primary/40 hover:text-primary transition-colors">
+              <a href="https://instagram.com/gamellito" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border text-foreground font-body font-semibold rounded-full hover:border-primary/40 hover:text-primary transition-colors">
                 Siga no Instagram
               </a>
             </div>
