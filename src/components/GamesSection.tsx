@@ -163,7 +163,7 @@ const GamesSection = () => {
               <img
                 src={siteAssets.controleVideogame}
                 alt="Controle de videogame"
-                className="w-32 md:w-40 h-auto opacity-90"
+                className="w-44 md:w-56 h-auto opacity-90"
               />
               <GamellitoSprite className="drop-shadow-2xl" />
             </motion.div>
