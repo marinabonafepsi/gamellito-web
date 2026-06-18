@@ -137,7 +137,7 @@ const GamesSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-primary-foreground mb-4">
-              🎮 Nossos <span className="text-primary">Jogos & Soluções</span>
+              Nossos <span className="text-primary">Jogos & Soluções</span>
             </h2>
             <p className="text-lg text-primary-foreground/90 max-w-2xl mx-auto font-body mb-6">
               De jogos digitais a livros e oficinas — todo um ecossistema lúdico

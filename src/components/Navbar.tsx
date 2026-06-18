@@ -48,7 +48,7 @@ const Navbar = () => {
                   : "text-primary-foreground/95 hover:text-primary"
               }`}
             >
-              {link.label === "Loja" ? "🛍️ Loja" : link.label}
+              {link.label}
             </a>
           ))}
         </div>
@@ -83,7 +83,7 @@ const Navbar = () => {
                       : "text-primary-foreground/95 hover:text-primary"
                   }`}
                 >
-                  {link.label === "Loja" ? "🛍️ Loja" : link.label}
+                  {link.label}
                 </a>
               ))}
             </div>

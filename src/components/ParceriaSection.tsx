@@ -40,7 +40,7 @@ const ParceriaSection = () => {
 
           <div>
             <p className="text-gamellito-orange font-body font-semibold text-sm uppercase tracking-wider mb-3">
-              🤝 Patrocínio e parceria
+              Patrocínio e parceria
             </p>
             <h2 className="font-display text-3xl md:text-4xl font-bold text-primary mb-5 leading-tight">
               Leve o Gamellito mais longe.

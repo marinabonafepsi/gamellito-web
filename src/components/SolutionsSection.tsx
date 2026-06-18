@@ -231,7 +231,7 @@ const SolutionsSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
-              🏥 Soluções para{" "}
+              Soluções para{" "}
               <span className="text-primary">Saúde Pública</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto font-body mb-4">
@@ -364,7 +364,7 @@ const SolutionsSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-primary mb-4">
-              🌎 Para quem atuamos
+              Para quem atuamos
             </h2>
             <p className="text-lg text-primary-foreground/85 max-w-3xl mx-auto font-body">
               Do diagnóstico na família ao programa municipal de saúde —
