@@ -74,12 +74,12 @@ function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () =
         <div className="flex flex-col gap-3">
           <a
             href="mailto:gamellitoltda@gmail.com?subject=Tenho interesse: {{ item.title }}"
-            className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+            className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
             onClick={onClose}
           >
             📧 Me avise quando lançar
           </a>
-          <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors">
+          <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
             Voltar
           </button>
         </div>
@@ -137,7 +137,7 @@ const GamesSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-primary-foreground mb-4">
-              🎮 Nossos <span className="text-primary">Jogos & Soluções</span>
+              Nossos <span className="text-primary">Jogos & Soluções</span>
             </h2>
             <p className="text-lg text-primary-foreground/90 max-w-2xl mx-auto font-body mb-6">
               De jogos digitais a livros e oficinas — todo um ecossistema lúdico
@@ -163,7 +163,7 @@ const GamesSection = () => {
               <img
                 src={siteAssets.controleVideogame}
                 alt="Controle de videogame"
-                className="w-32 md:w-40 h-auto opacity-90"
+                className="w-44 md:w-56 h-auto opacity-90"
               />
               <GamellitoSprite className="drop-shadow-2xl" />
             </motion.div>

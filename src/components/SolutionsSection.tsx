@@ -7,6 +7,7 @@ import {
   Users, School, Stethoscope, ShieldCheck,
 } from "@/components/icons";
 import { AssetImage, type SiteAssetKey } from "@/components/SiteAssets";
+import { PersonagemAnimado } from "@/components/PersonagemAnimado";
 import { track } from "@/lib/analytics";
 
 /* ══════════════════════════════════════════
@@ -14,20 +15,28 @@ import { track } from "@/lib/analytics";
 ══════════════════════════════════════════ */
 const solutions: Array<{
   icon: typeof ChefHat;
+  tag: string;
+  tagColor: string;
   title: string;
   description: string;
   asset: SiteAssetKey;
+  href?: string;
   cta?: { label: string };
 }> = [
   {
     icon: ChefHat,
+    tag: "OFICINAS",
+    tagColor: "bg-gamellito-pink",
     title: "Oficinas culinárias e alimentação",
     description:
       "Oficinas que promovem aprendizado prático sobre alimentação saudável e contagem de carboidratos, com participação ativa das crianças. Contribuem para melhoria de parâmetros clínicos e maior conscientização sobre os cuidados com a alimentação.",
     asset: "geladeira",
+    href: "/para-familias",
   },
   {
     icon: Gamepad2,
+    tag: "JOGOS",
+    tagColor: "bg-primary",
     title: "Jogos educativos e método Gamellito",
     description:
       "Atividades com o método Gamellito: recursos lúdicos e interativos para facilitar a compreensão do manejo do DM1. Jogos, dinâmicas em grupo e práticas recreativas que estimulam a autonomia e a adesão ao tratamento.",
@@ -36,17 +45,23 @@ const solutions: Array<{
   },
   {
     icon: GraduationCap,
+    tag: "RODAS DE CONVERSA",
+    tagColor: "bg-gamellito-blue",
     title: "Rodas de conversa e equipe multidisciplinar",
     description:
       "Intervenções que abordam adesão ao tratamento e reconhecimento de sinais de descompensação glicêmica. Equipe de nutrição, psicologia, artes cênicas, design, educação física, serviço social, odontologia, enfermagem e oftalmologia.",
     asset: "medicoMaeGamellito",
+    href: "/para-profissionais",
   },
   {
     icon: BookOpen,
+    tag: "MATERIAIS DIGITAIS",
+    tagColor: "bg-gamellito-green",
     title: "Materiais educativos e alcance digital",
     description:
       "Jogos, histórias em quadrinhos, vídeos e telenovela educativa em linguagem acessível. Disponibilizados em plataformas digitais, redes sociais e canais institucionais da UEL para ampliar o acesso e reforçar os conteúdos.",
     asset: "maeGamellitoGlicemia",
+    href: "/solucoes",
   },
 ];
 
@@ -172,11 +187,11 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
           <a
             href="mailto:gamellitoltda@gmail.com?subject=Interesse no jogo Gamellito Adventures"
             onClick={onClose}
-            className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+            className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
           >
             📧 Me avise quando lançar
           </a>
-          <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors">
+          <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
             Voltar
           </button>
         </div>
@@ -216,7 +231,7 @@ const SolutionsSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
-              🏥 Soluções para{" "}
+              Soluções para{" "}
               <span className="text-primary">Saúde Pública</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto font-body mb-4">
@@ -225,13 +240,15 @@ const SolutionsSection = () => {
             <p className="text-muted-foreground font-body max-w-2xl mx-auto">
               Desde 2023, atividades semanais com foco em prevenção de complicações, reabilitação e fortalecimento do autocuidado.
             </p>
-            <AssetImage
-              asset="bicicleta"
-              alt="Vida ativa e saúde — Gamellito"
-              className="w-32 h-auto mx-auto mt-6 opacity-90"
-              width={128}
-              height={80}
-            />
+            <PersonagemAnimado>
+              <AssetImage
+                asset="bicicleta"
+                alt="Vida ativa e saúde — Gamellito"
+                className="w-44 h-auto"
+                width={176}
+                height={110}
+              />
+            </PersonagemAnimado>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -242,26 +259,46 @@ const SolutionsSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="bg-card rounded-2xl p-8 border border-border hover:border-primary/30 transition-all group"
+                className="bg-card rounded-2xl p-7 border border-border hover:border-primary/30 transition-all group"
                 style={{ boxShadow: "var(--shadow-card)" }}
               >
-                <div className="flex items-start justify-between gap-4 mb-5">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                    <sol.icon className="w-7 h-7 text-primary" />
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl ${sol.tagColor} flex items-center justify-center flex-shrink-0`}>
+                      <sol.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-xs font-body font-bold text-primary uppercase tracking-wider">
+                      {sol.tag}
+                    </span>
                   </div>
-                  <AssetImage asset={sol.asset} alt="" className="w-20 h-auto flex-shrink-0 opacity-80" width={80} height={50} />
+                  <AssetImage
+                    asset={sol.asset}
+                    alt=""
+                    className="w-28 h-auto flex-shrink-0"
+                    width={112}
+                    height={80}
+                  />
                 </div>
                 <h3 className="font-display font-bold text-xl text-foreground mb-3">{sol.title}</h3>
-                <p className="text-muted-foreground font-body leading-relaxed">{sol.description}</p>
-                {sol.cta && (
-                  <button
-                    type="button"
-                    onClick={handleGameCTA}
-                    className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors text-sm"
-                  >
-                    {sol.cta.label}
-                  </button>
-                )}
+                <p className="text-muted-foreground font-body leading-relaxed text-sm">{sol.description}</p>
+                <div className="mt-4">
+                  {sol.cta ? (
+                    <button
+                      type="button"
+                      onClick={handleGameCTA}
+                      className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors text-sm"
+                    >
+                      {sol.cta.label}
+                    </button>
+                  ) : (
+                    <a
+                      href={sol.href}
+                      className="inline-block text-sm text-primary font-body font-semibold group-hover:underline"
+                    >
+                      Saber mais →
+                    </a>
+                  )}
+                </div>
               </motion.div>
             ))}
           </div>
@@ -327,7 +364,7 @@ const SolutionsSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-primary mb-4">
-              🌎 Para quem atuamos
+              Para quem atuamos
             </h2>
             <p className="text-lg text-primary-foreground/85 max-w-3xl mx-auto font-body">
               Do diagnóstico na família ao programa municipal de saúde —
@@ -377,9 +414,9 @@ const SolutionsSection = () => {
                 <a
                   href={setor.href}
                   onClick={() => track("nav_click", window.location.pathname, { label: setor.cta, href: setor.href })}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors text-sm"
                 >
-                  {setor.cta} →
+                  {setor.emoji} {setor.cta}
                 </a>
               </motion.div>
             ))}
