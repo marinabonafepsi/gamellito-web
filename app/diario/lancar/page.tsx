@@ -7,11 +7,11 @@ import { RecompensaSalvar } from "@/components/diario/RecompensaSalvar";
 type Rotulo = "jejum" | "antes" | "depois" | "dormir" | "outro";
 
 const ROTULOS: { id: Rotulo; label: string }[] = [
-  { id: "jejum", label: "Jejum" },
-  { id: "antes", label: "Antes de comer" },
+  { id: "jejum",  label: "Jejum" },
+  { id: "antes",  label: "Antes de comer" },
   { id: "depois", label: "Depois de comer" },
   { id: "dormir", label: "Antes de dormir" },
-  { id: "outro", label: "Outro" },
+  { id: "outro",  label: "Outro" },
 ];
 
 function hojeLocal(): string {
@@ -23,13 +23,13 @@ function hojeLocal(): string {
 export default function LancarPage() {
   const router = useRouter();
 
-  const [valor, setValor] = useState("");
-  const [dataHora, setDataHora] = useState(hojeLocal());
-  const [rotulo, setRotulo] = useState<Rotulo | null>(null);
+  const [valor,      setValor]      = useState("");
+  const [dataHora,   setDataHora]   = useState(hojeLocal());
+  const [rotulo,     setRotulo]     = useState<Rotulo | null>(null);
   const [observacao, setObservacao] = useState("");
   const [lancadoPor, setLancadoPor] = useState("");
-  const [salvando, setSalvando] = useState(false);
-  const [erro, setErro] = useState<string | null>(null);
+  const [salvando,   setSalvando]   = useState(false);
+  const [erro,       setErro]       = useState<string | null>(null);
   const [recompensa, setRecompensa] = useState(false);
 
   const esconderRecompensa = useCallback(() => {
@@ -75,7 +75,6 @@ export default function LancarPage() {
       return;
     }
 
-    // Microcomemoração — celebra o ato de registrar, nunca o valor
     setRecompensa(true);
   }
 
@@ -85,21 +84,18 @@ export default function LancarPage() {
 
       <div className="max-w-lg mx-auto">
         <header className="mb-8">
-          <h1 className="text-3xl font-display font-bold text-primary-foreground">
+          <h1 className="text-3xl font-display font-bold text-foreground">
             Registrar glicemia
           </h1>
-          <p className="text-sm text-primary-foreground/70 font-body mt-1">
+          <p className="text-sm font-body mt-1 text-primary">
             Preencha os campos e toque em Salvar.
           </p>
         </header>
 
-        <div className="flex flex-col gap-6">
-          {/* Valor — campo grande, teclado numérico no mobile */}
+        <div className="bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-6 flex flex-col gap-6">
+          {/* Valor */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="valor"
-              className="text-sm font-body font-medium text-primary-foreground"
-            >
+            <label htmlFor="valor" className="text-sm font-body font-semibold text-foreground">
               Valor da glicemia (mg/dL)
             </label>
             <input
@@ -107,19 +103,16 @@ export default function LancarPage() {
               type="number"
               inputMode="numeric"
               pattern="[0-9]*"
-              placeholder="Ex.: 120"
+              placeholder="120"
               value={valor}
               onChange={(e) => setValor(e.target.value)}
-              className="w-full rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-5 py-5 text-4xl font-display font-bold text-primary-foreground placeholder:text-primary-foreground/30 text-center focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-2xl font-display font-bold text-foreground text-center focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
 
           {/* Data e hora */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="data_hora"
-              className="text-sm font-body font-medium text-primary-foreground"
-            >
+            <label htmlFor="data_hora" className="text-sm font-body font-semibold text-foreground">
               Data e hora
             </label>
             <input
@@ -127,13 +120,13 @@ export default function LancarPage() {
               type="datetime-local"
               value={dataHora}
               onChange={(e) => setDataHora(e.target.value)}
-              className="w-full rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 font-body text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
 
-          {/* Rótulos — botões descritivos apenas, sem interpretação */}
+          {/* Rótulos */}
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-body font-medium text-primary-foreground">
+            <span className="text-sm font-body font-semibold text-foreground">
               Momento
             </span>
             <div className="flex flex-wrap gap-2">
@@ -142,11 +135,11 @@ export default function LancarPage() {
                   key={id}
                   type="button"
                   onClick={() => setRotulo(id)}
-                  className={`rounded-full px-4 py-2 text-sm font-body font-medium transition-colors
-                    ${rotulo === id
+                  className={`rounded-full px-3 py-1.5 text-xs font-body font-medium transition-colors ${
+                    rotulo === id
                       ? "bg-primary text-primary-foreground"
-                      : "bg-primary-foreground/10 text-primary-foreground/80 hover:bg-primary-foreground/20"
-                    }`}
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
                 >
                   {label}
                 </button>
@@ -156,10 +149,7 @@ export default function LancarPage() {
 
           {/* Quem registra */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="lancado_por"
-              className="text-sm font-body font-medium text-primary-foreground"
-            >
+            <label htmlFor="lancado_por" className="text-sm font-body font-semibold text-foreground">
               Registrado por
             </label>
             <input
@@ -168,18 +158,15 @@ export default function LancarPage() {
               placeholder="Ex.: mãe, pai, criança"
               value={lancadoPor}
               onChange={(e) => setLancadoPor(e.target.value)}
-              className="w-full rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 font-body text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
 
           {/* Observação opcional */}
           <div className="flex flex-col gap-2">
-            <label
-              htmlFor="observacao"
-              className="text-sm font-body font-medium text-primary-foreground"
-            >
+            <label htmlFor="observacao" className="text-sm font-body font-semibold text-foreground">
               Observação{" "}
-              <span className="text-primary-foreground/50 font-normal">(opcional)</span>
+              <span className="font-normal text-muted-foreground">(opcional)</span>
             </label>
             <textarea
               id="observacao"
@@ -187,12 +174,12 @@ export default function LancarPage() {
               placeholder="Ex.: após atividade física, mal-estar…"
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
-              className="w-full rounded-2xl border border-primary-foreground/20 bg-primary-foreground/10 px-4 py-3 font-body text-primary-foreground placeholder:text-primary-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
             />
           </div>
 
           {erro && (
-            <p className="text-sm text-destructive font-body bg-destructive/10 rounded-2xl px-4 py-3">
+            <p className="text-sm font-body border border-destructive bg-destructive/10 text-destructive rounded-2xl px-4 py-3">
               {erro}
             </p>
           )}
@@ -200,14 +187,14 @@ export default function LancarPage() {
           <button
             onClick={salvar}
             disabled={salvando}
-            className="w-full rounded-full bg-primary py-4 text-lg font-display font-bold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-60 mt-2"
+            className="w-full mt-2 bg-primary text-primary-foreground rounded-full font-display font-bold text-base py-3.5 hover:bg-primary/90 transition-colors disabled:opacity-60"
           >
             {salvando ? "Salvando…" : "Salvar registro"}
           </button>
 
           <button
             onClick={() => router.back()}
-            className="text-sm text-primary-foreground/60 font-body hover:text-primary-foreground transition-colors text-center"
+            className="text-sm font-body text-center text-muted-foreground hover:underline"
           >
             ← Cancelar
           </button>
