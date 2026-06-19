@@ -57,8 +57,7 @@ const HeroSection = () => {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-4xl md:text-6xl font-display font-bold text-primary-foreground mb-4 leading-tight"
           >
-            Cuidar do diabetes pode{" "}
-            <span className="text-primary">começar com um sorriso.</span>
+            Gamellito Ltda
           </motion.h1>
 
           <motion.div
@@ -87,13 +86,13 @@ const HeroSection = () => {
               href="#solucoes"
               className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-primary text-primary-foreground font-display font-bold text-lg hover:opacity-90 transition-opacity animate-pulse-glow"
             >
-              🎮 Conheça os programas
+              Conheça os programas
             </a>
             <a
               href="#parceria"
               className="inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-primary-foreground bg-primary-foreground/20 backdrop-blur-md text-primary-foreground font-display font-semibold text-lg hover:bg-primary-foreground/30 transition-colors shadow-[0_0_0_1px_rgba(255,255,255,0.2)]"
             >
-              🤝 Seja um parceiro
+              Seja um parceiro
             </a>
           </motion.div>
         </motion.div>

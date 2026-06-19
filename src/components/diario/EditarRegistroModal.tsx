@@ -73,7 +73,7 @@ export function EditarRegistroModal({ registro, onSalvo, onCancelar }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md bg-card rounded-3xl border border-border shadow-2xl p-6 flex flex-col gap-4">
+      <div className="w-full max-w-md bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-6 flex flex-col gap-4">
         <h2 className="font-display font-bold text-xl text-foreground">Editar registro</h2>
 
         {/* Valor */}

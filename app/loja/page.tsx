@@ -19,7 +19,6 @@ const produtos = [
     subtitulo: '"As Aventuras de Gamellito"',
     descricao:
       "Série infantil com as aventuras do Gamellito, ilustrações de Roger Cartoons. Linguagem acessível para crianças de 5 a 14 anos aprenderem sobre DM1 de forma leve e divertida.",
-    preco: "R$ 45",
     tag: "Mais querido",
     cor: "bg-gamellito-orange",
   },
@@ -30,7 +29,6 @@ const produtos = [
     subtitulo: "O alien fofo com DM1",
     descricao:
       "A pelúcia oficial do Gamellito! Material macio e seguro. O companheiro perfeito para crianças que vivem com DM1 se sentirem acompanhadas.",
-    preco: "R$ 89",
     tag: "Novo",
     cor: "bg-gamellito-health-green",
   },
@@ -41,7 +39,6 @@ const produtos = [
     subtitulo: "O vilão mais fofo do universo",
     descricao:
       "O Pâncreas Preguiçoso em versão pelúcia! Perfeito para explicar o DM1 de forma lúdica para crianças e famílias. Excelente recurso educativo.",
-    preco: "R$ 79",
     tag: "Fan favorite",
     cor: "bg-gamellito-hospital-purple",
   },
@@ -52,7 +49,6 @@ const produtos = [
     subtitulo: "Case + adesivos para sensor e bomba",
     descricao:
       "Case para glicosímetro, adesivos para bomba de insulina e sensor CGM (Libre, Dexcom) — tudo com estilo Gamellito. Porque cuidar da saúde pode ser estiloso!",
-    preco: "R$ 120",
     tag: "Personalizado",
     cor: "bg-gamellito-blue",
   },
@@ -63,8 +59,7 @@ const produtos = [
     subtitulo: "Livro + Pelúcia + Jogo + Guia",
     descricao:
       "O kit completo para famílias, escolas e ambulatórios. Inclui livro, pelúcia, jogo de tabuleiro e guia para educadores — tudo em uma caixa.",
-    preco: "R$ 249",
-    tag: "Melhor valor",
+    tag: "Kit completo",
     cor: "bg-gamellito-orange",
   },
   {
@@ -74,7 +69,6 @@ const produtos = [
     subtitulo: "Acolhimento para famílias no diagnóstico",
     descricao:
       "6 aulas curtas (~45 min total) para famílias que acabaram de receber o diagnóstico de DM1. Linguagem acolhedora, sem jargão médico, com materiais em PDF.",
-    preco: "R$ 97",
     tag: "Em breve",
     cor: "bg-gamellito-mae-red",
   },
@@ -110,14 +104,11 @@ function ProductModal({
           <X size={20} />
         </button>
 
-        <div className="text-5xl text-center mb-3">{produto.emoji}</div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-1">{produto.nome}</h2>
-        <p className="font-body text-muted-foreground text-center text-sm mb-2">{produto.subtitulo}</p>
-        <p className="font-display text-3xl font-bold text-primary text-center mb-5">{produto.preco}</p>
+        <p className="font-body text-muted-foreground text-center text-sm mb-5">{produto.subtitulo}</p>
 
         {done ? (
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-4">
-            <div className="text-4xl mb-2">🎉</div>
             <p className="font-body font-semibold text-foreground">Anotamos seu interesse!</p>
             <p className="font-body text-muted-foreground text-sm mt-1">Te avisamos quando a loja abrir.</p>
           </motion.div>
@@ -125,17 +116,17 @@ function ProductModal({
           <div className="space-y-3">
             <div className="bg-muted/60 rounded-2xl p-4 text-center">
               <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                🚧 Nossa loja está em construção! Estamos validando a demanda para garantir os melhores produtos.
+                Nossa loja está em construção! Estamos validando a demanda para garantir os melhores produtos.
               </p>
             </div>
             <a
-              href={`mailto:gamellitoltda@gmail.com?subject=Interesse: ${produto.nome}&body=Olá! Tenho interesse em: ${produto.nome} (${produto.preco}). Me avise quando a loja abrir!`}
-              className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+              href={`mailto:gamellitoltda@gmail.com?subject=Interesse: ${produto.nome}&body=Olá! Tenho interesse em: ${produto.nome}. Me avise quando a loja abrir!`}
+              className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
               onClick={() => setDone(true)}
             >
-              💌 Me avise quando abrir
+              Me avise quando abrir
             </a>
-            <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors">
+            <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
               Continuar explorando
             </button>
           </div>
@@ -189,7 +180,7 @@ export default function LojaPage() {
           >
             <div className="flex-1 text-center md:text-left">
               <p className="text-gamellito-orange font-body font-semibold text-sm uppercase tracking-wider mb-3">
-                🛍️ Ecossistema Gamellito
+                Ecossistema Gamellito
               </p>
               <h1 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5 leading-tight">
                 Produtos que tornam o DM1{" "}
@@ -201,7 +192,7 @@ export default function LojaPage() {
               </p>
               <div className="inline-flex items-center gap-2 bg-gamellito-orange/20 border border-gamellito-orange/40 rounded-full px-5 py-2">
                 <span className="text-gamellito-orange font-body font-semibold text-sm">
-                  🚧 Loja em construção — registre seu interesse!
+                  Loja em construção — registre seu interesse!
                 </span>
               </div>
             </div>
@@ -252,15 +243,13 @@ export default function LojaPage() {
                   <span className={`${produto.cor} text-white font-display text-xs px-3 py-1 rounded-full`}>
                     {produto.tag}
                   </span>
-                  <span className="text-3xl">{produto.emoji}</span>
                 </div>
 
                 <h3 className="font-display font-bold text-xl text-foreground mb-1">{produto.nome}</h3>
                 <p className="font-body text-xs text-muted-foreground mb-3">{produto.subtitulo}</p>
                 <p className="font-body text-sm text-muted-foreground leading-relaxed mb-5">{produto.descricao}</p>
 
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-2xl font-bold text-primary">{produto.preco}</span>
+                <div className="flex items-center justify-end">
                   <span className="font-body text-sm font-semibold text-primary group-hover:underline">
                     Tenho interesse →
                   </span>
@@ -329,7 +318,6 @@ export default function LojaPage() {
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto max-w-2xl text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="text-5xl mb-4">🎁</div>
             <h2 className="font-display text-3xl font-bold text-foreground mb-4">
               Quer ser avisado no lançamento?
             </h2>
@@ -339,9 +327,9 @@ export default function LojaPage() {
             <a
               href="mailto:gamellitoltda@gmail.com?subject=Quero ser avisado sobre a Loja Gamellito&body=Olá! Quero ser avisado quando a loja abrir."
               onClick={() => track("product_interest", "/loja", { source: "cta_newsletter" })}
-              className="inline-block px-8 py-4 bg-gamellito-orange text-white font-body font-semibold rounded-xl hover:bg-gamellito-orange/90 transition-colors text-lg"
+              className="inline-block px-8 py-4 bg-gamellito-orange text-white font-body font-semibold rounded-full hover:bg-gamellito-orange/90 transition-colors text-lg"
             >
-              📧 Me avise no lançamento
+              Me avise no lançamento
             </a>
           </motion.div>
         </div>

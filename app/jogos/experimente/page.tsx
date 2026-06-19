@@ -19,7 +19,7 @@ export default function ExperimentePage() {
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
         <header className="text-center mb-6 md:mb-8">
           <h1 className="text-3xl md:text-4xl font-display font-bold text-primary-foreground mb-2">
-            🎮 Experimente o Gamellito
+            Experimente o Gamellito
           </h1>
           <p className="text-lg text-primary-foreground/90 font-body max-w-xl mx-auto">
             Abra a geladeira, escolha um lanche e ganhe estrelas. Modo leve pensado
