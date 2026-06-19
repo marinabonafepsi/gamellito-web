@@ -493,7 +493,6 @@ function TabFamilias() {
                 <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
                   <div className="text-center mb-4">
                     <span className="inline-block rounded-full bg-gamellito-orange text-white font-display text-sm px-4 py-1 mb-3">Tipo 1</span>
-                    <AssetImage asset="gamellitoCorpinho" alt="Personagem Gamellito" className="w-20 h-auto mx-auto" width={80} height={80} />
                   </div>
                   <ul className="space-y-2">
                     {["Autoimune — o corpo ataca as próprias células beta", "Surge na infância ou adolescência (e também em adultos)", "Requer insulina todos os dias, sem exceção"].map((item) => (
@@ -510,7 +509,6 @@ function TabFamilias() {
                 <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
                   <div className="text-center mb-4">
                     <span className="inline-block rounded-full bg-gamellito-blue text-white font-display text-sm px-4 py-1 mb-3">Tipo 2</span>
-                    <AssetImage asset="olhoDesconfiado" alt="Não confunda DM1 com DM2" className="w-16 h-auto mx-auto opacity-80" width={64} height={64} />
                   </div>
                   <ul className="space-y-2">
                     {["Resistência à insulina — não é autoimune", "Geralmente em adultos, associado ao estilo de vida", "Pode ser tratado com dieta, medicação oral ou insulina"].map((item) => (
