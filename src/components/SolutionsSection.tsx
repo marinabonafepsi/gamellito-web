@@ -41,7 +41,7 @@ const solutions: Array<{
     description:
       "Atividades com o método Gamellito: recursos lúdicos e interativos para facilitar a compreensão do manejo do DM1. Jogos, dinâmicas em grupo e práticas recreativas que estimulam a autonomia e a adesão ao tratamento.",
     asset: "pancreasPreguicoso",
-    cta: { label: "🎮 Quero conhecer o jogo" },
+    cta: { label: "Quero conhecer o jogo" },
   },
   {
     icon: GraduationCap,
@@ -175,13 +175,12 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
           <X size={20} />
         </button>
-        <div className="text-5xl text-center mb-4">🚀</div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-3">
           Gamellito Adventures está chegando!
         </h2>
         <p className="font-body text-muted-foreground text-center text-sm leading-relaxed mb-6">
           Estamos desenvolvendo o jogo completo. Seu interesse aqui nos ajuda a
-          priorizar o lançamento — obrigada! ✨
+          priorizar o lançamento.
         </p>
         <div className="flex flex-col gap-3">
           <a
@@ -189,7 +188,7 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
             onClick={onClose}
             className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
           >
-            📧 Me avise quando lançar
+            Me avise quando lançar
           </a>
           <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
             Voltar
@@ -389,7 +388,6 @@ const SolutionsSection = () => {
                       {setor.fase}
                     </span>
                     <div className="flex items-center gap-2 mt-3">
-                      <span className="text-2xl">{setor.emoji}</span>
                       <h3 className="font-display font-bold text-xl text-primary-foreground">
                         {setor.titulo}
                       </h3>
@@ -416,7 +414,7 @@ const SolutionsSection = () => {
                   onClick={() => track("nav_click", window.location.pathname, { label: setor.cta, href: setor.href })}
                   className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors text-sm"
                 >
-                  {setor.emoji} {setor.cta}
+                  {setor.cta}
                 </a>
               </motion.div>
             ))}

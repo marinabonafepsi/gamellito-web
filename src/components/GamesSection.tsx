@@ -63,13 +63,12 @@ function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () =
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
           <X size={20} />
         </button>
-        <div className="text-5xl text-center mb-4">{item.emoji}</div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-2">
           {item.title}
         </h2>
         <p className="font-body text-muted-foreground text-center text-sm leading-relaxed mb-6">
           Este conteúdo está em desenvolvimento! Seu interesse nos ajuda a
-          priorizar o que lançar primeiro. 🚀
+          priorizar o que lançar primeiro.
         </p>
         <div className="flex flex-col gap-3">
           <a
@@ -77,7 +76,7 @@ function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () =
             className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
             onClick={onClose}
           >
-            📧 Me avise quando lançar
+            Me avise quando lançar
           </a>
           <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
             Voltar
@@ -148,7 +147,7 @@ const GamesSection = () => {
               onClick={handlePlayClick}
               className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-display font-bold text-primary-foreground hover:opacity-90 transition-opacity"
             >
-              🎮 Experimente um jogo
+              Experimente um jogo
             </button>
           </motion.div>
 

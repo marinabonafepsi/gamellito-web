@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { AssetImage } from "@/components/SiteAssets";
 
 type Etapa = "consentimento" | "email" | "confirmacao";
 
@@ -59,8 +60,8 @@ export default function LoginPage() {
         {etapa === "consentimento" && (
           <div className="flex flex-col gap-6">
             <div className="text-center">
-              <span className="text-5xl">📒</span>
-              <h1 className="text-2xl font-display font-bold mt-3" style={{ color: "#2B2233" }}>
+              <AssetImage asset="gamellitoCorpinho" alt="Gamellito" className="w-16 h-auto mx-auto" width={64} height={64} />
+              <h1 className="text-2xl font-display font-bold text-foreground mt-3">
                 Diário do Gamellito
               </h1>
               <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
@@ -120,8 +121,7 @@ export default function LoginPage() {
         {etapa === "email" && (
           <div className="flex flex-col gap-5">
             <div className="text-center">
-              <span className="text-5xl">✉️</span>
-              <h1 className="text-2xl font-display font-bold mt-3" style={{ color: "#2B2233" }}>
+              <h1 className="text-2xl font-display font-bold text-foreground mt-3">
                 Entrar
               </h1>
               <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
@@ -193,7 +193,7 @@ export default function LoginPage() {
               disabled={carregando}
               className="ds-btn w-full font-display font-bold"
             >
-              {carregando ? "Enviando…" : "Enviar link mágico ✉️"}
+              {carregando ? "Enviando…" : "Enviar link mágico"}
             </button>
 
             <button
@@ -209,8 +209,8 @@ export default function LoginPage() {
         {/* ── Etapa 3: Confirmação ── */}
         {etapa === "confirmacao" && (
           <div className="flex flex-col items-center gap-5 text-center">
-            <span className="text-6xl">🎉</span>
-            <h1 className="text-2xl font-display font-bold" style={{ color: "#2B2233" }}>
+            <AssetImage asset="gamellitoContente" alt="Gamellito comemorando" className="w-16 h-auto" width={64} height={64} />
+            <h1 className="text-2xl font-display font-bold text-foreground">
               Link enviado!
             </h1>
             <p className="text-sm font-body leading-relaxed max-w-xs" style={{ color: "rgba(43,34,51,0.7)" }}>

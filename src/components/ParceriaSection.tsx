@@ -70,7 +70,7 @@ const ParceriaSection = () => {
                 onClick={() => track("nav_click", "/", { label: "parceria_cta", href: "mailto" })}
                 className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
               >
-                💬 Quero conversar
+                Quero conversar
               </a>
               <a
                 href="/parcerias-uel"

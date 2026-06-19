@@ -318,10 +318,10 @@ const ondeAplicar = [
 
 type Tab = "familias" | "educadores" | "enfermagem";
 
-const tabs: { id: Tab; label: string; emoji: string }[] = [
-  { id: "familias", label: "Pais e Família", emoji: "👨‍👩‍👧" },
-  { id: "educadores", label: "Educadores e Escolas", emoji: "🏫" },
-  { id: "enfermagem", label: "Enfermagem e Saúde", emoji: "🩺" },
+const tabs: { id: Tab; label: string }[] = [
+  { id: "familias", label: "Pais e Família" },
+  { id: "educadores", label: "Educadores e Escolas" },
+  { id: "enfermagem", label: "Enfermagem e Saúde" },
 ];
 
 /* ═══════════════════════════════════════════════════════
@@ -493,7 +493,6 @@ function TabFamilias() {
                 <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
                   <div className="text-center mb-4">
                     <span className="inline-block rounded-full bg-gamellito-orange text-white font-display text-sm px-4 py-1 mb-3">Tipo 1</span>
-                    <AssetImage asset="gamellitoCorpinho" alt="Personagem Gamellito" className="w-20 h-auto mx-auto" width={80} height={80} />
                   </div>
                   <ul className="space-y-2">
                     {["Autoimune — o corpo ataca as próprias células beta", "Surge na infância ou adolescência (e também em adultos)", "Requer insulina todos os dias, sem exceção"].map((item) => (
@@ -510,7 +509,6 @@ function TabFamilias() {
                 <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
                   <div className="text-center mb-4">
                     <span className="inline-block rounded-full bg-gamellito-blue text-white font-display text-sm px-4 py-1 mb-3">Tipo 2</span>
-                    <AssetImage asset="olhoDesconfiado" alt="Não confunda DM1 com DM2" className="w-16 h-auto mx-auto opacity-80" width={64} height={64} />
                   </div>
                   <ul className="space-y-2">
                     {["Resistência à insulina — não é autoimune", "Geralmente em adultos, associado ao estilo de vida", "Pode ser tratado com dieta, medicação oral ou insulina"].map((item) => (
@@ -601,7 +599,6 @@ function TabFamilias() {
           <div className="space-y-4">
             {emocoesItems.map((item, i) => (
               <motion.div key={item.fase} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="flex gap-4 bg-card rounded-2xl p-5 border border-border">
-                <span className="text-3xl flex-shrink-0 mt-0.5">{item.emoji}</span>
                 <div>
                   <h3 className="font-display font-bold text-foreground mb-1">{item.fase}</h3>
                   <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
@@ -659,7 +656,6 @@ function TabFamilias() {
           <div className="grid md:grid-cols-2 gap-5">
             {adolescenciaItems.map((item, i) => (
               <motion.div key={item.titulo} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="bg-card rounded-2xl p-5 border border-border">
-                <span className="text-2xl mb-3 block">{item.emoji}</span>
                 <h3 className="font-display font-bold text-foreground mb-2">{item.titulo}</h3>
                 <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
               </motion.div>
@@ -779,7 +775,6 @@ function TabEducadores() {
               { emoji: "📋", titulo: "Obrigação legal", texto: "A legislação brasileira obriga as escolas a acolherem e apoiarem alunos com DM1. Estar preparado é cumprir a lei." },
             ].map((item, i) => (
               <motion.div key={item.titulo} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="bg-card rounded-2xl p-6 border border-border text-center">
-                <span className="text-4xl block mb-3">{item.emoji}</span>
                 <h3 className="font-display font-bold text-foreground mb-2">{item.titulo}</h3>
                 <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
               </motion.div>
@@ -1115,7 +1110,6 @@ export default function ParaFamiliasPage() {
                     : "bg-white/8 text-primary-foreground/70 border-transparent hover:bg-white/15"
                 }`}
               >
-                <span>{tab.emoji}</span>
                 <span className="hidden sm:inline">{tab.label}</span>
                 <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
               </button>
