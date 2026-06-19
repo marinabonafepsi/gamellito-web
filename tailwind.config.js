@@ -106,6 +106,21 @@ module.exports = {
           yellow:           "hsl(var(--gamellito-yellow))",
           pink:             "hsl(var(--gamellito-pink))",
         },
+        /* Design System tokens — usados no /diario */
+        ds: {
+          sun:    "#FFC400",
+          orange: "#F26A00",
+          lilac:  "#9B8CF0",
+          purple: "#6E59C9",
+          cream:  "#FFF3C9",
+          ink:    "#2B2233",
+          white:  "#FFFFFF",
+          "game-red":     "#EE2B2B",
+          "game-blue":    "#37B6E6",
+          "game-green":   "#8DC63F",
+          "game-pink":    "#F25CA2",
+          "game-magenta": "#C82FA0",
+        },
         sidebar: {
           DEFAULT:              "hsl(var(--sidebar-background))",
           foreground:           "hsl(var(--sidebar-foreground))",

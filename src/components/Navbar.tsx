@@ -9,12 +9,10 @@ import { track } from "@/lib/analytics";
 const navLinks = [
   { label: "Início",        href: "/#inicio" },
   { label: "Sobre",         href: "/#sobre" },
-  { label: "Soluções",      href: "/#solucoes" },
   { label: "Para Famílias", href: "/para-familias" },
-  { label: "Loja",          href: "/loja" },
-  { label: "Prêmios",       href: "/#premios" },
-  { label: "Parceiros",     href: "/#parceiros" },
+  { label: "Programas",     href: "/#solucoes" },
   { label: "Contato",       href: "/#contato" },
+  { label: "Loja",          href: "/loja" },
 ];
 
 const Navbar = () => {
@@ -42,15 +40,18 @@ const Navbar = () => {
               key={link.href}
               href={link.href}
               onClick={() => handleNavClick(link.label, link.href)}
-              className={`font-body text-sm font-semibold transition-colors ${
-                link.label === "Loja"
-                  ? "text-gamellito-orange hover:text-gamellito-orange/80"
-                  : "text-primary-foreground/95 hover:text-primary"
-              }`}
+              className="font-body text-sm font-semibold text-primary-foreground/95 hover:text-primary transition-colors"
             >
-              {link.label === "Loja" ? "🛍️ Loja" : link.label}
+              {link.label}
             </a>
           ))}
+          <a
+            href="/diario/login"
+            onClick={() => handleNavClick("Login", "/diario/login")}
+            className="inline-flex items-center px-5 py-2 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors"
+          >
+            Login
+          </a>
         </div>
 
         {/* Mobile toggle */}
@@ -72,20 +73,31 @@ const Navbar = () => {
             className="md:hidden bg-gamellito-space/98 overflow-hidden"
           >
             <div className="px-4 py-4 flex flex-col gap-3">
+              <a
+                href="/diario/login"
+                onClick={() => handleNavClick("Login", "/diario/login")}
+                className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors mb-1"
+              >
+                Login
+              </a>
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={() => handleNavClick(link.label, link.href)}
-                  className={`font-body text-base font-semibold transition-colors py-2 ${
-                    link.label === "Loja"
-                      ? "text-gamellito-orange"
-                      : "text-primary-foreground/95 hover:text-primary"
-                  }`}
+                  className="font-body text-base font-semibold text-primary-foreground/95 hover:text-primary transition-colors py-2"
                 >
-                  {link.label === "Loja" ? "🛍️ Loja" : link.label}
+                  {link.label}
                 </a>
               ))}
+              <a
+                href="/diario"
+                onClick={() => handleNavClick("Diário", "/diario")}
+                className="font-body text-base font-bold py-3 px-4 rounded-full text-center mt-2"
+                style={{ background: "#FFC400", color: "#2B2233", border: "2px solid #2B2233", boxShadow: "3px 3px 0 #2B2233" }}
+              >
+                Diário
+              </a>
             </div>
           </motion.div>
         )}

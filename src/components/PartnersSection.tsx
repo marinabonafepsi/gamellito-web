@@ -46,7 +46,7 @@ const PartnersSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
-            🤝 Parceiros & <span className="text-primary">Universidades</span>
+            Parceiros & <span className="text-primary">Universidades</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-body mb-6">
             O Gamellito é fruto de parcerias acadêmicas e sociais que
