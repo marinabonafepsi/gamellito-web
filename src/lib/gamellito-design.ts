@@ -1,64 +1,70 @@
 /**
- * Design system do personagem e do site Gamellito.
- * Alinhado ao guia visual do livro (Roger Cartoons) e às variantes do personagem.
+ * Design system oficial do Gamellito.
+ * Derivado do guia visual do livro (Roger Cartoons) e do Design System exportado.
  */
 
-/** Paleta Foundations do guia (livro) — hex para SVGs e design */
+/** Paleta primária oficial */
 export const GAMELLITO_PALETTE = {
-  /** Gamellito Orange — protagonista e CTAs principais */
-  orange: "#FF8C00",
-  /** Mãe Red — personagem de apoio e alertas importantes */
-  maeRed: "#E31E24",
-  /** Hospital Purple — ambientes de cuidado, Doutor Lagartão */
-  hospitalPurple: "#A881C0",
-  /** BG Yellow — planos de fundo e áreas de destaque */
-  bgYellow: "#FFD700",
-  /** Health Green — ícones de nutrição e sucesso */
-  healthGreen: "#8CC63F",
+  /** Amarelo-sol — cor dominante (capa/energia) */
+  sun:    "#FFC400",
+  /** Laranja Gamellito — mascote, CTAs, botões primários */
+  orange: "#F26A00",
+  /** Lilás — fundos de seção, divisores */
+  lilac:  "#9B8CF0",
+  /** Roxo — texto em cream/yellow, títulos secundários */
+  purple: "#6E59C9",
+  /** Creme — halos, cards, respiro sobre amarelo */
+  cream:  "#FFF3C9",
+  /** Tinta — contorno cartoon + texto principal */
+  ink:    "#2B2233",
+  /** Branco */
+  white:  "#FFFFFF",
 } as const;
 
-/** Cores oficiais do personagem Gamellito (SVGs) */
+/** Acentos "game" — usados em doses pequenas (bolinhas coloridas) */
+export const GAME_ACCENT_COLORS = {
+  red:     "#EE2B2B",
+  blue:    "#37B6E6",
+  green:   "#8DC63F",
+  pink:    "#F25CA2",
+  magenta: "#C82FA0",
+} as const;
+
+/** Estados derivados */
+export const GAMELLITO_STATES = {
+  sunDeep:    "#E5A800",
+  orangeDeep: "#D25A00",
+  lilacSoft:  "#C7BEF7",
+  creamDeep:  "#FBE7A6",
+} as const;
+
+/** Cores do personagem Gamellito (SVGs) */
 export const GAMELLITO_COLORS = {
-  body: GAMELLITO_PALETTE.orange,
-  bodyDark: "#F06105",
-  accent: "#FFBC00",
-  outline: "#000000",
+  body:     GAMELLITO_PALETTE.orange,
+  bodyDark: "#D25A00",
+  accent:   GAMELLITO_PALETTE.sun,
+  outline:  GAMELLITO_PALETTE.ink,
 } as const;
 
-/** Cores em HSL para uso com CSS/Tailwind */
+/** HSL para uso com CSS/Tailwind (legado) */
 export const GAMELLITO_HSL = {
-  body: "33 100% 50%",
-  bodyDark: "24 95% 49%",
-  accent: "43 100% 51%",
-  orange: "33 100% 50%",
-  maeRed: "358 76% 50%",
-  hospitalPurple: "277 35% 64%",
-  bgYellow: "51 100% 50%",
-  healthGreen: "88 55% 51%",
+  orange:          "26 100% 47%",
+  sun:             "47 100% 50%",
+  lilac:           "252 77% 75%",
+  purple:          "252 77% 57%",
+  maeRed:          "358 76% 50%",
+  hospitalPurple:  "252 77% 57%",
+  bgYellow:        "47 100% 50%",
+  healthGreen:     "88 55% 51%",
 } as const;
 
 /**
  * Variantes do personagem registradas no site.
- * Ao adicionar uma nova forma: coloque o SVG em public/assets,
- * registre em SiteAssets.tsx e adicione aqui (opcional, para documentação).
  */
 export const GAMELLITO_VARIANTS = [
-  "contente",   // rostinho feliz
-  "furioso",    // frustrado/confuso (FAQ)
-  "corpinho",   // corpo inteiro
-  // Adicione novas variantes aqui conforme criar (ex: "surpreso", "dormindo")
+  "contente",
+  "furioso",
+  "corpinho",
 ] as const;
 
 export type GamellitoVariantName = (typeof GAMELLITO_VARIANTS)[number];
-
-/**
- * Para criar novas formas do Gamellito:
- * 1. Edite ou crie um SVG (pode usar currentColor nos fills para trocar cor via CSS).
- * 2. Salve em public/assets com nome kebab-case (ex: gamellito-surpreso.svg).
- * 3. Adicione em src/components/SiteAssets.tsx em siteAssets.
- * 4. Se for variante do personagem principal, adicione em GamellitoCharacter (variant ou asset).
- * 5. Opcional: adicione o nome em GAMELLITO_VARIANTS acima.
- *
- * Dica: em SVGs novos, use fill="currentColor" ou variáveis CSS (--gamellito-body etc.)
- * para permitir que o site troque cores sem editar o arquivo.
- */
