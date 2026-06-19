@@ -300,6 +300,11 @@ export const BookMarked = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
     <polyline points="10 2 10 10 13 7 16 10 16 2" />
   </Icon>
 );
+export const ChevronDown = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
+  <Icon {...p}>
+    <path d="m6 9 6 6 6-6" />
+  </Icon>
+);
 export const ChevronLeft = (p: SVGProps<SVGSVGElement> & { size?: number }) => (
   <Icon {...p}>
     <path d="m15 18-6-6 6-6" />
