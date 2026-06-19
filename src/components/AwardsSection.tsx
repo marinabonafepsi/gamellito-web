@@ -48,7 +48,7 @@ const AwardsSection = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-display font-bold text-primary-foreground mb-4">
-            🏆 Prêmios <span className="text-gamellito-yellow">Internacionais</span>
+            Prêmios <span className="text-gamellito-yellow">Internacionais</span>
           </h2>
           <p className="text-lg text-primary-foreground/90 max-w-xl mx-auto font-body mb-6">
             Reconhecido mundialmente por sua contribuição à educação em saúde

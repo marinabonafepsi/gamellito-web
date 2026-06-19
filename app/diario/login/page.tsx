@@ -1,136 +1,105 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-type Etapa = "consentimento" | "email" | "confirmacao";
+type Etapa = "form" | "confirmacao";
 
 export default function LoginPage() {
-  const [etapa, setEtapa] = useState<Etapa>("consentimento");
-  const [consentido, setConsentido] = useState(false);
+  const [etapa, setEtapa] = useState<Etapa>("form");
   const [email, setEmail] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
 
   async function enviarMagicLink() {
-    if (!email.trim()) {
-      setErro("Digite um e-mail válido.");
-      return;
-    }
+    if (!email.trim()) { setErro("Digite um e-mail válido."); return; }
     setCarregando(true);
     setErro(null);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOtp({
-      email: email.trim().toLowerCase(),
-      options: {
-        emailRedirectTo: `${window.location.origin}/diario`,
-      },
+    const res = await fetch("/api/auth/magic-link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.trim().toLowerCase() }),
     });
 
     setCarregando(false);
 
-    if (error) {
-      setErro("Não foi possível enviar o link. Tente novamente.");
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      setErro((err as { error?: string }).error ?? "Não foi possível enviar o link. Tente novamente.");
     } else {
       setEtapa("confirmacao");
     }
   }
 
-  const cardClass =
-    "w-full max-w-md bg-white rounded-3xl border-[3px] border-[#2B2233] shadow-[4px_4px_0_#2B2233] p-8 md:p-10";
-
-  const inputClass =
-    "w-full rounded-2xl border-[2px] border-[#2B2233] bg-[#EBF4FF] px-4 py-3 font-body text-[#2B2233] placeholder:text-[#2B2233]/40 focus:outline-none focus:ring-2 focus:ring-[#9B8CF0]/60";
-
-  const btnPrimary =
-    "w-full rounded-full bg-[#F26A00] border-[3px] border-[#2B2233] shadow-[3px_3px_0_#2B2233] py-3 font-display font-bold text-white text-base hover:-translate-y-px hover:shadow-[4px_4px_0_#2B2233] active:translate-y-0.5 active:shadow-[1px_1px_0_#2B2233] transition-all disabled:opacity-50 disabled:cursor-not-allowed";
+  async function entrarComGoogle() {
+    setLoadingGoogle(true);
+    setErro(null);
+    const supabase = createClient();
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=/diario`,
+        queryParams: { prompt: "select_account" },
+      },
+    });
+    if (error) {
+      setErro("Não foi possível conectar com o Google. Tente pelo e-mail.");
+      setLoadingGoogle(false);
+    }
+  }
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <div className={cardClass}>
+      <div className="w-full max-w-md ds-card p-8 md:p-10">
 
-        {/* ── Etapa 1: Consentimento ── */}
-        {etapa === "consentimento" && (
-          <div className="flex flex-col gap-6">
+        {etapa === "form" && (
+          <div className="flex flex-col gap-5">
             <div className="text-center">
               <span className="text-5xl">📒</span>
-              <h1 className="text-2xl font-display font-bold text-[#2B2233] mt-3">
+              <h1 className="text-2xl font-display font-bold mt-3" style={{ color: "#2B2233" }}>
                 Diário do Gamellito
               </h1>
-              <p className="text-sm text-[#2B2233]/70 font-body mt-2">
-                Antes de começar, leia como seus dados são usados.
+              <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
+                Entre para acessar os registros da sua família.
               </p>
             </div>
 
-            <div className="rounded-2xl bg-[#FFF3C9] border-[2px] border-[#2B2233] p-5 text-sm text-[#2B2233] font-body leading-relaxed space-y-3">
-              <p>
-                <strong>O que coletamos:</strong>{" "}
-                apenas o e-mail da conta e os registros de glicemia que você
-                mesmo digitar (valor, data/hora, rótulo descritivo e
-                observação opcional).
-              </p>
-              <p>
-                <strong>Para que serve:</strong>{" "}
-                guardar seus registros com segurança e mostrar o histórico
-                para levar organizado à consulta médica.
-              </p>
-              <p>
-                <strong>O que não fazemos:</strong>{" "}
-                não interpretamos valores, não emitimos alertas clínicos, não
-                compartilhamos seus dados com terceiros sem sua autorização.
-              </p>
-              <p>
-                <strong>Seus direitos (LGPD):</strong>{" "}
-                você pode apagar todos os seus dados a qualquer momento em
-                Conta → Apagar todos os dados.
-              </p>
-              <p className="text-xs text-[#2B2233]/60 pt-1 border-t border-[#2B2233]/20">
-                Política de privacidade completa: <em>[link pendente — DIA-000]</em>
-              </p>
-            </div>
-
-            <label className="flex items-start gap-3 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={consentido}
-                onChange={(e) => setConsentido(e.target.checked)}
-                className="mt-1 h-5 w-5 shrink-0 rounded border-2 border-[#2B2233] accent-[#F26A00] cursor-pointer"
-              />
-              <span className="text-sm font-body text-[#2B2233] leading-relaxed">
-                Li e aceito o uso dos meus dados conforme descrito acima para
-                utilizar o Diário do Gamellito.
-              </span>
-            </label>
-
+            {/* Google OAuth */}
             <button
-              disabled={!consentido}
-              onClick={() => setEtapa("email")}
-              className={btnPrimary}
+              onClick={entrarComGoogle}
+              disabled={loadingGoogle}
+              className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-full font-body font-semibold transition-all"
+              style={{
+                background: "#ffffff",
+                border: "3px solid #2B2233",
+                boxShadow: "4px 4px 0 #2B2233",
+                color: "#2B2233",
+                minHeight: 44,
+              }}
             >
-              Continuar →
+              {loadingGoogle ? "Conectando…" : (
+                <>
+                  <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
+                    <path fill="#4285F4" d="M47.5 24.6c0-1.6-.1-3.1-.4-4.6H24v8.7h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.6 7.3-17.3z"/>
+                    <path fill="#34A853" d="M24 48c6.5 0 12-2.2 16-5.8l-7.9-6c-2.2 1.5-5 2.3-8.1 2.3-6.2 0-11.5-4.2-13.4-9.9H2.5v6.2C6.5 42.7 14.7 48 24 48z"/>
+                    <path fill="#FBBC05" d="M10.6 28.6c-.5-1.5-.8-3-.8-4.6s.3-3.1.8-4.6v-6.2H2.5C.9 16.6 0 20.2 0 24s.9 7.4 2.5 10.8l8.1-6.2z"/>
+                    <path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.6l6.8-6.8C35.9 2.2 30.5 0 24 0 14.7 0 6.5 5.3 2.5 13.2l8.1 6.2C12.5 13.7 17.8 9.5 24 9.5z"/>
+                  </svg>
+                  Entrar com Google
+                </>
+              )}
             </button>
-          </div>
-        )}
 
-        {/* ── Etapa 2: Inserir e-mail ── */}
-        {etapa === "email" && (
-          <div className="flex flex-col gap-6">
-            <div className="text-center">
-              <span className="text-5xl">✉️</span>
-              <h1 className="text-2xl font-display font-bold text-[#2B2233] mt-3">
-                Entrar com e-mail
-              </h1>
-              <p className="text-sm text-[#2B2233]/70 font-body mt-2">
-                Vamos enviar um link mágico — sem senha para lembrar.
-              </p>
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
+              <span className="text-xs font-body" style={{ color: "rgba(43,34,51,0.45)" }}>ou por e-mail</span>
+              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
             </div>
 
             <div className="flex flex-col gap-2">
-              <label
-                htmlFor="email"
-                className="text-sm font-body font-semibold text-[#F26A00]"
-              >
+              <label htmlFor="email" className="text-sm font-body font-medium" style={{ color: "#2B2233" }}>
                 E-mail da família
               </label>
               <input
@@ -142,10 +111,11 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && enviarMagicLink()}
-                className={inputClass}
+                className="ds-input w-full"
               />
               {erro && (
-                <p className="text-sm text-[#EE2B2B] font-body bg-[#EE2B2B]/10 rounded-xl px-4 py-2">
+                <p className="text-sm font-body px-3 py-2 rounded-xl"
+                  style={{ background: "#FEE2E2", color: "#991B1B" }}>
                   {erro}
                 </p>
               )}
@@ -154,44 +124,29 @@ export default function LoginPage() {
             <button
               onClick={enviarMagicLink}
               disabled={carregando}
-              className={btnPrimary}
+              className="ds-btn w-full font-display font-bold"
             >
               {carregando ? "Enviando…" : "Enviar link mágico ✉️"}
-            </button>
-
-            <button
-              onClick={() => setEtapa("consentimento")}
-              className="text-sm text-[#2B2233]/60 font-body hover:text-[#2B2233] transition-colors text-center"
-            >
-              ← Voltar
             </button>
           </div>
         )}
 
-        {/* ── Etapa 3: Confirmação ── */}
         {etapa === "confirmacao" && (
           <div className="flex flex-col items-center gap-5 text-center">
             <span className="text-6xl">🎉</span>
-            <h1 className="text-2xl font-display font-bold text-[#2B2233]">
+            <h1 className="text-2xl font-display font-bold" style={{ color: "#2B2233" }}>
               Link enviado!
             </h1>
-            <p className="text-sm text-[#2B2233]/70 font-body leading-relaxed max-w-xs">
+            <p className="text-sm font-body leading-relaxed max-w-xs" style={{ color: "rgba(43,34,51,0.7)" }}>
               Verifique a caixa de entrada de{" "}
-              <strong className="text-[#2B2233]">{email}</strong> e clique no
-              link para entrar. Pode fechar esta aba.
+              <strong style={{ color: "#2B2233" }}>{email}</strong> e clique
+              no link para entrar.
             </p>
-            <p className="text-xs text-[#2B2233]/50 font-body">
+            <p className="text-xs font-body" style={{ color: "rgba(43,34,51,0.5)" }}>
               Não recebeu? Verifique o spam ou{" "}
-              <button
-                onClick={() => {
-                  setEtapa("email");
-                  setErro(null);
-                }}
-                className="underline hover:text-[#F26A00] transition-colors"
-              >
+              <button onClick={() => { setEtapa("form"); setErro(null); }} className="underline">
                 tente novamente
-              </button>
-              .
+              </button>.
             </p>
           </div>
         )}

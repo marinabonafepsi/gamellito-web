@@ -6,7 +6,7 @@ export function HomeHero() {
   return (
     <section
       id="inicio"
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#2b1654] via-[#1a0f3a] to-[#1a0f3a] pt-16"
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-gamellito-space via-gamellito-space to-gamellito-space pt-16"
     >
       {/* Background: imagem + overlay — fundo roxo sempre visível */}
       <div className="absolute inset-0 min-h-screen">
@@ -20,7 +20,7 @@ export function HomeHero() {
           priority
         />
         <div
-          className="absolute inset-0 bg-[#2b1654]/50"
+          className="absolute inset-0 bg-gamellito-space/50"
           aria-hidden
         />
       </div>
@@ -29,7 +29,7 @@ export function HomeHero() {
       {[...Array(20)].map((_, i) => (
         <div
           key={i}
-          className="absolute rounded-full bg-[#ffd66b] animate-twinkle"
+          className="absolute rounded-full bg-gamellito-yellow animate-twinkle"
           style={{
             top: `${(i * 7) % 100}%`,
             left: `${(i * 11) % 100}%`,
@@ -46,7 +46,7 @@ export function HomeHero() {
         <div className="flex-1 text-center lg:text-left">
           <h1 className="font-display text-5xl font-bold text-white mb-4 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] md:text-7xl">
             Gamellito
-            <span className="mt-2 block text-3xl text-[#ff8a3c] md:text-4xl">
+            <span className="mt-2 block text-3xl text-gamellito-orange md:text-4xl">
               Ltda.
             </span>
           </h1>
@@ -58,17 +58,15 @@ export function HomeHero() {
           <div className="flex flex-col gap-4 sm:flex-row justify-center lg:justify-start">
             <Link
               href="/jogos"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff8a3c] px-8 py-4 font-display text-lg font-bold text-white shadow-[0_4px_20px_rgba(255,138,60,0.5)] hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center rounded-full bg-gamellito-orange px-8 py-4 font-display text-lg font-bold text-white shadow-lg hover:opacity-90 transition-opacity"
             >
-              <span aria-hidden>🎮</span>
-              <span>Conheça os Jogos</span>
+              Conheça os Jogos
             </Link>
             <Link
               href="/solucoes"
-              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white bg-white/10 px-8 py-4 font-display text-lg font-semibold text-white hover:bg-white/20 transition-colors"
+              className="inline-flex items-center justify-center rounded-full border-2 border-white bg-white/10 px-8 py-4 font-display text-lg font-semibold text-white hover:bg-white/20 transition-colors"
             >
-              <span aria-hidden>🏥</span>
-              <span>Soluções em Saúde</span>
+              Soluções em Saúde
             </Link>
           </div>
         </div>
@@ -97,7 +95,7 @@ export function HomeHero() {
         aria-label="Rolar para baixo"
       >
         <div className="flex h-10 w-6 flex-col items-center rounded-full border-2 border-current pt-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#ff8a3c] animate-scroll-bounce" />
+          <span className="h-1.5 w-1.5 rounded-full bg-gamellito-orange animate-scroll-bounce" />
         </div>
       </a>
     </section>

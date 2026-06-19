@@ -3,10 +3,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  ChefHat, Gamepad2, GraduationCap, BookOpen, X,
+  ChefHat, Gamepad2, GraduationCap, BookOpen, X, ChevronDown,
   Users, School, Stethoscope, ShieldCheck,
 } from "@/components/icons";
 import { AssetImage, type SiteAssetKey } from "@/components/SiteAssets";
+import { PersonagemAnimado } from "@/components/PersonagemAnimado";
 import { track } from "@/lib/analytics";
 
 /* ══════════════════════════════════════════
@@ -14,38 +15,73 @@ import { track } from "@/lib/analytics";
 ══════════════════════════════════════════ */
 const solutions: Array<{
   icon: typeof ChefHat;
+  tag: string;
+  tagColor: string;
   title: string;
   description: string;
+  extra: string[];
   asset: SiteAssetKey;
   cta?: { label: string };
 }> = [
   {
     icon: ChefHat,
+    tag: "OFICINAS",
+    tagColor: "bg-gamellito-pink",
     title: "Oficinas culinárias e alimentação",
     description:
       "Oficinas que promovem aprendizado prático sobre alimentação saudável e contagem de carboidratos, com participação ativa das crianças. Contribuem para melhoria de parâmetros clínicos e maior conscientização sobre os cuidados com a alimentação.",
+    extra: [
+      "Atividades presenciais semanais no AEHU/UEL",
+      "Contagem de carboidratos na prática",
+      "Participação ativa das crianças e famílias",
+      "Melhora comprovada em parâmetros clínicos",
+    ],
     asset: "geladeira",
   },
   {
     icon: Gamepad2,
+    tag: "JOGOS",
+    tagColor: "bg-primary",
     title: "Jogos educativos e método Gamellito",
     description:
       "Atividades com o método Gamellito: recursos lúdicos e interativos para facilitar a compreensão do manejo do DM1. Jogos, dinâmicas em grupo e práticas recreativas que estimulam a autonomia e a adesão ao tratamento.",
+    extra: [
+      "Jogo digital para celular e tablet",
+      "Jogo de tabuleiro para grupos e oficinas",
+      "Dinâmicas recreativas adaptadas por faixa etária",
+      "Desenvolvimento de autonomia e autoestima",
+    ],
     asset: "pancreasPreguicoso",
-    cta: { label: "🎮 Quero conhecer o jogo" },
+    cta: { label: "Quero conhecer o jogo" },
   },
   {
     icon: GraduationCap,
+    tag: "RODAS DE CONVERSA",
+    tagColor: "bg-gamellito-blue",
     title: "Rodas de conversa e equipe multidisciplinar",
     description:
       "Intervenções que abordam adesão ao tratamento e reconhecimento de sinais de descompensação glicêmica. Equipe de nutrição, psicologia, artes cênicas, design, educação física, serviço social, odontologia, enfermagem e oftalmologia.",
+    extra: [
+      "Nutrição, psicologia e enfermagem integradas",
+      "Artes cênicas e educação física adaptada",
+      "Odontologia, oftalmologia e serviço social",
+      "Apoio à adesão ao tratamento de longo prazo",
+    ],
     asset: "medicoMaeGamellito",
   },
   {
     icon: BookOpen,
+    tag: "MATERIAIS DIGITAIS",
+    tagColor: "bg-gamellito-green",
     title: "Materiais educativos e alcance digital",
     description:
       "Jogos, histórias em quadrinhos, vídeos e telenovela educativa em linguagem acessível. Disponibilizados em plataformas digitais, redes sociais e canais institucionais da UEL para ampliar o acesso e reforçar os conteúdos.",
+    extra: [
+      "Livros ilustrados com as aventuras do Gamellito",
+      "Telenovela educativa em linguagem acessível",
+      "Histórias em quadrinhos e vídeos animados",
+      "Distribuição gratuita via redes e canais da UEL",
+    ],
     asset: "maeGamellitoGlicemia",
   },
 ];
@@ -160,23 +196,22 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
           <X size={20} />
         </button>
-        <div className="text-5xl text-center mb-4">🚀</div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-3">
           Gamellito Adventures está chegando!
         </h2>
         <p className="font-body text-muted-foreground text-center text-sm leading-relaxed mb-6">
           Estamos desenvolvendo o jogo completo. Seu interesse aqui nos ajuda a
-          priorizar o lançamento — obrigada! ✨
+          priorizar o lançamento.
         </p>
         <div className="flex flex-col gap-3">
           <a
             href="mailto:gamellitoltda@gmail.com?subject=Interesse no jogo Gamellito Adventures"
             onClick={onClose}
-            className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+            className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
           >
-            📧 Me avise quando lançar
+            Me avise quando lançar
           </a>
-          <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors">
+          <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
             Voltar
           </button>
         </div>
@@ -190,10 +225,15 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
 ══════════════════════════════════════════ */
 const SolutionsSection = () => {
   const [showGameModal, setShowGameModal] = useState(false);
+  const [openCard, setOpenCard] = useState<string | null>(null);
 
   async function handleGameCTA() {
     await track("game_interest", window.location.pathname, { source: "solutions_section" });
     setShowGameModal(true);
+  }
+
+  function toggleCard(title: string) {
+    setOpenCard((prev) => (prev === title ? null : title));
   }
 
   return (
@@ -216,7 +256,7 @@ const SolutionsSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
-              🏥 Soluções para{" "}
+              Soluções para{" "}
               <span className="text-primary">Saúde Pública</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto font-body mb-4">
@@ -225,13 +265,15 @@ const SolutionsSection = () => {
             <p className="text-muted-foreground font-body max-w-2xl mx-auto">
               Desde 2023, atividades semanais com foco em prevenção de complicações, reabilitação e fortalecimento do autocuidado.
             </p>
-            <AssetImage
-              asset="bicicleta"
-              alt="Vida ativa e saúde — Gamellito"
-              className="w-32 h-auto mx-auto mt-6 opacity-90"
-              width={128}
-              height={80}
-            />
+            <PersonagemAnimado>
+              <AssetImage
+                asset="bicicleta"
+                alt="Vida ativa e saúde — Gamellito"
+                className="w-44 h-auto"
+                width={176}
+                height={110}
+              />
+            </PersonagemAnimado>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -242,26 +284,71 @@ const SolutionsSection = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.5 }}
-                className="bg-card rounded-2xl p-8 border border-border hover:border-primary/30 transition-all group"
+                className="bg-card rounded-2xl p-7 border border-border hover:border-primary/30 transition-all group"
                 style={{ boxShadow: "var(--shadow-card)" }}
               >
-                <div className="flex items-start justify-between gap-4 mb-5">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/20 transition-colors">
-                    <sol.icon className="w-7 h-7 text-primary" />
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-xl ${sol.tagColor} flex items-center justify-center flex-shrink-0`}>
+                      <sol.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="text-xs font-body font-bold text-primary uppercase tracking-wider">
+                      {sol.tag}
+                    </span>
                   </div>
-                  <AssetImage asset={sol.asset} alt="" className="w-20 h-auto flex-shrink-0 opacity-80" width={80} height={50} />
+                  <AssetImage
+                    asset={sol.asset}
+                    alt=""
+                    className="w-28 h-auto flex-shrink-0"
+                    width={112}
+                    height={80}
+                  />
                 </div>
                 <h3 className="font-display font-bold text-xl text-foreground mb-3">{sol.title}</h3>
-                <p className="text-muted-foreground font-body leading-relaxed">{sol.description}</p>
-                {sol.cta && (
+                <p className="text-muted-foreground font-body leading-relaxed text-sm">{sol.description}</p>
+
+                {/* Accordion de detalhes */}
+                <AnimatePresence>
+                  {openCard === sol.title && (
+                    <motion.ul
+                      key="extra"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="mt-3 space-y-1.5 overflow-hidden"
+                    >
+                      {sol.extra.map((item) => (
+                        <li key={item} className="flex items-start gap-2 text-muted-foreground font-body text-sm">
+                          <span className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </motion.ul>
+                  )}
+                </AnimatePresence>
+
+                <div className="mt-4 flex items-center gap-3 flex-wrap">
                   <button
                     type="button"
-                    onClick={handleGameCTA}
-                    className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors text-sm"
+                    onClick={() => toggleCard(sol.title)}
+                    className="inline-flex items-center gap-1 text-sm text-primary font-body font-semibold hover:underline"
                   >
-                    {sol.cta.label}
+                    {openCard === sol.title ? "Ver menos" : "Saber mais"}
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform duration-200 ${openCard === sol.title ? "rotate-180" : ""}`}
+                    />
                   </button>
-                )}
+                  {sol.cta && (
+                    <button
+                      type="button"
+                      onClick={handleGameCTA}
+                      className="inline-flex items-center gap-2 px-5 py-2 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors text-sm"
+                    >
+                      {sol.cta.label}
+                    </button>
+                  )}
+                </div>
               </motion.div>
             ))}
           </div>
@@ -327,7 +414,7 @@ const SolutionsSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-primary mb-4">
-              🌎 Para quem atuamos
+              Para quem atuamos
             </h2>
             <p className="text-lg text-primary-foreground/85 max-w-3xl mx-auto font-body">
               Do diagnóstico na família ao programa municipal de saúde —
@@ -352,7 +439,6 @@ const SolutionsSection = () => {
                       {setor.fase}
                     </span>
                     <div className="flex items-center gap-2 mt-3">
-                      <span className="text-2xl">{setor.emoji}</span>
                       <h3 className="font-display font-bold text-xl text-primary-foreground">
                         {setor.titulo}
                       </h3>
@@ -377,9 +463,9 @@ const SolutionsSection = () => {
                 <a
                   href={setor.href}
                   onClick={() => track("nav_click", window.location.pathname, { label: setor.cta, href: setor.href })}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors text-sm"
                 >
-                  {setor.cta} →
+                  {setor.cta}
                 </a>
               </motion.div>
             ))}

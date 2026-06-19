@@ -1,15 +1,18 @@
 import type { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
+import "./diario.css";
 
 export default function DiarioLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#FFF3C9] flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ background: "#FFF3C9" }}>
       <Navbar />
 
-      {/* Aviso não-clínico */}
-      <div className="border-b-[3px] border-[#2B2233] bg-[#FFC400] px-4 py-2.5 text-center text-sm font-body font-semibold text-[#2B2233]">
-        📋 Este diário organiza registros para sua consulta — não substitui orientação médica.
+      {/* Aviso não-clínico — obrigatório em todas as telas do diário (REGRA Nº 1) */}
+      <div className="ds-disclaimer">
+        Este diário ajuda a organizar os registros para a sua consulta. Ele não substitui
+        orientação médica e não interpreta os valores. Em caso de dúvida, fale com a
+        equipe de saúde do seu filho.
       </div>
 
       <main className="flex-1 container mx-auto px-4 py-8 md:py-12">
