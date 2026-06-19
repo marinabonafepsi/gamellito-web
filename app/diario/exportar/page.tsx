@@ -167,7 +167,7 @@ function PreviewTabela({ registros, print }: { registros: Registro[]; print?: bo
             <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-[#2B2233]/20"}>
               {r.lancado_por}
             </td>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border text-xs opacity-70"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-[#2B2233]/20 text-xs text-[#2B2233]/60"}>
               {r.observacao ?? "—"}
             </td>
           </tr>
