@@ -77,16 +77,16 @@ export default function HistoricoPage() {
       <div className="max-w-lg mx-auto">
         <header className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-display font-bold text-foreground">
+            <h1 className="text-2xl font-display font-bold text-[#2B2233]">
               Histórico
             </h1>
-            <p className="text-sm font-body text-primary">
+            <p className="text-sm font-body text-[#6E59C9]">
               Seus registros de glicemia
             </p>
           </div>
           <Link
             href="/diario/lancar"
-            className="bg-primary text-primary-foreground rounded-full font-display font-bold text-xs px-4 py-2 hover:bg-primary/90 transition-colors"
+            className="rounded-full bg-[#F26A00] border-[2px] border-[#2B2233] shadow-[2px_2px_0_#2B2233] font-display font-bold text-xs text-white px-4 py-2 hover:-translate-y-px hover:shadow-[3px_3px_0_#2B2233] transition-all"
           >
             + Registrar
           </Link>
@@ -99,10 +99,10 @@ export default function HistoricoPage() {
               key={id}
               type="button"
               onClick={() => setPeriodo(id)}
-              className={`rounded-full px-3 py-1.5 text-xs font-body font-medium transition-colors ${
+              className={`rounded-full px-4 py-1.5 text-sm font-body font-semibold border-[2px] border-[#2B2233] transition-all ${
                 periodo === id
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  ? "bg-[#F26A00] text-white shadow-[2px_2px_0_#2B2233]"
+                  : "bg-white text-[#2B2233] hover:-translate-y-px hover:shadow-[2px_2px_0_#2B2233]"
               }`}
             >
               {label}
@@ -111,17 +111,17 @@ export default function HistoricoPage() {
         </div>
 
         {carregando ? (
-          <div className="text-center py-16 font-body text-muted-foreground">
+          <div className="text-center py-16 font-body text-[#2B2233]/50">
             Carregando…
           </div>
         ) : registros.length === 0 ? (
-          <div className="bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl text-center py-12 px-6">
-            <p className="font-body text-foreground mb-4">
+          <div className="bg-white rounded-3xl border-[3px] border-[#2B2233] shadow-[4px_4px_0_#2B2233] text-center py-12 px-6">
+            <p className="font-body text-[#2B2233] mb-4">
               Nenhum registro neste período.
             </p>
             <Link
               href="/diario/lancar"
-              className="inline-block bg-primary text-primary-foreground rounded-full font-display font-bold px-6 py-3 hover:bg-primary/90 transition-colors"
+              className="inline-block rounded-full bg-[#F26A00] border-[3px] border-[#2B2233] shadow-[3px_3px_0_#2B2233] font-display font-bold text-white px-6 py-3 hover:-translate-y-px hover:shadow-[4px_4px_0_#2B2233] transition-all"
             >
               Adicionar o primeiro
             </Link>
@@ -129,27 +129,27 @@ export default function HistoricoPage() {
         ) : (
           <div className="flex flex-col gap-3">
             {registros.map((r) => (
-              <div key={r.id} className="bg-card rounded-2xl border border-border flex items-start gap-4 p-4">
+              <div key={r.id} className="bg-white rounded-2xl border-[2px] border-[#2B2233] shadow-[2px_2px_0_#2B2233] flex items-start gap-4 p-4">
                 {/* Valor em destaque */}
-                <div className="flex-shrink-0 w-20 text-center rounded-2xl py-2 bg-gamellito-yellow border-2 border-gamellito-space/30">
-                  <span className="font-display font-bold text-2xl text-gamellito-space">
+                <div className="flex-shrink-0 w-20 text-center rounded-2xl py-2 bg-[#FFC400] border-[2px] border-[#2B2233]">
+                  <span className="font-display font-bold text-2xl text-[#2B2233]">
                     {r.valor}
                   </span>
-                  <div className="text-xs font-body text-gamellito-space/70">
+                  <div className="text-xs font-body text-[#2B2233]/70">
                     mg/dL
                   </div>
                 </div>
 
                 {/* Detalhes */}
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm font-body font-semibold text-foreground">
+                  <div className="text-sm font-body font-semibold text-[#2B2233]">
                     {ROTULO_LABEL[r.rotulo] ?? r.rotulo}
                   </div>
-                  <div className="text-xs font-body mt-0.5 text-muted-foreground">
+                  <div className="text-xs font-body mt-0.5 text-[#2B2233]/60">
                     {formatarDataHora(r.data_hora)} · {r.lancado_por}
                   </div>
                   {r.observacao && (
-                    <div className="text-xs font-body mt-1 italic text-muted-foreground">
+                    <div className="text-xs font-body mt-1 italic text-[#2B2233]/50">
                       {r.observacao}
                     </div>
                   )}
@@ -160,14 +160,14 @@ export default function HistoricoPage() {
                   <button
                     type="button"
                     onClick={() => setEditando(r)}
-                    className="border border-border text-foreground rounded-full font-body text-xs px-3 py-1.5 hover:border-primary/40 transition-colors"
+                    className="border-[2px] border-[#2B2233] text-[#2B2233] bg-white rounded-full font-body text-xs px-3 py-1.5 hover:-translate-y-px hover:shadow-[2px_2px_0_#2B2233] transition-all"
                   >
                     Editar
                   </button>
                   <button
                     type="button"
                     onClick={() => apagar(r.id)}
-                    className="border border-destructive/40 text-destructive rounded-full font-body text-xs px-3 py-1.5 hover:border-destructive transition-colors"
+                    className="border-[2px] border-[#EE2B2B]/60 text-[#EE2B2B] bg-white rounded-full font-body text-xs px-3 py-1.5 hover:bg-[#EE2B2B]/10 transition-colors"
                   >
                     Apagar
                   </button>
@@ -178,7 +178,7 @@ export default function HistoricoPage() {
         )}
 
         <div className="mt-6 text-center">
-          <Link href="/diario" className="text-sm font-body text-muted-foreground hover:underline">
+          <Link href="/diario" className="text-sm font-body text-[#2B2233]/50 hover:text-[#2B2233] transition-colors">
             ← Voltar
           </Link>
         </div>

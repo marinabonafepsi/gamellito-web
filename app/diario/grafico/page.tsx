@@ -34,12 +34,12 @@ export default function GraficoPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
-        <h1 className="text-3xl font-display font-bold text-primary-foreground">
+        <h1 className="text-3xl font-display font-bold text-[#2B2233]">
           Gráfico
         </h1>
         <Link href="/diario"
-          className="text-sm font-body text-primary-foreground/60 hover:text-primary-foreground transition-colors">
-          ← Histórico
+          className="text-sm font-body text-[#2B2233]/60 hover:text-[#2B2233] transition-colors">
+          ← Voltar
         </Link>
       </div>
 
@@ -47,20 +47,20 @@ export default function GraficoPage() {
       <div className="flex gap-2 mb-6">
         {(["7", "14", "30"] as Periodo[]).map((p) => (
           <button key={p} onClick={() => setPeriodo(p)}
-            className={`rounded-full px-4 py-2 text-sm font-body font-medium transition-colors
-              ${periodo === p
-                ? "bg-primary text-primary-foreground"
-                : "bg-primary-foreground/10 text-primary-foreground/80 hover:bg-primary-foreground/20"
-              }`}>
+            className={`rounded-full px-4 py-2 text-sm font-body font-semibold border-[2px] border-[#2B2233] transition-all ${
+              periodo === p
+                ? "bg-[#F26A00] text-white shadow-[2px_2px_0_#2B2233]"
+                : "bg-white text-[#2B2233] hover:-translate-y-px hover:shadow-[2px_2px_0_#2B2233]"
+            }`}>
             {p} dias
           </button>
         ))}
       </div>
 
       {/* Gráfico */}
-      <div className="bg-card rounded-3xl border border-border p-4 md:p-6 mb-6">
+      <div className="bg-white rounded-3xl border-[3px] border-[#2B2233] shadow-[4px_4px_0_#2B2233] p-4 md:p-6 mb-6">
         {carregando ? (
-          <div className="flex items-center justify-center h-48 text-muted-foreground font-body text-sm">
+          <div className="flex items-center justify-center h-48 text-[#2B2233]/50 font-body text-sm">
             Carregando…
           </div>
         ) : (
@@ -70,8 +70,8 @@ export default function GraficoPage() {
 
       {/* Legenda neutra — sem interpretação */}
       {pontos.length > 0 && (
-        <div className="bg-primary-foreground/5 rounded-2xl border border-primary-foreground/10 p-4 mb-6">
-          <p className="text-xs font-body text-primary-foreground/60 mb-3 font-medium uppercase tracking-wide">
+        <div className="bg-[#FFF3C9] rounded-2xl border-[2px] border-[#2B2233] p-4 mb-6">
+          <p className="text-xs font-body text-[#2B2233]/60 mb-3 font-semibold uppercase tracking-wide">
             Registros por momento ({pontos.length} total)
           </p>
           <div className="flex flex-wrap gap-3">
@@ -79,8 +79,8 @@ export default function GraficoPage() {
               const count = pontos.filter((p) => p.rotulo === key).length;
               if (count === 0) return null;
               return (
-                <span key={key} className="text-xs font-body text-primary-foreground/70">
-                  {label}: <strong className="text-primary-foreground">{count}</strong>
+                <span key={key} className="text-xs font-body text-[#2B2233]/70">
+                  {label}: <strong className="text-[#2B2233]">{count}</strong>
                 </span>
               );
             })}
@@ -91,11 +91,11 @@ export default function GraficoPage() {
       {/* Ações */}
       <div className="flex gap-4 justify-center flex-wrap">
         <Link href="/diario/exportar"
-          className="rounded-full bg-primary px-6 py-2.5 font-display font-bold text-primary-foreground hover:opacity-90 transition-opacity text-sm">
+          className="rounded-full bg-[#F26A00] border-[3px] border-[#2B2233] shadow-[3px_3px_0_#2B2233] px-6 py-2.5 font-display font-bold text-white text-sm hover:-translate-y-px hover:shadow-[4px_4px_0_#2B2233] transition-all">
           Exportar PDF →
         </Link>
         <Link href="/diario/lancar"
-          className="rounded-full border border-primary-foreground/20 px-6 py-2.5 font-display font-bold text-primary-foreground hover:bg-primary-foreground/10 transition-colors text-sm">
+          className="rounded-full border-[2px] border-[#2B2233] bg-white px-6 py-2.5 font-display font-bold text-[#2B2233] text-sm hover:-translate-y-px hover:shadow-[2px_2px_0_#2B2233] transition-all">
           + Novo registro
         </Link>
       </div>
