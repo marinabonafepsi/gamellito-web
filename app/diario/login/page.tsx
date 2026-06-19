@@ -54,7 +54,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="w-full max-w-md ds-card p-8 md:p-10">
+      <div className="w-full max-w-md bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-8 md:p-10">
 
         {/* ── Etapa 1: Consentimento ── */}
         {etapa === "consentimento" && (
@@ -64,31 +64,30 @@ export default function LoginPage() {
               <h1 className="text-2xl font-display font-bold text-foreground mt-3">
                 Diário do Gamellito
               </h1>
-              <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
+              <p className="text-sm font-body mt-2 text-muted-foreground">
                 Antes de começar, leia como seus dados são usados.
               </p>
             </div>
 
-            <div className="rounded-2xl p-5 text-sm font-body leading-relaxed space-y-3"
-              style={{ background: "#FFF3C9", border: "2px solid #2B2233" }}>
-              <p style={{ color: "#2B2233" }}>
+            <div className="rounded-2xl p-5 text-sm font-body leading-relaxed space-y-3 bg-muted/60 border border-border">
+              <p className="text-foreground">
                 <strong>O que coletamos:</strong>{" "}
                 apenas o e-mail da conta e os registros de glicemia que você mesmo digitar
                 (valor, data/hora, rótulo e observação opcional).
               </p>
-              <p style={{ color: "#2B2233" }}>
+              <p className="text-foreground">
                 <strong>Para que serve:</strong>{" "}
                 guardar seus registros com segurança e mostrar o histórico organizado à consulta médica.
               </p>
-              <p style={{ color: "#2B2233" }}>
+              <p className="text-foreground">
                 <strong>O que não fazemos:</strong>{" "}
                 não interpretamos valores, não emitimos alertas clínicos, não compartilhamos seus dados.
               </p>
-              <p style={{ color: "#2B2233" }}>
+              <p className="text-foreground">
                 <strong>Seus direitos (LGPD):</strong>{" "}
                 você pode apagar todos os dados a qualquer momento em Conta → Apagar todos os dados.
               </p>
-              <p className="text-xs pt-1" style={{ color: "rgba(43,34,51,0.5)", borderTop: "1px solid #2B2233" }}>
+              <p className="text-xs pt-1 text-muted-foreground border-t border-border">
                 Política de privacidade completa: <em>[link pendente — validação jurídica em andamento]</em>
               </p>
             </div>
@@ -98,10 +97,9 @@ export default function LoginPage() {
                 type="checkbox"
                 checked={consentido}
                 onChange={(e) => setConsentido(e.target.checked)}
-                className="mt-1 h-5 w-5 shrink-0 rounded cursor-pointer"
-                style={{ accentColor: "#F26A00" }}
+                className="mt-1 h-5 w-5 shrink-0 rounded cursor-pointer accent-primary"
               />
-              <span className="text-sm font-body leading-relaxed" style={{ color: "#2B2233" }}>
+              <span className="text-sm font-body leading-relaxed text-foreground">
                 Li e aceito o uso dos meus dados conforme descrito acima para
                 utilizar o Diário do Gamellito.
               </span>
@@ -110,7 +108,7 @@ export default function LoginPage() {
             <button
               disabled={!consentido}
               onClick={() => setEtapa("email")}
-              className="ds-btn w-full text-base font-display font-bold"
+              className="w-full bg-primary text-primary-foreground rounded-full font-display font-bold text-base py-3 hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
             >
               Continuar →
             </button>
@@ -121,10 +119,10 @@ export default function LoginPage() {
         {etapa === "email" && (
           <div className="flex flex-col gap-5">
             <div className="text-center">
-              <h1 className="text-2xl font-display font-bold text-foreground mt-3">
+              <h1 className="text-2xl font-display font-bold text-foreground">
                 Entrar
               </h1>
-              <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
+              <p className="text-sm font-body mt-2 text-muted-foreground">
                 Escolha como prefere acessar o diário.
               </p>
             </div>
@@ -133,14 +131,7 @@ export default function LoginPage() {
             <button
               onClick={entrarComGoogle}
               disabled={loadingGoogle}
-              className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-full font-body font-semibold transition-all"
-              style={{
-                background: "#ffffff",
-                border: "3px solid #2B2233",
-                boxShadow: "4px 4px 0 #2B2233",
-                color: "#2B2233",
-                minHeight: 44,
-              }}
+              className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-full font-body font-semibold bg-white text-gamellito-space border-2 border-gamellito-space/20 hover:border-gamellito-hospital-purple/50 transition-colors min-h-[44px]"
             >
               {loadingGoogle ? (
                 "Conectando…"
@@ -159,14 +150,14 @@ export default function LoginPage() {
 
             {/* Divisor */}
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.2 }} />
-              <span className="text-xs font-body" style={{ color: "rgba(43,34,51,0.5)" }}>ou por e-mail</span>
-              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.2 }} />
+              <div className="flex-1 h-px bg-foreground/20" />
+              <span className="text-xs font-body text-muted-foreground">ou por e-mail</span>
+              <div className="flex-1 h-px bg-foreground/20" />
             </div>
 
             {/* E-mail magic link */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-sm font-body font-medium" style={{ color: "#2B2233" }}>
+              <label htmlFor="email" className="text-sm font-body font-medium text-foreground">
                 E-mail da família
               </label>
               <input
@@ -178,11 +169,10 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && enviarMagicLink()}
-                className="ds-input w-full"
+                className="w-full rounded-xl border border-border bg-background px-4 py-2.5 font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
               />
               {erro && (
-                <p className="text-sm font-body px-3 py-2 rounded-xl"
-                  style={{ background: "#FEE2E2", color: "#991B1B" }}>
+                <p className="text-sm font-body bg-destructive/10 text-destructive px-3 py-2 rounded-xl">
                   {erro}
                 </p>
               )}
@@ -191,15 +181,14 @@ export default function LoginPage() {
             <button
               onClick={enviarMagicLink}
               disabled={carregando}
-              className="ds-btn w-full font-display font-bold"
+              className="w-full bg-primary text-primary-foreground rounded-full font-display font-bold py-3 hover:bg-primary/90 transition-colors disabled:opacity-60"
             >
               {carregando ? "Enviando…" : "Enviar link mágico"}
             </button>
 
             <button
               onClick={() => setEtapa("consentimento")}
-              className="text-sm font-body text-center hover:underline"
-              style={{ color: "rgba(43,34,51,0.5)" }}
+              className="text-sm font-body text-center text-muted-foreground hover:underline"
             >
               ← Voltar
             </button>
@@ -213,16 +202,16 @@ export default function LoginPage() {
             <h1 className="text-2xl font-display font-bold text-foreground">
               Link enviado!
             </h1>
-            <p className="text-sm font-body leading-relaxed max-w-xs" style={{ color: "rgba(43,34,51,0.7)" }}>
+            <p className="text-sm font-body leading-relaxed max-w-xs text-muted-foreground">
               Verifique a caixa de entrada de{" "}
-              <strong style={{ color: "#2B2233" }}>{email}</strong> e clique no
+              <strong className="text-foreground">{email}</strong> e clique no
               link para entrar. Pode fechar esta aba.
             </p>
-            <p className="text-xs font-body" style={{ color: "rgba(43,34,51,0.5)" }}>
+            <p className="text-xs font-body text-muted-foreground/70">
               Não recebeu? Verifique o spam ou{" "}
               <button
                 onClick={() => { setEtapa("email"); setErro(null); }}
-                className="underline"
+                className="underline hover:text-muted-foreground transition-colors"
               >
                 tente novamente
               </button>

@@ -44,10 +44,10 @@ export default function ExportarPage() {
       {/* Controles — ocultos na impressão */}
       <div className="print:hidden max-w-lg mx-auto">
         <header className="mb-6">
-          <h1 className="text-2xl font-display font-bold" style={{ color: "#2B2233" }}>
+          <h1 className="text-2xl font-display font-bold text-foreground">
             Exportar registros
           </h1>
-          <p className="text-sm font-body mt-1" style={{ color: "#6E59C9" }}>
+          <p className="text-sm font-body mt-1 text-primary">
             Salve como PDF para levar à consulta.
           </p>
         </header>
@@ -59,7 +59,11 @@ export default function ExportarPage() {
               key={p}
               type="button"
               onClick={() => setPeriodo(p)}
-              className={`ds-label ${periodo === p ? "ds-label--active" : ""}`}
+              className={`rounded-full px-3 py-1.5 text-xs font-body font-medium transition-colors ${
+                periodo === p
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              }`}
             >
               {p} dias
             </button>
@@ -67,18 +71,18 @@ export default function ExportarPage() {
         </div>
 
         {carregando ? (
-          <p className="font-body text-center py-8" style={{ color: "rgba(43,34,51,0.5)" }}>
+          <p className="font-body text-center text-muted-foreground py-8">
             Carregando…
           </p>
         ) : registros.length === 0 ? (
-          <div className="ds-card ds-card--cream text-center py-10">
-            <p className="font-body" style={{ color: "#2B2233" }}>
+          <div className="bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl text-center py-10">
+            <p className="font-body text-foreground">
               Nenhum registro nos últimos {periodo} dias.
             </p>
           </div>
         ) : (
-          <div className="ds-card p-4 mb-6 overflow-x-auto">
-            <p className="text-sm font-body mb-3" style={{ color: "rgba(43,34,51,0.6)" }}>
+          <div className="bg-card rounded-2xl border border-border p-4 mb-6 overflow-x-auto">
+            <p className="text-sm font-body text-muted-foreground mb-3">
               {registros.length} registro{registros.length !== 1 ? "s" : ""} encontrado{registros.length !== 1 ? "s" : ""}
             </p>
             <PreviewTabela registros={registros} />
@@ -88,13 +92,13 @@ export default function ExportarPage() {
         <button
           onClick={() => window.print()}
           disabled={carregando || registros.length === 0}
-          className="ds-btn ds-btn--lg w-full"
+          className="w-full bg-primary text-primary-foreground rounded-full font-display font-bold text-base py-3.5 hover:bg-primary/90 transition-colors disabled:opacity-60"
         >
           Imprimir / Salvar PDF
         </button>
 
         <div className="mt-4 text-center">
-          <Link href="/diario" className="text-sm font-body hover:underline" style={{ color: "rgba(43,34,51,0.6)" }}>
+          <Link href="/diario" className="text-sm font-body text-muted-foreground hover:underline">
             ← Voltar
           </Link>
         </div>
@@ -140,8 +144,8 @@ function PreviewTabela({ registros, print }: { registros: Registro[]; print?: bo
           {["Data/Hora", "Valor (mg/dL)", "Momento", "Registrado por", "Observação"].map((h) => (
             <th
               key={h}
-              style={print ? thStyle : { color: "#2B2233" }}
-              className={print ? "" : "text-left pb-2 font-semibold border-b-2 px-2"}
+              style={print ? thStyle : undefined}
+              className={print ? "" : "text-left pb-2 font-semibold border-b-2 px-2 text-foreground"}
             >
               {h}
             </th>
@@ -151,19 +155,19 @@ function PreviewTabela({ registros, print }: { registros: Registro[]; print?: bo
       <tbody>
         {registros.map((r) => (
           <tr key={r.id}>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-ds-ink/20"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border"}>
               {formatarDataHora(r.data_hora)}
             </td>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-ds-ink/20 font-bold"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border font-bold"}>
               {r.valor}
             </td>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-ds-ink/20"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border"}>
               {ROTULO_LABEL[r.rotulo] ?? r.rotulo}
             </td>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-ds-ink/20"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border"}>
               {r.lancado_por}
             </td>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-ds-ink/20 text-xs opacity-70"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border text-xs opacity-70"}>
               {r.observacao ?? "—"}
             </td>
           </tr>
