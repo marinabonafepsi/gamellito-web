@@ -34,17 +34,16 @@ export async function middleware(request: NextRequest) {
   const isLoginPage = pathname === "/diario/login";
   const isDiario = pathname.startsWith("/diario");
 
-  // AUTH DESABILITADO TEMPORARIAMENTE PARA TESTE — reabilitar antes do merge
-  // if (isDiario && !isLoginPage && !user) {
-  //   const loginUrl = request.nextUrl.clone();
-  //   loginUrl.pathname = "/diario/login";
-  //   return NextResponse.redirect(loginUrl);
-  // }
-  // if (isLoginPage && user) {
-  //   const painelUrl = request.nextUrl.clone();
-  //   painelUrl.pathname = "/diario";
-  //   return NextResponse.redirect(painelUrl);
-  // }
+  if (isDiario && !isLoginPage && !user) {
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = "/diario/login";
+    return NextResponse.redirect(loginUrl);
+  }
+  if (isLoginPage && user) {
+    const painelUrl = request.nextUrl.clone();
+    painelUrl.pathname = "/diario";
+    return NextResponse.redirect(painelUrl);
+  }
 
   return response;
 }
