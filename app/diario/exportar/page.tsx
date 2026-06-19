@@ -44,10 +44,10 @@ export default function ExportarPage() {
       {/* Controles — ocultos na impressão */}
       <div className="print:hidden max-w-lg mx-auto">
         <header className="mb-6">
-          <h1 className="text-2xl font-display font-bold text-foreground">
+          <h1 className="text-2xl font-display font-bold text-[#2B2233]">
             Exportar registros
           </h1>
-          <p className="text-sm font-body mt-1 text-primary">
+          <p className="text-sm font-body mt-1 text-[#6E59C9]">
             Salve como PDF para levar à consulta.
           </p>
         </header>
@@ -59,10 +59,10 @@ export default function ExportarPage() {
               key={p}
               type="button"
               onClick={() => setPeriodo(p)}
-              className={`rounded-full px-3 py-1.5 text-xs font-body font-medium transition-colors ${
+              className={`rounded-full px-4 py-1.5 text-sm font-body font-semibold border-[2px] border-[#2B2233] transition-all ${
                 periodo === p
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  ? "bg-[#F26A00] text-white shadow-[2px_2px_0_#2B2233]"
+                  : "bg-white text-[#2B2233] hover:-translate-y-px hover:shadow-[2px_2px_0_#2B2233]"
               }`}
             >
               {p} dias
@@ -71,18 +71,18 @@ export default function ExportarPage() {
         </div>
 
         {carregando ? (
-          <p className="font-body text-center text-muted-foreground py-8">
+          <p className="font-body text-center text-[#2B2233]/50 py-8">
             Carregando…
           </p>
         ) : registros.length === 0 ? (
-          <div className="bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl text-center py-10">
-            <p className="font-body text-foreground">
+          <div className="bg-white rounded-3xl border-[3px] border-[#2B2233] shadow-[4px_4px_0_#2B2233] text-center py-10">
+            <p className="font-body text-[#2B2233]">
               Nenhum registro nos últimos {periodo} dias.
             </p>
           </div>
         ) : (
-          <div className="bg-card rounded-2xl border border-border p-4 mb-6 overflow-x-auto">
-            <p className="text-sm font-body text-muted-foreground mb-3">
+          <div className="bg-white rounded-2xl border-[2px] border-[#2B2233] p-4 mb-6 overflow-x-auto">
+            <p className="text-sm font-body text-[#2B2233]/60 mb-3">
               {registros.length} registro{registros.length !== 1 ? "s" : ""} encontrado{registros.length !== 1 ? "s" : ""}
             </p>
             <PreviewTabela registros={registros} />
@@ -92,13 +92,13 @@ export default function ExportarPage() {
         <button
           onClick={() => window.print()}
           disabled={carregando || registros.length === 0}
-          className="w-full bg-primary text-primary-foreground rounded-full font-display font-bold text-base py-3.5 hover:bg-primary/90 transition-colors disabled:opacity-60"
+          className="w-full rounded-full bg-[#F26A00] border-[3px] border-[#2B2233] shadow-[3px_3px_0_#2B2233] py-3.5 font-display font-bold text-white text-base hover:-translate-y-px hover:shadow-[4px_4px_0_#2B2233] active:translate-y-0.5 active:shadow-[1px_1px_0_#2B2233] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Imprimir / Salvar PDF
         </button>
 
         <div className="mt-4 text-center">
-          <Link href="/diario" className="text-sm font-body text-muted-foreground hover:underline">
+          <Link href="/diario" className="text-sm font-body text-[#2B2233]/50 hover:text-[#2B2233] transition-colors">
             ← Voltar
           </Link>
         </div>
@@ -145,7 +145,7 @@ function PreviewTabela({ registros, print }: { registros: Registro[]; print?: bo
             <th
               key={h}
               style={print ? thStyle : undefined}
-              className={print ? "" : "text-left pb-2 font-semibold border-b-2 px-2 text-foreground"}
+              className={print ? "" : "text-left pb-2 font-semibold border-b-2 border-[#2B2233] px-2 text-[#2B2233]"}
             >
               {h}
             </th>
@@ -155,16 +155,16 @@ function PreviewTabela({ registros, print }: { registros: Registro[]; print?: bo
       <tbody>
         {registros.map((r) => (
           <tr key={r.id}>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-[#2B2233]/20"}>
               {formatarDataHora(r.data_hora)}
             </td>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border font-bold"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-[#2B2233]/20 font-bold text-[#2B2233]"}>
               {r.valor}
             </td>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-[#2B2233]/20"}>
               {ROTULO_LABEL[r.rotulo] ?? r.rotulo}
             </td>
-            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border"}>
+            <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-[#2B2233]/20"}>
               {r.lancado_por}
             </td>
             <td style={tdStyle} className={print ? "" : "py-2 px-2 border-b border-border text-xs opacity-70"}>

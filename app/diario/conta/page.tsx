@@ -47,47 +47,47 @@ export default function ContaPage() {
   return (
     <div className="max-w-md mx-auto flex flex-col gap-6">
       <header>
-        <h1 className="text-2xl font-display font-bold text-foreground">
+        <h1 className="text-2xl font-display font-bold text-[#2B2233]">
           Minha conta
         </h1>
       </header>
 
       {/* Informações da conta */}
-      <div className="bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-6 flex flex-col gap-4">
+      <div className="bg-white rounded-3xl border-[3px] border-[#2B2233] shadow-[4px_4px_0_#2B2233] p-6 flex flex-col gap-4">
         <div>
-          <div className="text-xs font-body font-semibold uppercase tracking-widest mb-1 text-muted-foreground">
+          <div className="text-xs font-body font-semibold uppercase tracking-widest mb-1 text-[#6E59C9]">
             E-mail
           </div>
-          <div className="font-body font-medium text-lg text-foreground">
+          <div className="font-body font-medium text-lg text-[#2B2233]">
             {email ?? "Carregando…"}
           </div>
         </div>
 
         <button
           onClick={sair}
-          className="w-full border border-border text-foreground rounded-full font-display font-bold py-3 hover:border-primary/40 transition-colors"
+          className="w-full rounded-full border-[2px] border-[#2B2233] bg-white text-[#2B2233] font-display font-bold py-3 hover:-translate-y-px hover:shadow-[2px_2px_0_#2B2233] transition-all"
         >
           Sair da conta
         </button>
       </div>
 
       {/* Zona de risco — exclusão de dados (LGPD direito ao esquecimento) */}
-      <div className="bg-card rounded-3xl border-2 border-destructive/40 shadow-2xl p-6 flex flex-col gap-4">
+      <div className="bg-white rounded-3xl border-[3px] border-[#EE2B2B]/60 p-6 flex flex-col gap-4">
         <div>
-          <h2 className="font-display font-bold text-lg mb-1 text-destructive">
+          <h2 className="font-display font-bold text-lg mb-1 text-[#EE2B2B]">
             Apagar todos os dados
           </h2>
-          <p className="text-sm font-body text-foreground">
+          <p className="text-sm font-body text-[#2B2233]">
             Ao confirmar, todos os registros desta família serão apagados permanentemente
             e a conta será removida. Esta ação não pode ser desfeita.
           </p>
-          <p className="text-xs font-body mt-2 text-muted-foreground">
+          <p className="text-xs font-body mt-2 text-[#2B2233]/50">
             Direito ao esquecimento — Lei nº 13.709/2018 (LGPD), art. 18, IV.
           </p>
         </div>
 
         {erro && (
-          <p className="text-sm font-body bg-destructive/10 text-destructive rounded-xl px-4 py-3">
+          <p className="text-sm font-body bg-[#EE2B2B]/10 text-[#EE2B2B] rounded-xl px-4 py-3 border-[2px] border-[#EE2B2B]/40">
             {erro}
           </p>
         )}
@@ -95,14 +95,14 @@ export default function ContaPage() {
         <button
           onClick={apagarTudo}
           disabled={apagando}
-          className="w-full bg-destructive text-destructive-foreground rounded-full font-display font-bold py-3 hover:bg-destructive/90 transition-colors disabled:opacity-60"
+          className="w-full rounded-full bg-[#EE2B2B] text-white font-display font-bold py-3 hover:bg-[#CC2020] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {apagando ? "Apagando…" : "Apagar tudo e encerrar conta"}
         </button>
       </div>
 
       <div className="text-center">
-        <Link href="/diario" className="text-sm font-body text-muted-foreground hover:underline">
+        <Link href="/diario" className="text-sm font-body text-[#2B2233]/50 hover:text-[#2B2233] transition-colors">
           ← Voltar ao diário
         </Link>
       </div>
