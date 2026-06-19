@@ -14,8 +14,6 @@ const ROTULOS: { id: Rotulo; label: string }[] = [
   { id: "outro",  label: "Outro" },
 ];
 
-const DOT_COLORS = ["#EE2B2B", "#37B6E6", "#8DC63F", "#F25CA2"];
-
 function hojeLocal(): string {
   const d = new Date();
   const pad = (n: number) => String(n).padStart(2, "0");
@@ -77,7 +75,6 @@ export default function LancarPage() {
       return;
     }
 
-    // Microcomemoração — celebra o ato de registrar, nunca o valor (REGRA Nº 1)
     setRecompensa(true);
   }
 
@@ -86,25 +83,19 @@ export default function LancarPage() {
       <RecompensaSalvar visivel={recompensa} onFim={esconderRecompensa} />
 
       <div className="max-w-lg mx-auto">
-        <header className="mb-8 relative">
-          {/* Game-dots decorativos */}
-          <div className="ds-dots absolute top-0 right-0" aria-hidden="true">
-            {DOT_COLORS.map((c, i) => (
-              <span key={i} style={{ background: c }} />
-            ))}
-          </div>
-          <h1 className="text-3xl font-display font-bold" style={{ color: "#2B2233" }}>
+        <header className="mb-8">
+          <h1 className="text-3xl font-display font-bold text-foreground">
             Registrar glicemia
           </h1>
-          <p className="text-sm font-body mt-1" style={{ color: "#6E59C9" }}>
+          <p className="text-sm font-body mt-1 text-primary">
             Preencha os campos e toque em Salvar.
           </p>
         </header>
 
-        <div className="ds-card p-6 flex flex-col gap-6">
-          {/* Valor — campo grande, teclado numérico no mobile */}
+        <div className="bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-6 flex flex-col gap-6">
+          {/* Valor */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="valor" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
+            <label htmlFor="valor" className="text-sm font-body font-semibold text-foreground">
               Valor da glicemia (mg/dL)
             </label>
             <input
@@ -115,13 +106,13 @@ export default function LancarPage() {
               placeholder="120"
               value={valor}
               onChange={(e) => setValor(e.target.value)}
-              className="ds-input-number"
+              className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-2xl font-display font-bold text-foreground text-center focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
 
           {/* Data e hora */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="data_hora" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
+            <label htmlFor="data_hora" className="text-sm font-body font-semibold text-foreground">
               Data e hora
             </label>
             <input
@@ -129,13 +120,13 @@ export default function LancarPage() {
               type="datetime-local"
               value={dataHora}
               onChange={(e) => setDataHora(e.target.value)}
-              className="ds-input"
+              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
 
-          {/* Rótulos — descritivos apenas, sem interpretação clínica */}
+          {/* Rótulos */}
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
+            <span className="text-sm font-body font-semibold text-foreground">
               Momento
             </span>
             <div className="flex flex-wrap gap-2">
@@ -144,7 +135,11 @@ export default function LancarPage() {
                   key={id}
                   type="button"
                   onClick={() => setRotulo(id)}
-                  className={`ds-label ${rotulo === id ? "ds-label--active" : ""}`}
+                  className={`rounded-full px-3 py-1.5 text-xs font-body font-medium transition-colors ${
+                    rotulo === id
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                  }`}
                 >
                   {label}
                 </button>
@@ -154,7 +149,7 @@ export default function LancarPage() {
 
           {/* Quem registra */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="lancado_por" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
+            <label htmlFor="lancado_por" className="text-sm font-body font-semibold text-foreground">
               Registrado por
             </label>
             <input
@@ -163,15 +158,15 @@ export default function LancarPage() {
               placeholder="Ex.: mãe, pai, criança"
               value={lancadoPor}
               onChange={(e) => setLancadoPor(e.target.value)}
-              className="ds-input"
+              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
 
           {/* Observação opcional */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="observacao" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
+            <label htmlFor="observacao" className="text-sm font-body font-semibold text-foreground">
               Observação{" "}
-              <span className="font-normal" style={{ color: "rgba(43,34,51,0.5)" }}>(opcional)</span>
+              <span className="font-normal text-muted-foreground">(opcional)</span>
             </label>
             <textarea
               id="observacao"
@@ -179,12 +174,12 @@ export default function LancarPage() {
               placeholder="Ex.: após atividade física, mal-estar…"
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
-              className="ds-textarea"
+              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
             />
           </div>
 
           {erro && (
-            <p className="text-sm font-body rounded-ds-md px-4 py-3" style={{ background: "#FEE2E2", color: "#991B1B", border: "2px solid #991B1B", borderRadius: 16 }}>
+            <p className="text-sm font-body border border-destructive bg-destructive/10 text-destructive rounded-2xl px-4 py-3">
               {erro}
             </p>
           )}
@@ -192,15 +187,14 @@ export default function LancarPage() {
           <button
             onClick={salvar}
             disabled={salvando}
-            className="ds-btn ds-btn--lg w-full mt-2"
+            className="w-full mt-2 bg-primary text-primary-foreground rounded-full font-display font-bold text-base py-3.5 hover:bg-primary/90 transition-colors disabled:opacity-60"
           >
             {salvando ? "Salvando…" : "Salvar registro"}
           </button>
 
           <button
             onClick={() => router.back()}
-            className="text-sm font-body text-center hover:underline"
-            style={{ color: "rgba(43,34,51,0.6)" }}
+            className="text-sm font-body text-center text-muted-foreground hover:underline"
           >
             ← Cancelar
           </button>
