@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { AssetImage } from "@/components/SiteAssets";
+import { siteAssets } from "@/components/SiteAssets";
 
 type Etapa = "form" | "confirmacao";
 
@@ -17,15 +17,12 @@ export default function LoginPage() {
     if (!email.trim()) { setErro("Digite um e-mail válido."); return; }
     setCarregando(true);
     setErro(null);
-
     const res = await fetch("/api/auth/magic-link", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.trim().toLowerCase() }),
     });
-
     setCarregando(false);
-
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       setErro((err as { error?: string }).error ?? "Não foi possível enviar o link. Tente novamente.");
@@ -87,43 +84,69 @@ export default function LoginPage() {
               )}
             </button>
 
-            {/* Divisor */}
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-px bg-foreground/20" />
-              <span className="text-xs font-body text-muted-foreground">ou por e-mail</span>
-              <div className="flex-1 h-px bg-foreground/20" />
-            </div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
+                <span className="font-body text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(43,34,51,0.4)" }}>ou</span>
+                <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
+              </div>
 
-            {/* E-mail magic link */}
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-sm font-body font-medium text-foreground">
-                E-mail da família
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                inputMode="email"
-                placeholder="familia@exemplo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && enviarMagicLink()}
-                className="w-full rounded-xl border border-border bg-background px-4 py-2.5 font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
-              />
-              {erro && (
-                <p className="text-sm font-body bg-destructive/10 text-destructive px-3 py-2 rounded-xl">
-                  {erro}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email" className="font-body text-sm font-semibold" style={{ color: "#2B2233" }}>
+                  Entrar por e-mail
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  placeholder="familia@exemplo.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && enviarMagicLink()}
+                  className="ds-input w-full"
+                />
+                {erro && (
+                  <p className="font-body text-sm px-3 py-2 rounded-xl" style={{ background: "#FEE2E2", color: "#991B1B" }}>{erro}</p>
+                )}
+              </div>
+
+              <button onClick={enviarMagicLink} disabled={carregando} className="ds-btn w-full font-display text-base">
+                {carregando ? "Enviando link…" : "Enviar link de acesso"}
+              </button>
+
+              <p className="font-body text-xs text-center" style={{ color: "rgba(43,34,51,0.45)" }}>
+                Sem senha — enviamos um link direto para o seu e-mail.
+              </p>
+            </>
+          )}
+
+          {etapa === "confirmacao" && (
+            <div className="flex flex-col items-center gap-4 text-center py-2">
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center font-display text-2xl font-bold"
+                style={{ background: "#FFC400", border: "3px solid #2B2233", boxShadow: "4px 4px 0 #2B2233", color: "#2B2233" }}
+              >
+                OK!
+              </div>
+              <div>
+                <h2 className="font-display text-xl font-bold" style={{ color: "#2B2233" }}>Link enviado!</h2>
+                <p className="font-body text-sm mt-2 leading-relaxed" style={{ color: "rgba(43,34,51,0.7)" }}>
+                  Verifique a caixa de entrada de{" "}
+                  <strong style={{ color: "#2B2233" }}>{email}</strong>{" "}
+                  e clique no link para entrar.
                 </p>
-              )}
+              </div>
+              <button onClick={() => { setEtapa("form"); setErro(null); }} className="font-body text-sm underline" style={{ color: "rgba(43,34,51,0.5)" }}>
+                Não recebi — tentar novamente
+              </button>
             </div>
+          )}
+        </div>
 
-            <button
-              onClick={enviarMagicLink}
-              disabled={carregando}
-              className="w-full bg-primary text-primary-foreground rounded-full font-display font-bold py-3 hover:bg-primary/90 transition-colors disabled:opacity-60"
-            >
-              {carregando ? "Enviando…" : "Enviar link mágico"}
-            </button>
+        <p className="font-body text-xs text-center max-w-xs" style={{ color: "rgba(43,34,51,0.4)" }}>
+          Ao entrar, você concorda com o uso dos seus dados conforme nossa política de privacidade.
+          Os registros da família são visíveis apenas para você.
+        </p>
 
           </div>
         )}

@@ -1,6 +1,7 @@
-/* Foundations — Guia visual do livro Gamellito (Roger Cartoons) */
-@import url('https://fonts.googleapis.com/css2?family=Pangolin&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
-/* Opcional: substituir Pangolin por Pulang via @font-face quando tiver o arquivo .ttf/.otf */
+/* Gamellito Design System — Baloo 2 (display) + Nunito (body) */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+/* Pangolin mantido como fallback */
+@import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -8,97 +9,128 @@
 
 @layer base {
   :root {
-    /* ─── Paleta do guia (Foundations) ─── */
-    /* Gamellito Orange #FF8C00 — protagonista e CTAs principais */
-    --gamellito-orange: 33 100% 50%;
-    /* Mãe Red #E31E24 — personagem de apoio e alertas importantes */
-    --gamellito-mae-red: 358 76% 50%;
-    /* Hospital Purple #A881C0 — ambientes de cuidado, Doutor Lagartão */
-    --gamellito-hospital-purple: 277 35% 64%;
-    /* BG Yellow #FFD700 — planos de fundo e áreas de destaque */
-    --gamellito-bg-yellow: 51 100% 50%;
-    /* Health Green #8CC63F — ícones de nutrição e sucesso nas tarefas */
-    --gamellito-health-green: 88 55% 51%;
+    /* ── Design System Gamellito (paleta oficial) ── */
+    --color-sun:    #FFC400;
+    --color-orange: #F26A00;
+    --color-lilac:  #9B8CF0;
+    --color-purple: #6E59C9;
+    --color-cream:  #FFF3C9;
+    --color-ink:    #2B2233;
+    --color-white:  #FFFFFF;
 
-    /* Semânticos (mapeados à paleta do guia) */
-    --background: 51 100% 97%;
-    --foreground: 260 30% 12%;
+    /* Acentos "game" (bolinhas) — em doses pequenas */
+    --game-red:     #EE2B2B;
+    --game-blue:    #37B6E6;
+    --game-green:   #8DC63F;
+    --game-pink:    #F25CA2;
+    --game-magenta: #C82FA0;
 
-    --card: 0 0% 100%;
-    --card-foreground: 260 30% 12%;
+    /* Estados derivados */
+    --color-sun-deep:    #E5A800;
+    --color-orange-deep: #D25A00;
+    --color-lilac-soft:  #C7BEF7;
+    --color-cream-deep:  #FBE7A6;
+    --color-ink-60:      rgba(43, 34, 51, 0.60);
+    --color-ink-12:      rgba(43, 34, 51, 0.12);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 260 30% 12%;
+    /* Efeitos cartoon — contorno de tinta + pop shadow */
+    --border-cartoon:       3px solid var(--color-ink);
+    --border-cartoon-thick: 4px solid var(--color-ink);
+    --shadow-pop:           4px 4px 0 var(--color-ink);
+    --shadow-pop-lg:        6px 6px 0 var(--color-ink);
+    --shadow-pop-sm:        2px 2px 0 var(--color-ink);
+    --shadow-pop-press:     1px 1px 0 var(--color-ink);
+    --shadow-soft:          0 8px 24px rgba(43, 34, 51, 0.16);
 
-    /* Primário = cor do Gamellito (Orange #FF8C00) */
-    --primary: var(--gamellito-orange);
-    --primary-foreground: 0 0% 100%;
+    /* Motion */
+    --ease-bounce:       cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-out-smooth:   cubic-bezier(0.22, 1, 0.36, 1);
+    --dur-fast:          120ms;
+    --dur-base:          200ms;
 
-    --secondary: 358 76% 50%;
-    --secondary-foreground: 0 0% 100%;
+    /* Tipografia */
+    --font-display: 'Baloo 2', 'Pangolin', 'Arial Black', system-ui, sans-serif;
+    --font-body:    'Nunito', Arial, system-ui, sans-serif;
 
-    --muted: 51 40% 94%;
-    /* Acessibilidade: contraste ≥ 4.5:1 em fundo claro (WCAG AA) */
-    --muted-foreground: 260 15% 35%;
+    /* Escala de tipo */
+    --fs-display: clamp(2.75rem, 6vw, 4.5rem);
+    --fs-h1:      2.5rem;
+    --fs-h2:      2rem;
+    --fs-h3:      1.5rem;
+    --fs-h4:      1.25rem;
+    --fs-lead:    1.25rem;
+    --fs-body:    1.0625rem;
+    --fs-small:   0.9375rem;
+    --fs-caption: 0.8125rem;
 
-    --accent: 88 55% 51%;
-    --accent-foreground: 0 0% 100%;
+    /* Escala tipográfica legada (compatibilidade) */
+    --text-base: 1rem;
+    --text-sm:   0.8rem;
+    --text-lg:   1.25rem;
+    --text-xl:   1.563rem;
+    --text-2xl:  1.953rem;
+    --text-3xl:  2.441rem;
+    --text-4xl:  3.052rem;
+    --text-5xl:  3.815rem;
 
-    --destructive: 358 76% 50%;
+    /* ── Tokens Tailwind (HSL) ── */
+    --gamellito-orange:          26 100% 47%;
+    --gamellito-mae-red:         358 76% 50%;
+    --gamellito-hospital-purple: 252 77% 57%;
+    --gamellito-bg-yellow:       47 100% 50%;
+    --gamellito-health-green:    88 55% 51%;
+    --gamellito-purple:          252 77% 57%;
+    --gamellito-purple-light:    252 77% 72%;
+    --gamellito-space:           252 77% 28%;
+    --gamellito-green:           88 55% 51%;
+    --gamellito-blue:            200 80% 55%;
+    --gamellito-yellow:          47 100% 50%;
+    --gamellito-pink:            340 70% 60%;
+
+    --background:            47 100% 97%;
+    --foreground:            260 30% 12%;
+    --card:                  0 0% 100%;
+    --card-foreground:       260 30% 12%;
+    --popover:               0 0% 100%;
+    --popover-foreground:    260 30% 12%;
+    --primary:               26 100% 47%;
+    --primary-foreground:    0 0% 100%;
+    --secondary:             252 77% 57%;
+    --secondary-foreground:  0 0% 100%;
+    --muted:                 47 40% 94%;
+    --muted-foreground:      260 15% 35%;
+    --accent:                88 55% 51%;
+    --accent-foreground:     0 0% 100%;
+    --destructive:           358 76% 50%;
     --destructive-foreground: 0 0% 100%;
+    --border:                47 20% 88%;
+    --input:                 47 20% 88%;
+    --ring:                  26 100% 47%;
 
-    --border: 51 20% 88%;
-    --input: 51 20% 88%;
-    --ring: var(--gamellito-orange);
+    /* Raios — tudo arredondado */
+    --radius:    16px;
+    --radius-sm: 10px;
+    --radius-lg: 24px;
 
-    /* Estética "Livro Vivo" — bordas suaves (≥ 24px) */
-    --radius: 24px;
-    --radius-sm: 20px;
-    --radius-lg: 28px;
+    /* Sombras legadas */
+    --shadow-card: 0 8px 32px -8px rgba(110, 89, 201, 0.15);
+    --shadow-glow: 0 0 40px rgba(242, 106, 0, 0.35);
 
-    /* Tokens legados (compatibilidade) */
-    --gamellito-purple: 277 35% 64%;
-    --gamellito-purple-light: 277 40% 72%;
-    --gamellito-space: 277 35% 28%;
-    --gamellito-green: 88 55% 51%;
-    --gamellito-blue: 200 80% 55%;
-    --gamellito-yellow: 51 100% 50%;
-    --gamellito-pink: 340 70% 60%;
-
-    --gradient-hero: linear-gradient(135deg, hsl(var(--gamellito-space)), hsl(var(--gamellito-hospital-purple)), hsl(var(--gamellito-orange)));
+    /* Gradientes (uso criterioso) */
+    --gradient-hero:   linear-gradient(135deg, hsl(var(--gamellito-space)), hsl(var(--gamellito-hospital-purple)), hsl(var(--gamellito-orange)));
     --gradient-orange: linear-gradient(135deg, hsl(var(--gamellito-orange)), hsl(25 95% 48%));
     --gradient-accent: linear-gradient(135deg, hsl(var(--gamellito-health-green)), hsl(88 55% 45%));
 
-    --shadow-card: 0 8px 32px -8px hsl(277 35% 64% / 0.15);
-    --shadow-glow: 0 0 40px hsl(33 100% 50% / 0.35);
-
-    /* Tipografia — Headings: estilo manuscrito/orgânico (Pulang no guia; Pangolin como fallback). Body: Roboto. */
-    --font-display: 'Pangolin', cursive;
-    --font-body: 'Roboto', sans-serif;
-
-    /* Escala tipográfica Major Third (1.250) — hierarquia para crianças */
-    --text-base: 1rem;
-    --text-sm: 0.8rem;
-    --text-lg: 1.25rem;
-    --text-xl: 1.563rem;
-    --text-2xl: 1.953rem;
-    --text-3xl: 2.441rem;
-    --text-4xl: 3.052rem;
-    --text-5xl: 3.815rem;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background:           0 0% 98%;
+    --sidebar-foreground:           240 5.3% 26.1%;
+    --sidebar-primary:              240 5.9% 10%;
+    --sidebar-primary-foreground:   0 0% 98%;
+    --sidebar-accent:               240 4.8% 95.9%;
+    --sidebar-accent-foreground:    240 5.9% 10%;
+    --sidebar-border:               220 13% 91%;
+    --sidebar-ring:                 217.2 91.2% 59.8%;
   }
 }
-
-/* Textura opcional "Livro Vivo" — descomente para ruído sutil de papel */
-/* .bg-paper { background-image: url("data:image/svg+xml,..."); } */
 
 @layer base {
   * {
@@ -108,14 +140,58 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
+    line-height: 1.55;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    font-weight: 700;
+    line-height: 1.2;
   }
 }
 
-/* Stars animation for space background */
+/* ── Utilitários cartoon ── */
+@layer utilities {
+  .border-cartoon      { border: var(--border-cartoon); }
+  .border-cartoon-thick { border: var(--border-cartoon-thick); }
+  .shadow-pop          { box-shadow: var(--shadow-pop); }
+  .shadow-pop-lg       { box-shadow: var(--shadow-pop-lg); }
+  .shadow-pop-sm       { box-shadow: var(--shadow-pop-sm); }
+  .shadow-pop-press    { box-shadow: var(--shadow-pop-press); }
+
+  /* Hover lift + press collapse (cartoon motion) */
+  .btn-cartoon {
+    transition: transform var(--dur-fast) var(--ease-out-smooth),
+                box-shadow var(--dur-fast) var(--ease-out-smooth);
+  }
+  .btn-cartoon:hover  { transform: translate(-1px, -1px); box-shadow: var(--shadow-pop-lg); }
+  .btn-cartoon:active { transform: translate(3px, 3px);   box-shadow: var(--shadow-pop-press); }
+
+  /* Game dots cluster */
+  .game-dots::after {
+    content: '';
+    display: block;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--color-ink);
+    background: var(--game-red);
+    position: absolute;
+    top: -6px; right: 18px;
+    box-shadow:
+      16px 0 0 var(--game-blue),
+      32px 0 0 var(--game-green);
+  }
+
+  /* Background helpers */
+  .bg-sun    { background-color: var(--color-sun) !important; }
+  .bg-cream  { background-color: var(--color-cream) !important; }
+  .bg-lilac  { background-color: var(--color-lilac) !important; }
+  .bg-ink    { background-color: var(--color-ink) !important; }
+  .text-ink  { color: var(--color-ink) !important; }
+  .text-on-sun { color: var(--color-ink) !important; }
+}
+
+/* ── Animações ── */
 @keyframes twinkle {
   0%, 100% { opacity: 0.3; }
   50% { opacity: 1; }
@@ -127,32 +203,22 @@
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px hsl(var(--gamellito-orange) / 0.3); }
-  50% { box-shadow: 0 0 40px hsl(var(--gamellito-orange) / 0.6); }
+  0%, 100% { box-shadow: 0 0 20px rgba(242, 106, 0, 0.3); }
+  50%       { box-shadow: 0 0 40px rgba(242, 106, 0, 0.6); }
 }
 
-.animate-twinkle {
-  animation: twinkle 3s ease-in-out infinite;
+@keyframes bounce-in {
+  0%   { transform: scale(0.8); opacity: 0; }
+  70%  { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
+.animate-twinkle      { animation: twinkle 3s ease-in-out infinite; }
+.animate-float        { animation: float 6s ease-in-out infinite; }
+.animate-pulse-glow   { animation: pulse-glow 3s ease-in-out infinite; }
+.animate-bounce-in    { animation: bounce-in var(--dur-base) var(--ease-bounce) both; }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: hsl(var(--muted));
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--primary));
-  border-radius: 4px;
-}
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: hsl(var(--muted)); }
+::-webkit-scrollbar-thumb { background: var(--color-orange); border-radius: 4px; }
