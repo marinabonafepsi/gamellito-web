@@ -63,13 +63,12 @@ function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () =
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
           <X size={20} />
         </button>
-        <div className="text-5xl text-center mb-4">{item.emoji}</div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-2">
           {item.title}
         </h2>
         <p className="font-body text-muted-foreground text-center text-sm leading-relaxed mb-6">
           Este conteúdo está em desenvolvimento! Seu interesse nos ajuda a
-          priorizar o que lançar primeiro. 🚀
+          priorizar o que lançar primeiro.
         </p>
         <div className="flex flex-col gap-3">
           <a

@@ -601,7 +601,6 @@ function TabFamilias() {
           <div className="space-y-4">
             {emocoesItems.map((item, i) => (
               <motion.div key={item.fase} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="flex gap-4 bg-card rounded-2xl p-5 border border-border">
-                <span className="text-3xl flex-shrink-0 mt-0.5">{item.emoji}</span>
                 <div>
                   <h3 className="font-display font-bold text-foreground mb-1">{item.fase}</h3>
                   <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
@@ -659,7 +658,6 @@ function TabFamilias() {
           <div className="grid md:grid-cols-2 gap-5">
             {adolescenciaItems.map((item, i) => (
               <motion.div key={item.titulo} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="bg-card rounded-2xl p-5 border border-border">
-                <span className="text-2xl mb-3 block">{item.emoji}</span>
                 <h3 className="font-display font-bold text-foreground mb-2">{item.titulo}</h3>
                 <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
               </motion.div>
@@ -779,7 +777,6 @@ function TabEducadores() {
               { emoji: "📋", titulo: "Obrigação legal", texto: "A legislação brasileira obriga as escolas a acolherem e apoiarem alunos com DM1. Estar preparado é cumprir a lei." },
             ].map((item, i) => (
               <motion.div key={item.titulo} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="bg-card rounded-2xl p-6 border border-border text-center">
-                <span className="text-4xl block mb-3">{item.emoji}</span>
                 <h3 className="font-display font-bold text-foreground mb-2">{item.titulo}</h3>
                 <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
               </motion.div>

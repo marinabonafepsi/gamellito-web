@@ -175,13 +175,12 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
           <X size={20} />
         </button>
-        <div className="text-5xl text-center mb-4">🚀</div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-3">
           Gamellito Adventures está chegando!
         </h2>
         <p className="font-body text-muted-foreground text-center text-sm leading-relaxed mb-6">
           Estamos desenvolvendo o jogo completo. Seu interesse aqui nos ajuda a
-          priorizar o lançamento — obrigada! ✨
+          priorizar o lançamento.
         </p>
         <div className="flex flex-col gap-3">
           <a
@@ -389,7 +388,6 @@ const SolutionsSection = () => {
                       {setor.fase}
                     </span>
                     <div className="flex items-center gap-2 mt-3">
-                      <span className="text-2xl">{setor.emoji}</span>
                       <h3 className="font-display font-bold text-xl text-primary-foreground">
                         {setor.titulo}
                       </h3>

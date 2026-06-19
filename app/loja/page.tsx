@@ -104,13 +104,11 @@ function ProductModal({
           <X size={20} />
         </button>
 
-        <div className="text-5xl text-center mb-3">{produto.emoji}</div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-1">{produto.nome}</h2>
         <p className="font-body text-muted-foreground text-center text-sm mb-5">{produto.subtitulo}</p>
 
         {done ? (
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-4">
-            <div className="text-4xl mb-2">🎉</div>
             <p className="font-body font-semibold text-foreground">Anotamos seu interesse!</p>
             <p className="font-body text-muted-foreground text-sm mt-1">Te avisamos quando a loja abrir.</p>
           </motion.div>
@@ -118,7 +116,7 @@ function ProductModal({
           <div className="space-y-3">
             <div className="bg-muted/60 rounded-2xl p-4 text-center">
               <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                🚧 Nossa loja está em construção! Estamos validando a demanda para garantir os melhores produtos.
+                Nossa loja está em construção! Estamos validando a demanda para garantir os melhores produtos.
               </p>
             </div>
             <a
@@ -182,7 +180,7 @@ export default function LojaPage() {
           >
             <div className="flex-1 text-center md:text-left">
               <p className="text-gamellito-orange font-body font-semibold text-sm uppercase tracking-wider mb-3">
-                🛍️ Ecossistema Gamellito
+                Ecossistema Gamellito
               </p>
               <h1 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5 leading-tight">
                 Produtos que tornam o DM1{" "}
@@ -194,7 +192,7 @@ export default function LojaPage() {
               </p>
               <div className="inline-flex items-center gap-2 bg-gamellito-orange/20 border border-gamellito-orange/40 rounded-full px-5 py-2">
                 <span className="text-gamellito-orange font-body font-semibold text-sm">
-                  🚧 Loja em construção — registre seu interesse!
+                  Loja em construção — registre seu interesse!
                 </span>
               </div>
             </div>
@@ -245,7 +243,6 @@ export default function LojaPage() {
                   <span className={`${produto.cor} text-white font-display text-xs px-3 py-1 rounded-full`}>
                     {produto.tag}
                   </span>
-                  <span className="text-3xl">{produto.emoji}</span>
                 </div>
 
                 <h3 className="font-display font-bold text-xl text-foreground mb-1">{produto.nome}</h3>
@@ -321,7 +318,6 @@ export default function LojaPage() {
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto max-w-2xl text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="text-5xl mb-4">🎁</div>
             <h2 className="font-display text-3xl font-bold text-foreground mb-4">
               Quer ser avisado no lançamento?
             </h2>
