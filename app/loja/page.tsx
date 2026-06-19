@@ -126,7 +126,7 @@ function ProductModal({
               className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
               onClick={() => setDone(true)}
             >
-              💌 Me avise quando abrir
+              Me avise quando abrir
             </a>
             <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
               Continuar explorando
@@ -333,7 +333,7 @@ export default function LojaPage() {
               onClick={() => track("product_interest", "/loja", { source: "cta_newsletter" })}
               className="inline-block px-8 py-4 bg-gamellito-orange text-white font-body font-semibold rounded-full hover:bg-gamellito-orange/90 transition-colors text-lg"
             >
-              📧 Me avise no lançamento
+              Me avise no lançamento
             </a>
           </motion.div>
         </div>

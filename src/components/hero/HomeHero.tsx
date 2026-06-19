@@ -58,17 +58,15 @@ export function HomeHero() {
           <div className="flex flex-col gap-4 sm:flex-row justify-center lg:justify-start">
             <Link
               href="/jogos"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-[#ff8a3c] px-8 py-4 font-display text-lg font-bold text-white shadow-[0_4px_20px_rgba(255,138,60,0.5)] hover:opacity-90 transition-opacity"
+              className="inline-flex items-center justify-center rounded-full bg-gamellito-orange px-8 py-4 font-display text-lg font-bold text-white shadow-lg hover:opacity-90 transition-opacity"
             >
-              <span aria-hidden>🎮</span>
-              <span>Conheça os Jogos</span>
+              Conheça os Jogos
             </Link>
             <Link
               href="/solucoes"
-              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white bg-white/10 px-8 py-4 font-display text-lg font-semibold text-white hover:bg-white/20 transition-colors"
+              className="inline-flex items-center justify-center rounded-full border-2 border-white bg-white/10 px-8 py-4 font-display text-lg font-semibold text-white hover:bg-white/20 transition-colors"
             >
-              <span aria-hidden>🏥</span>
-              <span>Soluções em Saúde</span>
+              Soluções em Saúde
             </Link>
           </div>
         </div>

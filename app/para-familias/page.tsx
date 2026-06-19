@@ -318,10 +318,10 @@ const ondeAplicar = [
 
 type Tab = "familias" | "educadores" | "enfermagem";
 
-const tabs: { id: Tab; label: string; emoji: string }[] = [
-  { id: "familias", label: "Pais e Família", emoji: "👨‍👩‍👧" },
-  { id: "educadores", label: "Educadores e Escolas", emoji: "🏫" },
-  { id: "enfermagem", label: "Enfermagem e Saúde", emoji: "🩺" },
+const tabs: { id: Tab; label: string }[] = [
+  { id: "familias", label: "Pais e Família" },
+  { id: "educadores", label: "Educadores e Escolas" },
+  { id: "enfermagem", label: "Enfermagem e Saúde" },
 ];
 
 /* ═══════════════════════════════════════════════════════
@@ -1115,7 +1115,6 @@ export default function ParaFamiliasPage() {
                     : "bg-white/8 text-primary-foreground/70 border-transparent hover:bg-white/15"
                 }`}
               >
-                <span>{tab.emoji}</span>
                 <span className="hidden sm:inline">{tab.label}</span>
                 <span className="sm:hidden">{tab.label.split(" ")[0]}</span>
               </button>

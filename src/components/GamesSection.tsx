@@ -77,7 +77,7 @@ function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () =
             className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
             onClick={onClose}
           >
-            📧 Me avise quando lançar
+            Me avise quando lançar
           </a>
           <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
             Voltar
@@ -148,7 +148,7 @@ const GamesSection = () => {
               onClick={handlePlayClick}
               className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-display font-bold text-primary-foreground hover:opacity-90 transition-opacity"
             >
-              🎮 Experimente um jogo
+              Experimente um jogo
             </button>
           </motion.div>
 
