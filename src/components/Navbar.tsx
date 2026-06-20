@@ -10,7 +10,6 @@ const navLinks = [
   { label: "Início",        href: "/#inicio" },
   { label: "Sobre",         href: "/#sobre" },
   { label: "Para Famílias", href: "/para-familias" },
-  { label: "Programas",     href: "/#solucoes" },
   { label: "Contato",       href: "/#contato" },
   { label: "Loja",          href: "/loja" },
 ];

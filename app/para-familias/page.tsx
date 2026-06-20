@@ -35,38 +35,6 @@ import { trackIntent } from "@/lib/trackIntent";
    DADOS — PAIS E FAMÍLIA
 ════════════════════════════════════════════════════════ */
 
-const emocoesItems = [
-  {
-    emoji: "😰",
-    fase: "Choque e negação",
-    texto:
-      "É normal sentir que o diagnóstico não pode ser verdade. Muitos pais descrevem um entorpecimento nos primeiros dias. Isso é uma resposta natural do organismo a uma notícia impactante.",
-  },
-  {
-    emoji: "😢",
-    fase: "Medo e tristeza",
-    texto:
-      "Preocupações com a saúde do filho, com a hipoglicemia noturna, com a escola — tudo isso aparece ao mesmo tempo. Permitir-se sentir e chorar faz parte do processo.",
-  },
-  {
-    emoji: "😠",
-    fase: "Raiva e culpa",
-    texto:
-      '"Por que meu filho?" É uma pergunta comum. A culpa não tem base — DM1 não é causado por alimentação ou por algo que os pais fizeram ou deixaram de fazer.',
-  },
-  {
-    emoji: "🤝",
-    fase: "Adaptação",
-    texto:
-      "Com tempo e apoio, a rotina começa a se reorganizar. A família aprende a incorporar insulina, monitoramento e alimentação equilibrada na vida cotidiana.",
-  },
-  {
-    emoji: "💪",
-    fase: "Empoderamento",
-    texto:
-      "Muitas famílias chegam a um ponto em que se sentem seguras e competentes no manejo do DM1. Conhecimento e rede de apoio são os maiores aliados.",
-  },
-];
 
 const primeirosDias = [
   {
@@ -581,38 +549,6 @@ function TabFamilias() {
         </div>
       </section>
 
-      {/* ── Jornada emocional ── */}
-      <section className="py-16 px-4 bg-muted/40">
-        <div className="container mx-auto max-w-4xl">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 rounded-xl bg-gamellito-mae-red/10 flex items-center justify-center">
-                <Heart className="w-5 h-5 text-gamellito-mae-red" />
-              </div>
-              <h2 className="font-display text-3xl font-bold text-foreground">A jornada emocional dos pais</h2>
-            </div>
-            <p className="font-body text-muted-foreground leading-relaxed max-w-2xl">
-              O que você está sentindo tem nome — e muitas famílias passaram ou passam pelo mesmo.
-            </p>
-          </motion.div>
-          <div className="space-y-4">
-            {emocoesItems.map((item, i) => (
-              <motion.div key={item.fase} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="flex gap-4 bg-card rounded-2xl p-5 border border-border">
-                <div>
-                  <h3 className="font-display font-bold text-foreground mb-1">{item.fase}</h3>
-                  <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-8 bg-gamellito-purple/10 border border-gamellito-purple/20 rounded-2xl p-6">
-            <p className="font-body text-foreground leading-relaxed">
-              <strong className="font-semibold">Lembre-se:</strong> buscar apoio psicológico não é fraqueza — é autocuidado. Pais que cuidam da própria saúde mental cuidam melhor dos filhos.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
       {/* ── Dicas do dia a dia ── */}
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto max-w-4xl">
@@ -1083,11 +1019,11 @@ function EcosistemaSection() {
       <div className="container mx-auto max-w-4xl relative">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
           <span className="inline-block bg-gamellito-orange/20 text-gamellito-orange font-body font-semibold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            O ecossistema Gamellito
+            Soluções do ecossistema
           </span>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5 leading-tight">
-            Mais do que um jogo —<br className="hidden sm:block" />
-            <span className="text-gamellito-orange"> uma jornada para a sua família</span>
+            Um ecossistema completo —<br className="hidden sm:block" />
+            <span className="text-gamellito-orange"> para famílias, escolas e saúde</span>
           </h2>
           <p className="font-body text-primary-foreground/75 text-lg leading-relaxed max-w-2xl mx-auto">
             Estamos construindo um espaço onde famílias com DM1 encontram acolhimento, aprendizado e comunidade — tudo com a leveza e o rigor clínico que são a alma do Gamellito.
