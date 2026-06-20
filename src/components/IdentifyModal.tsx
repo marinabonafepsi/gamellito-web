@@ -25,12 +25,14 @@ export function IdentifyModal({
   const [loading, setLoading] = useState(false);
   const [done, setDone]       = useState(false);
 
-  /* Mostrar automaticamente após delay (apenas se não identificado) */
+  /* Mostrar automaticamente após delay (apenas se não identificado e não mostrado nesta sessão) */
   useEffect(() => {
     if (isIdentified()) return;
+    if (sessionStorage.getItem("gml_modal_shown")) return;
 
     const timer = setTimeout(() => {
       setVisible(true);
+      sessionStorage.setItem("gml_modal_shown", "true");
       track("identify_modal_shown", window.location.pathname);
     }, autoShowDelay);
 

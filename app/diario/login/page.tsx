@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -17,14 +17,12 @@ export default function LoginPage() {
     if (!email.trim()) { setErro("Digite um e-mail válido."); return; }
     setCarregando(true);
     setErro(null);
-
     const res = await fetch("/api/auth/magic-link", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: email.trim().toLowerCase() }),
     });
     setCarregando(false);
-
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       setErro((err as { error?: string }).error ?? "Não foi possível enviar o link. Tente novamente.");
@@ -52,17 +50,16 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="w-full max-w-md ds-card p-8 md:p-10">
+      <div className="w-full max-w-md bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-8 md:p-10">
 
         {etapa === "form" && (
           <div className="flex flex-col gap-5">
             <div className="text-center">
-              <span className="text-5xl">📒</span>
-              <h1 className="text-2xl font-display font-bold mt-3" style={{ color: "#2B2233" }}>
-                Diário do Gamellito
+              <h1 className="text-2xl font-display font-bold text-foreground">
+                Entrar
               </h1>
-              <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
-                Entre para acessar os registros da sua família.
+              <p className="text-sm font-body mt-2 text-muted-foreground">
+                Escolha como prefere acessar o diário.
               </p>
             </div>
 
@@ -70,16 +67,11 @@ export default function LoginPage() {
             <button
               onClick={entrarComGoogle}
               disabled={loadingGoogle}
-              className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-full font-body font-semibold transition-all"
-              style={{
-                background: "#ffffff",
-                border: "3px solid #2B2233",
-                boxShadow: "4px 4px 0 #2B2233",
-                color: "#2B2233",
-                minHeight: 44,
-              }}
+              className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-full font-body font-semibold bg-white text-gamellito-space border-2 border-gamellito-space/20 hover:border-gamellito-hospital-purple/50 transition-colors min-h-[44px]"
             >
-              {loadingGoogle ? "Conectando…" : (
+              {loadingGoogle ? (
+                "Conectando…"
+              ) : (
                 <>
                   <svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true">
                     <path fill="#4285F4" d="M47.5 24.6c0-1.6-.1-3.1-.4-4.6H24v8.7h13.2c-.6 3-2.3 5.5-4.9 7.2v6h7.9c4.6-4.3 7.3-10.6 7.3-17.3z"/>
@@ -92,61 +84,94 @@ export default function LoginPage() {
               )}
             </button>
 
-            <div className="flex items-center gap-3">
-              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
-              <span className="text-xs font-body" style={{ color: "rgba(43,34,51,0.45)" }}>ou por e-mail</span>
-              <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
-            </div>
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
+                <span className="font-body text-xs font-semibold uppercase tracking-widest" style={{ color: "rgba(43,34,51,0.4)" }}>ou</span>
+                <div className="flex-1 h-px" style={{ background: "#2B2233", opacity: 0.15 }} />
+              </div>
 
-            <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-sm font-body font-medium" style={{ color: "#2B2233" }}>
-                E-mail da família
-              </label>
-              <input
-                id="email"
-                type="email"
-                autoComplete="email"
-                inputMode="email"
-                placeholder="familia@exemplo.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && enviarMagicLink()}
-                className="ds-input w-full"
-              />
-              {erro && (
-                <p className="text-sm font-body px-3 py-2 rounded-xl"
-                  style={{ background: "#FEE2E2", color: "#991B1B" }}>
-                  {erro}
+              <div className="flex flex-col gap-2">
+                <label htmlFor="email" className="font-body text-sm font-semibold" style={{ color: "#2B2233" }}>
+                  Entrar por e-mail
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  placeholder="familia@exemplo.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && enviarMagicLink()}
+                  className="ds-input w-full"
+                />
+                {erro && (
+                  <p className="font-body text-sm px-3 py-2 rounded-xl" style={{ background: "#FEE2E2", color: "#991B1B" }}>{erro}</p>
+                )}
+              </div>
+
+              <button onClick={enviarMagicLink} disabled={carregando} className="ds-btn w-full font-display text-base">
+                {carregando ? "Enviando link…" : "Enviar link de acesso"}
+              </button>
+
+              <p className="font-body text-xs text-center" style={{ color: "rgba(43,34,51,0.45)" }}>
+                Sem senha — enviamos um link direto para o seu e-mail.
+              </p>
+            </>
+          )}
+
+          {etapa === "confirmacao" && (
+            <div className="flex flex-col items-center gap-4 text-center py-2">
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center font-display text-2xl font-bold"
+                style={{ background: "#FFC400", border: "3px solid #2B2233", boxShadow: "4px 4px 0 #2B2233", color: "#2B2233" }}
+              >
+                OK!
+              </div>
+              <div>
+                <h2 className="font-display text-xl font-bold" style={{ color: "#2B2233" }}>Link enviado!</h2>
+                <p className="font-body text-sm mt-2 leading-relaxed" style={{ color: "rgba(43,34,51,0.7)" }}>
+                  Verifique a caixa de entrada de{" "}
+                  <strong style={{ color: "#2B2233" }}>{email}</strong>{" "}
+                  e clique no link para entrar.
                 </p>
-              )}
+              </div>
+              <button onClick={() => { setEtapa("form"); setErro(null); }} className="font-body text-sm underline" style={{ color: "rgba(43,34,51,0.5)" }}>
+                Não recebi — tentar novamente
+              </button>
             </div>
+          )}
+        </div>
 
-            <button
-              onClick={enviarMagicLink}
-              disabled={carregando}
-              className="ds-btn w-full font-display font-bold"
-            >
-              {carregando ? "Enviando…" : "Enviar link mágico ✉️"}
-            </button>
+        <p className="font-body text-xs text-center max-w-xs" style={{ color: "rgba(43,34,51,0.4)" }}>
+          Ao entrar, você concorda com o uso dos seus dados conforme nossa política de privacidade.
+          Os registros da família são visíveis apenas para você.
+        </p>
+
           </div>
         )}
 
+        {/* ── Etapa 3: Confirmação ── */}
         {etapa === "confirmacao" && (
           <div className="flex flex-col items-center gap-5 text-center">
-            <span className="text-6xl">🎉</span>
-            <h1 className="text-2xl font-display font-bold" style={{ color: "#2B2233" }}>
+            <AssetImage asset="gamellitoContente" alt="Gamellito comemorando" className="w-16 h-auto" width={64} height={64} />
+            <h1 className="text-2xl font-display font-bold text-foreground">
               Link enviado!
             </h1>
-            <p className="text-sm font-body leading-relaxed max-w-xs" style={{ color: "rgba(43,34,51,0.7)" }}>
+            <p className="text-sm font-body leading-relaxed max-w-xs text-muted-foreground">
               Verifique a caixa de entrada de{" "}
-              <strong style={{ color: "#2B2233" }}>{email}</strong> e clique
-              no link para entrar.
+              <strong className="text-foreground">{email}</strong> e clique no
+              link para entrar. Pode fechar esta aba.
             </p>
-            <p className="text-xs font-body" style={{ color: "rgba(43,34,51,0.5)" }}>
+            <p className="text-xs font-body text-muted-foreground/70">
               Não recebeu? Verifique o spam ou{" "}
-              <button onClick={() => { setEtapa("form"); setErro(null); }} className="underline">
+              <button
+                onClick={() => { setEtapa("form"); setErro(null); }}
+                className="underline hover:text-muted-foreground transition-colors"
+              >
                 tente novamente
-              </button>.
+              </button>
+              .
             </p>
           </div>
         </div>
