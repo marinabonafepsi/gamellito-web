@@ -41,7 +41,7 @@ const Navbar = () => {
               onClick={() => handleNavClick(link.label, link.href)}
               className="font-body text-sm font-semibold text-primary-foreground/95 hover:text-primary transition-colors"
             >
-              {link.label}
+              {link.label === "Loja" ? "🛍️ Loja" : link.label}
             </a>
           ))}
           <a
@@ -86,7 +86,7 @@ const Navbar = () => {
                   onClick={() => handleNavClick(link.label, link.href)}
                   className="font-body text-base font-semibold text-primary-foreground/95 hover:text-primary transition-colors py-2"
                 >
-                  {link.label}
+                  {link.label === "Loja" ? "🛍️ Loja" : link.label}
                 </a>
               ))}
               <a

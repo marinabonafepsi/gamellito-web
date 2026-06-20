@@ -53,7 +53,7 @@ function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () =
       onClick={onClose}
     >
       <motion.div
-        className="relative w-full max-w-md bg-card rounded-3xl p-8 shadow-2xl border-2 border-gamellito-hospital-purple/30"
+        className="relative w-full max-w-md bg-card rounded-3xl p-8 shadow-2xl border-2 border-gamellito-hospital-purple/25"
         initial={{ scale: 0.88, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.92, opacity: 0 }}

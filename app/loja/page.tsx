@@ -5,26 +5,29 @@ import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
 import { AssetImage } from "@/components/SiteAssets";
-import { X } from "@/components/icons";
+import { X, Heart, ShieldCheck, Stethoscope } from "@/components/icons";
 import { track } from "@/lib/analytics";
 
-/* ══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    PRODUTOS
-══════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
+
 const produtos = [
   {
     id: "livro-dm1",
-    emoji: "📚",
     nome: "Livro Ilustrado",
-    subtitulo: '"As Aventuras de Gamellito"',
+    subtitulo: "Enfrentando o Diabetes Tipo 1",
     descricao:
-      "Série infantil com as aventuras do Gamellito, ilustrações de Roger Cartoons. Linguagem acessível para crianças de 5 a 14 anos aprenderem sobre DM1 de forma leve e divertida.",
+      "Série de livros infantis com as aventuras do Gamellito, ilustrações de Roger Cartoons. Linguagem acessível para crianças de 5 a 14 anos aprenderem sobre DM1 de forma leve e divertida.",
+    preco: "R$ 45,00",
     tag: "Mais querido",
-    cor: "bg-gamellito-orange",
+    tagColor: "bg-gamellito-orange",
+    cor: "from-gamellito-orange/20 to-gamellito-bg-yellow/30",
+    borda: "border-gamellito-orange/30",
+    destaque: true,
   },
   {
     id: "pelucia-gamellito",
-    emoji: "🧸",
     nome: "Pelúcia Gamellito",
     subtitulo: "O alien fofo com DM1",
     descricao:
@@ -34,7 +37,6 @@ const produtos = [
   },
   {
     id: "pelucia-pancreas",
-    emoji: "💜",
     nome: "Pelúcia Pâncreas Preguiçoso",
     subtitulo: "O vilão mais fofo do universo",
     descricao:
@@ -84,17 +86,17 @@ function ProductModal({
   produto: (typeof produtos)[0];
   onClose: () => void;
 }) {
-  const [done, setDone] = useState(false);
+  const [notifyDone, setNotifyDone] = useState(false);
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gamellito-space/80 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gamellito-space/70 backdrop-blur-sm"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       onClick={onClose}
     >
       <motion.div
         className="relative w-full max-w-md bg-card rounded-3xl p-8 shadow-2xl border-2 border-gamellito-hospital-purple/25"
-        initial={{ scale: 0.88, opacity: 0, y: 24 }}
+        initial={{ scale: 0.88, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.92, opacity: 0 }}
         transition={{ type: "spring", damping: 22, stiffness: 300 }}
@@ -104,29 +106,51 @@ function ProductModal({
           <X size={20} />
         </button>
 
-        <h2 className="font-display text-2xl font-bold text-foreground text-center mb-1">{produto.nome}</h2>
-        <p className="font-body text-muted-foreground text-center text-sm mb-5">{produto.subtitulo}</p>
+        <div className="text-5xl text-center mb-3">{produto.emoji}</div>
+        <h2 className="font-display text-2xl font-bold text-foreground text-center mb-1">
+          {produto.nome}
+        </h2>
+        <p className="font-body text-muted-foreground text-center text-sm mb-2">
+          {produto.subtitulo}
+        </p>
+        <p className="font-display text-3xl font-bold text-primary text-center mb-4">
+          {produto.preco}
+        </p>
 
-        {done ? (
-          <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-4">
-            <p className="font-body font-semibold text-foreground">Anotamos seu interesse!</p>
-            <p className="font-body text-muted-foreground text-sm mt-1">Te avisamos quando a loja abrir.</p>
+        {notifyDone ? (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center py-4"
+          >
+            <div className="text-4xl mb-2">🎉</div>
+            <p className="font-body font-semibold text-foreground">
+              Anotamos seu interesse!
+            </p>
+            <p className="font-body text-muted-foreground text-sm mt-1">
+              Te avisamos assim que a loja abrir.
+            </p>
           </motion.div>
         ) : (
           <div className="space-y-3">
-            <div className="bg-muted/60 rounded-2xl p-4 text-center">
+            <div className="bg-muted/60 rounded-xl p-4 text-center">
               <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                Nossa loja está em construção! Estamos validando a demanda para garantir os melhores produtos.
+                🚧 Nossa loja está em construção! Estamos validando a demanda
+                para garantir os melhores produtos pra vocês.
               </p>
             </div>
             <a
-              href={`mailto:gamellitoltda@gmail.com?subject=Interesse: ${produto.nome}&body=Olá! Tenho interesse em: ${produto.nome}. Me avise quando a loja abrir!`}
-              className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
-              onClick={() => setDone(true)}
+              href={`mailto:gamellitoltda@gmail.com?subject=Interesse na loja: ${produto.nome}&body=Olá! Tenho interesse em comprar: ${produto.nome} (${produto.preco}). Por favor me avise quando a loja abrir!`}
+              className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+              onClick={() => { setNotifyDone(true); }}
             >
-              Me avise quando abrir
+              💌 Me avise quando abrir
             </a>
-            <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
+            <button
+              type="button"
+              onClick={onClose}
+              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors"
+            >
               Continuar explorando
             </button>
           </div>
@@ -136,14 +160,19 @@ function ProductModal({
   );
 }
 
-/* ══════════════════════════════════════════
+/* ═══════════════════════════════════════════════════════
    PAGE
-══════════════════════════════════════════ */
+════════════════════════════════════════════════════════ */
+
 export default function LojaPage() {
   const [activeProduct, setActiveProduct] = useState<(typeof produtos)[0] | null>(null);
 
-  async function handleClick(produto: (typeof produtos)[0]) {
-    await track("product_interest", "/loja", { product_id: produto.id, product_name: produto.nome });
+  async function handleProductClick(produto: (typeof produtos)[0]) {
+    await track("product_interest", "/loja", {
+      product_id: produto.id,
+      product_name: produto.nome,
+      price: produto.preco,
+    });
     setActiveProduct(produto);
   }
 
@@ -152,15 +181,17 @@ export default function LojaPage() {
       <Navbar />
 
       <AnimatePresence>
-        {activeProduct && <ProductModal produto={activeProduct} onClose={() => setActiveProduct(null)} />}
+        {activeProduct && (
+          <ProductModal produto={activeProduct} onClose={() => setActiveProduct(null)} />
+        )}
       </AnimatePresence>
 
       {/* ── Hero ── */}
       <section
         data-track-section="loja-hero"
-        className="pt-28 pb-20 bg-gamellito-space relative overflow-hidden"
+        className="pt-28 pb-16 bg-gamellito-space px-4 relative overflow-hidden"
       >
-        {[...Array(14)].map((_, i) => (
+        {[...Array(12)].map((_, i) => (
           <div
             key={i}
             className="absolute w-1 h-1 rounded-full bg-gamellito-yellow animate-twinkle opacity-60"
