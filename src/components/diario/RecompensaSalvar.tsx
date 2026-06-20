@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
+import { AssetImage } from "@/components/SiteAssets";
 
 interface Props {
   visivel: boolean;
@@ -39,20 +40,17 @@ export function RecompensaSalvar({ visivel, onFim }: Props) {
           ${reducedMotion ? "" : "animate-gamellito-celebrate"}
         `}
       >
-        {/* Personagem comemorando */}
-        <span className="text-6xl" role="img" aria-label="Gamellito comemorando">
-          🎉
-        </span>
+        <AssetImage asset="gamellitoContente" alt="Gamellito comemorando" className="w-16 h-auto" width={64} height={64} />
 
         {/* Mensagem: celebra o registro, NUNCA o valor */}
         <p className="font-display font-bold text-2xl text-foreground">
           Boa! Anotado!
         </p>
         <p className="font-body text-sm text-muted-foreground text-center max-w-[200px]">
-          Mais um registro no seu diário 📒
+          Mais um registro no seu diário!
         </p>
 
-        {/* Confete visual simples em CSS — respeita prefers-reduced-motion */}
+        {/* Confete visual — respeita prefers-reduced-motion */}
         {!reducedMotion && (
           <div className="flex gap-2 mt-1" aria-hidden="true">
             {["#E8540A", "#F5C518", "#27AE60", "#E8540A", "#F5C518"].map(

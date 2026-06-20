@@ -4,17 +4,29 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  [
+    "inline-flex items-center rounded-pill",
+    "border-[2px] border-ink",
+    "px-3 py-0.5",
+    "text-xs font-display font-bold",
+    "shadow-pop-sm",
+    "transition-colors",
+    "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  ].join(" "),
   {
     variants: {
       variant: {
-        default:
-          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+        default:     "bg-[#F26A00] text-white border-[#2B2233]",
+        sun:         "bg-[#FFC400] text-[#2B2233] border-[#2B2233]",
+        lilac:       "bg-[#9B8CF0] text-white border-[#2B2233]",
+        cream:       "bg-[#FFF3C9] text-[#2B2233] border-[#2B2233]",
+        ink:         "bg-[#2B2233] text-white border-[#2B2233]",
+        "game-red":  "bg-[#EE2B2B] text-white border-[#2B2233]",
+        "game-blue": "bg-[#37B6E6] text-[#2B2233] border-[#2B2233]",
+        "game-green":"bg-[#8DC63F] text-[#2B2233] border-[#2B2233]",
+        secondary:   "bg-secondary text-secondary-foreground border-[#2B2233]",
+        destructive: "bg-destructive text-destructive-foreground border-[#2B2233]",
+        outline:     "bg-transparent text-foreground border-[#2B2233] shadow-none",
       },
     },
     defaultVariants: {

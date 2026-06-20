@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "@/components/icons";
 import { identifyUser, isIdentified, track } from "@/lib/analytics";
+import { AssetImage } from "@/components/SiteAssets";
 
 interface IdentifyModalProps {
   /** Delay em ms antes de mostrar automaticamente (padrão 45s) */
@@ -24,12 +25,14 @@ export function IdentifyModal({
   const [loading, setLoading] = useState(false);
   const [done, setDone]       = useState(false);
 
-  /* Mostrar automaticamente após delay (apenas se não identificado) */
+  /* Mostrar automaticamente após delay (apenas se não identificado e não mostrado nesta sessão) */
   useEffect(() => {
     if (isIdentified()) return;
+    if (sessionStorage.getItem("gml_modal_shown")) return;
 
     const timer = setTimeout(() => {
       setVisible(true);
+      sessionStorage.setItem("gml_modal_shown", "true");
       track("identify_modal_shown", window.location.pathname);
     }, autoShowDelay);
 
@@ -97,7 +100,7 @@ export function IdentifyModal({
                   animate={{ opacity: 1, scale: 1 }}
                   className="text-center py-4"
                 >
-                  <div className="text-5xl mb-3">🎉</div>
+                  <AssetImage asset="gamellitoContente" alt="Gamellito" className="w-16 h-auto mx-auto mb-3" width={64} height={64} />
                   <h2 className="font-display text-2xl font-bold text-foreground mb-2">
                     Oba, bem-vindo!
                   </h2>
@@ -109,7 +112,7 @@ export function IdentifyModal({
                 <motion.div key="form" initial={{ opacity: 1 }} exit={{ opacity: 0 }}>
                   {/* Mascote */}
                   <div className="text-center mb-5">
-                    <div className="text-4xl mb-2">👾</div>
+                    <AssetImage asset="gamellitoContente" alt="Gamellito" className="w-14 h-auto mx-auto mb-2" width={56} height={56} />
                     <h2 className="font-display text-2xl font-bold text-foreground mb-1">
                       Quem está explorando por aqui?
                     </h2>
@@ -181,9 +184,9 @@ export function IdentifyModal({
                     <button
                       type="submit"
                       disabled={loading || !email.trim()}
-                      className="w-full py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                      className="w-full py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 disabled:opacity-50 transition-colors"
                     >
-                      {loading ? "Salvando..." : "✨ Entrar na jornada"}
+                      {loading ? "Salvando..." : "Entrar na jornada"}
                     </button>
 
                     <p className="text-center font-body text-xs text-muted-foreground">

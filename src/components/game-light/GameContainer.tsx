@@ -23,16 +23,13 @@ function FakeDoorModal({ onClose }: { onClose: () => void }) {
       >
         <motion.div
           key="modal"
-          className="relative w-full max-w-md bg-card rounded-3xl p-8 shadow-2xl border-2 border-gamellito-hospital-purple/30"
+          className="relative w-full max-w-md bg-card rounded-3xl p-8 shadow-2xl border-2 border-gamellito-hospital-purple/25"
           initial={{ scale: 0.88, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.92, opacity: 0 }}
           transition={{ type: "spring", damping: 22, stiffness: 300 }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Emoji de foguete */}
-          <div className="text-5xl text-center mb-4">🚀</div>
-
           <h2 className="font-display text-2xl font-bold text-foreground text-center mb-3">
             O Gamellito está chegando!
           </h2>
@@ -40,21 +37,21 @@ function FakeDoorModal({ onClose }: { onClose: () => void }) {
           <p className="font-body text-muted-foreground text-center leading-relaxed mb-6">
             Estamos finalizando o jogo completo. Mas você já deu um passo
             incrível de chegar até aqui — <strong>seu interesse nos ajuda a
-            priorizar o lançamento</strong>! ✨
+            priorizar o lançamento</strong>.
           </p>
 
           <div className="flex flex-col gap-3">
             <a
               href="mailto:gamellitoltda@gmail.com?subject=Quero saber quando o jogo lançar!"
-              className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+              className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
               onClick={onClose}
             >
-              📧 Me avise quando lançar
+              Me avise quando lançar
             </a>
             <button
               type="button"
               onClick={onClose}
-              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors"
+              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors"
             >
               Voltar para o preview
             </button>
