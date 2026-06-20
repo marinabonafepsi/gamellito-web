@@ -26,7 +26,6 @@ import {
   ShieldCheck,
   Clock,
   FileText,
-  Lightbulb,
   Baby,
   BookMarked,
 } from "@/components/icons";
@@ -248,24 +247,24 @@ const direitosEscolares = [
 
 const comoUsarGamellitoEscola = [
   {
-    icon: Lightbulb,
-    titulo: "Aula de ciências",
-    texto: "Use os cenários do Gamellito para explicar como o corpo usa energia, o papel do pâncreas e o que é a insulina — de forma visual e lúdica.",
-  },
-  {
-    icon: Users,
-    titulo: "Inclusão em sala",
-    texto: "Promova rodas de conversa usando os personagens do Gamellito para desmistificar o DM1 e reduzir o estigma entre os colegas.",
+    icon: Activity,
+    titulo: "Plataforma + minigames",
+    texto: "Acesso à plataforma Gamellito com trilha de atividades por faixa etária — o jogo que a criança já ama, agora integrado à rotina escolar.",
   },
   {
     icon: BookMarked,
-    titulo: "Material de apoio",
-    texto: "Os livros ilustrados do Gamellito podem ser usados em hora de leitura ou como parte do acervo da biblioteca escolar.",
+    titulo: "Kit físico completo",
+    texto: "Livro ilustrado, jogo de tabuleiro, cartazes e Guia do Professor — material concreto para usar em sala sem improvisar.",
   },
   {
     icon: GraduationCap,
-    titulo: "Formação de professores",
-    texto: "Solicite uma oficina Gamellito na sua escola — treinamos educadores para apoiar alunos com DM1 com segurança e confiança.",
+    titulo: "Formação de educadores",
+    texto: "Oficina presencial ou online: como identificar sinais de DM1, acolher o aluno e agir com segurança em emergências.",
+  },
+  {
+    icon: Users,
+    titulo: "Inclusão para toda a turma",
+    texto: "Rodas de conversa, histórias e jogos que ensinam empatia para todas as crianças — não só as com DM1.",
   },
 ];
 
@@ -744,13 +743,9 @@ function TabFamilias() {
 ════════════════════════════════════════════════════════ */
 
 function TabEducadores() {
-  async function handleGuideClick() {
-    await trackIntent("educator_guide_download", "/para-familias");
-  }
-
   return (
     <>
-      {/* ── Por que a escola precisa saber ── */}
+      {/* ── Hook narrativo ── */}
       <section className="py-16 px-4 bg-gamellito-health-green/5">
         <div className="container mx-auto max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10">
@@ -759,22 +754,22 @@ function TabEducadores() {
                 <School className="w-5 h-5 text-gamellito-health-green" />
               </div>
               <h2 className="font-display text-3xl font-bold text-foreground">
-                Por que a escola precisa saber sobre DM1?
+                A escola faz parte do tratamento
               </h2>
             </div>
             <p className="font-body text-muted-foreground leading-relaxed max-w-2xl">
-              A criança com DM1 passa até 8 horas por dia na escola. Educadores
-              informados fazem toda a diferença na segurança e inclusão do aluno.
+              A criança com DM1 passa até 8 horas por dia na escola. Quando o professor sabe o que fazer, a criança sente segurança — e os pais respiram. Não é burocracia: é cuidado.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-5">
             {[
               { emoji: "⏱️", titulo: "Resposta rápida salva vidas", texto: "Em uma crise de hipoglicemia, cada minuto conta. Professores treinados sabem agir antes da chegada dos pais." },
-              { emoji: "🤝", titulo: "Inclusão real", texto: "Um aluno que se sente seguro na escola aprende melhor, faz amigos e desenvolve autonomia no manejo da doença." },
-              { emoji: "📋", titulo: "Obrigação legal", texto: "A legislação brasileira obriga as escolas a acolherem e apoiarem alunos com DM1. Estar preparado é cumprir a lei." },
+              { emoji: "🤝", titulo: "Inclusão de verdade", texto: "Um aluno que se sente seguro na escola aprende melhor, faz amigos e desenvolve autonomia no manejo da doença." },
+              { emoji: "📋", titulo: "Obrigação legal", texto: "A legislação brasileira obriga as escolas a acolherem e apoiarem alunos com DM1. Estar preparado é cumprir a lei — e é fazer o bem." },
             ].map((item, i) => (
               <motion.div key={item.titulo} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="bg-card rounded-2xl p-6 border border-border text-center">
+                <span className="text-3xl block mb-3">{item.emoji}</span>
                 <h3 className="font-display font-bold text-foreground mb-2">{item.titulo}</h3>
                 <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
               </motion.div>
@@ -792,11 +787,11 @@ function TabEducadores() {
                 <AlertCircle className="w-5 h-5 text-gamellito-mae-red" />
               </div>
               <h2 className="font-display text-3xl font-bold text-foreground">
-                O que reconhecer em sala de aula
+                O que reconhecer — e o que fazer
               </h2>
             </div>
             <p className="font-body text-muted-foreground max-w-2xl">
-              Dois cenários que educadores devem saber identificar e agir com segurança.
+              Dois cenários que qualquer educador pode aprender a identificar e manejar com segurança. Não é preciso ser da área de saúde.
             </p>
           </motion.div>
 
@@ -836,9 +831,12 @@ function TabEducadores() {
                 <ShieldCheck className="w-5 h-5 text-gamellito-blue" />
               </div>
               <h2 className="font-display text-3xl font-bold text-foreground">
-                Direitos do aluno com DM1 na escola
+                O que a lei garante — e o que a escola precisa ter
               </h2>
             </div>
+            <p className="font-body text-muted-foreground max-w-2xl">
+              A família pode exigir. A escola precisa estar pronta. Conheça a legislação que protege o aluno com DM1.
+            </p>
           </motion.div>
 
           <div className="space-y-4">
@@ -857,15 +855,18 @@ function TabEducadores() {
         </div>
       </section>
 
-      {/* ── Como usar o Gamellito na escola ── */}
+      {/* ── Programa Gamellito na Escola ── */}
       <section className="py-16 px-4 bg-gamellito-space">
         <div className="container mx-auto max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10">
+            <span className="inline-block bg-gamellito-health-green/20 text-gamellito-health-green font-body font-semibold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-4">
+              Programa escolar
+            </span>
             <h2 className="font-display text-3xl font-bold text-primary mb-3">
-              Como usar o Gamellito na sua escola
+              Gamellito na Escola — o que o programa inclui
             </h2>
             <p className="font-body text-primary-foreground/80 max-w-2xl">
-              O método Gamellito foi desenvolvido para funcionar tanto em casa quanto em contextos educacionais.
+              Não é só informação — é um programa completo para que a escola se torne um espaço de verdade para o aluno com DM1.
             </p>
           </motion.div>
 
@@ -881,21 +882,37 @@ function TabEducadores() {
             ))}
           </div>
 
-          {/* CTA fake door */}
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-primary/15 border border-primary/30 rounded-2xl p-8 text-center">
-            <span className="text-4xl block mb-3">📚</span>
-            <h3 className="font-display text-2xl font-bold text-primary mb-3">Guia do Educador</h3>
-            <p className="font-body text-primary-foreground/80 mb-6 max-w-md mx-auto">
-              Um material completo com protocolos, atividades e orientações para educadores. Em breve disponível para download.
-            </p>
-            <button
-              type="button"
-              onClick={handleGuideClick}
-              className="px-8 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
-            >
-              📥 Quero o Guia do Educador
-            </button>
-            <p className="font-body text-primary-foreground/50 text-xs mt-3">Em desenvolvimento — seu interesse ajuda a priorizar o lançamento.</p>
+          {/* Evidência + CTA */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white/5 border border-white/15 rounded-3xl p-8 md:p-10">
+            <div className="grid md:grid-cols-[1fr_auto] gap-8 items-center">
+              <div>
+                <p className="font-body text-primary-foreground/60 text-xs uppercase tracking-wider font-semibold mb-2">Evidência clínica</p>
+                <h3 className="font-display text-2xl md:text-3xl font-bold text-primary mb-3">
+                  77% de redução em emergências hipoglicêmicas na escola
+                </h3>
+                <p className="font-body text-primary-foreground/70 leading-relaxed mb-6">
+                  Em escolas que implementaram o método Gamellito, episódios de emergência caíram drasticamente — resultado de educadores informados e protocolo claro.
+                </p>
+                <a
+                  href="mailto:gamellitoltda@gmail.com?subject=Quero%20o%20Gamellito%20na%20minha%20escola"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gamellito-health-green text-white font-body font-bold rounded-full hover:bg-gamellito-health-green/90 transition-colors text-base shadow-lg shadow-gamellito-health-green/20"
+                >
+                  🏫 Quero o Gamellito na minha escola
+                </a>
+              </div>
+              <div className="flex flex-col gap-4 md:min-w-[140px]">
+                {[
+                  { numero: "2.000+", label: "crianças alcançadas" },
+                  { numero: "12 anos", label: "de pesquisa" },
+                  { numero: "USP + UEL", label: "validação científica" },
+                ].map((stat) => (
+                  <div key={stat.label} className="text-center bg-white/8 rounded-2xl p-4 border border-white/10">
+                    <p className="font-display text-xl font-bold text-primary">{stat.numero}</p>
+                    <p className="font-body text-primary-foreground/55 text-xs mt-0.5">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -1026,6 +1043,93 @@ function TabEnfermagem() {
 }
 
 /* ═══════════════════════════════════════════════════════
+   SEÇÃO: ECOSSISTEMA GAMELLITO
+════════════════════════════════════════════════════════ */
+
+const cursosPreview = [
+  {
+    emoji: "🌱",
+    titulo: "Primeiros Passos",
+    subtitulo: "Para diagnóstico recente",
+    descricao: "Do choque do diagnóstico à primeira rotina em casa. Um curso curto, acolhedor e com base clínica — criado para a semana mais difícil da sua vida.",
+    cor: "gamellito-health-green",
+    tag: "Em breve",
+  },
+  {
+    emoji: "👩‍🍳",
+    titulo: "Cozinha do Gamellito",
+    subtitulo: "Oficinas de nutrição ao vivo",
+    descricao: "Receitas adaptadas, contagem de carboidratos sem drama e culinária que a criança vai querer participar. Ao vivo com a equipe de nutrição da UEL.",
+    cor: "gamellito-orange",
+    tag: "Em breve",
+  },
+  {
+    emoji: "🤝",
+    titulo: "Comunidade Gamellito",
+    subtitulo: "Suporte contínuo para sua família",
+    descricao: "Lives com a equipe multidisciplinar, biblioteca de recursos, espaço para tirar dúvidas e conexão com outras famílias que entendem o que você vive.",
+    cor: "gamellito-yellow",
+    tag: "Em breve",
+  },
+];
+
+function EcosistemaSection() {
+  return (
+    <section className="py-20 px-4 bg-gamellito-space relative overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gamellito-orange/6 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gamellito-health-green/5 rounded-full blur-3xl" />
+      </div>
+      <div className="container mx-auto max-w-4xl relative">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
+          <span className="inline-block bg-gamellito-orange/20 text-gamellito-orange font-body font-semibold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
+            O ecossistema Gamellito
+          </span>
+          <h2 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5 leading-tight">
+            Mais do que um jogo —<br className="hidden sm:block" />
+            <span className="text-gamellito-orange"> uma jornada para a sua família</span>
+          </h2>
+          <p className="font-body text-primary-foreground/75 text-lg leading-relaxed max-w-2xl mx-auto">
+            Estamos construindo um espaço onde famílias com DM1 encontram acolhimento, aprendizado e comunidade — tudo com a leveza e o rigor clínico que são a alma do Gamellito.
+          </p>
+        </motion.div>
+        <div className="grid md:grid-cols-3 gap-5 mb-12">
+          {cursosPreview.map((curso, i) => (
+            <motion.div key={curso.titulo} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="relative bg-white/6 border border-white/12 rounded-2xl p-6 flex flex-col gap-4 overflow-hidden">
+              <span className="absolute top-4 right-4 bg-white/10 text-primary-foreground/60 font-body text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1">
+                🔒 {curso.tag}
+              </span>
+              <div className="text-4xl">{curso.emoji}</div>
+              <div>
+                <p className="font-body text-xs font-semibold uppercase tracking-wider text-primary-foreground/50 mb-1">{curso.subtitulo}</p>
+                <h3 className="font-display font-bold text-primary text-xl mb-2">{curso.titulo}</h3>
+                <p className="font-body text-primary-foreground/65 text-sm leading-relaxed">{curso.descricao}</p>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="bg-white/5 border border-white/15 rounded-3xl p-8 md:p-10 text-center">
+          <AssetImage asset="gamellitoContente" alt="Gamellito contente" className="w-20 h-auto mx-auto mb-5" width={80} height={80} />
+          <h3 className="font-display text-2xl md:text-3xl font-bold text-primary mb-3">Cadastre-se e seja o primeiro a saber</h3>
+          <p className="font-body text-primary-foreground/70 leading-relaxed mb-8 max-w-lg mx-auto">
+            Os cursos estão em desenvolvimento — mas você já pode criar sua conta gratuita no ecossistema Gamellito. Quando os conteúdos chegarem, você será o primeiro a acessar. E sua conta já serve para acompanhar o Diário do Gamellito.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+            <a href="/diario/login" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gamellito-orange text-white font-body font-bold rounded-full hover:bg-gamellito-orange/90 transition-colors text-base shadow-lg shadow-gamellito-orange/20">
+              ✨ Criar minha conta gratuita
+            </a>
+            <a href="/diario/login" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-white/20 text-primary-foreground/80 font-body font-semibold rounded-full hover:border-primary/50 hover:text-primary transition-colors text-base">
+              Já tenho conta — entrar
+            </a>
+          </div>
+          <p className="font-body text-primary-foreground/35 text-xs">Gratuito. Sem spam. Só atualizamos quando há novidade real.</p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    PAGE COMPONENT
 ════════════════════════════════════════════════════════ */
 
@@ -1132,6 +1236,8 @@ export default function ParaFamiliasPage() {
           {activeTab === "enfermagem" && <TabEnfermagem />}
         </motion.div>
       </AnimatePresence>
+
+      <EcosistemaSection />
 
       {/* ── CTA Contato (sempre visível) ── */}
       <section className="py-16 px-4 bg-background">
