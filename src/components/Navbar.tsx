@@ -1,20 +1,32 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "@/components/icons";
 import { track } from "@/lib/analytics";
+import { createClient } from "@/lib/supabase/client";
+import UserMenu from "@/components/UserMenu";
 
 const navLinks = [
   { label: "Início",        href: "/#inicio" },
   { label: "Sobre",         href: "/#sobre" },
-  { label: "Para Famílias", href: "/para-familias" },
+  { label: "Ecossistema",   href: "/para-familias" },
   { label: "Contato",       href: "/#contato" },
   { label: "Loja",          href: "/loja" },
 ];
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen,    setIsOpen]    = useState(false);
+  const [loggedIn,  setLoggedIn]  = useState(false);
+
+  useEffect(() => {
+    const client = createClient();
+    client.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
+    const { data: { subscription } } = client.auth.onAuthStateChange((_, session) => {
+      setLoggedIn(!!session?.user);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   function handleNavClick(label: string, href: string) {
     track("nav_click", window.location.pathname, { label, href });
@@ -50,13 +62,17 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <a
-            href="/diario/login"
-            onClick={() => handleNavClick("Login", "/diario/login")}
-            className="inline-flex items-center px-5 py-2 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors"
-          >
-            Login
-          </a>
+          {loggedIn ? (
+            <UserMenu />
+          ) : (
+            <a
+              href="/diario/login"
+              onClick={() => handleNavClick("Login", "/diario/login")}
+              className="inline-flex items-center px-5 py-2 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors"
+            >
+              Login
+            </a>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -78,13 +94,20 @@ const Navbar = () => {
             className="md:hidden overflow-hidden" style={{ background: "#6F567E" }}
           >
             <div className="px-4 py-4 flex flex-col gap-3">
-              <a
-                href="/diario/login"
-                onClick={() => handleNavClick("Login", "/diario/login")}
-                className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors mb-1"
-              >
-                Login
-              </a>
+              {loggedIn ? (
+                <div className="flex items-center gap-3 mb-1">
+                  <UserMenu />
+                  <span className="font-body text-sm font-semibold text-primary-foreground/80">Minha conta</span>
+                </div>
+              ) : (
+                <a
+                  href="/diario/login"
+                  onClick={() => handleNavClick("Login", "/diario/login")}
+                  className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors mb-1"
+                >
+                  Login
+                </a>
+              )}
               {navLinks.map((link) => (
                 <a
                   key={link.href}

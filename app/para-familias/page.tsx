@@ -982,83 +982,26 @@ function TabEnfermagem() {
    SEÇÃO: ECOSSISTEMA GAMELLITO
 ════════════════════════════════════════════════════════ */
 
-const cursosPreview = [
-  {
-    emoji: "🌱",
-    titulo: "Primeiros Passos",
-    subtitulo: "Para diagnóstico recente",
-    descricao: "Do choque do diagnóstico à primeira rotina em casa. Um curso curto, acolhedor e com base clínica — criado para a semana mais difícil da sua vida.",
-    cor: "gamellito-health-green",
-    tag: "Em breve",
-  },
-  {
-    emoji: "👩‍🍳",
-    titulo: "Cozinha do Gamellito",
-    subtitulo: "Oficinas de nutrição ao vivo",
-    descricao: "Receitas adaptadas, contagem de carboidratos sem drama e culinária que a criança vai querer participar. Ao vivo com a equipe de nutrição da UEL.",
-    cor: "gamellito-orange",
-    tag: "Em breve",
-  },
-  {
-    emoji: "🤝",
-    titulo: "Comunidade Gamellito",
-    subtitulo: "Suporte contínuo para sua família",
-    descricao: "Lives com a equipe multidisciplinar, biblioteca de recursos, espaço para tirar dúvidas e conexão com outras famílias que entendem o que você vive.",
-    cor: "gamellito-yellow",
-    tag: "Em breve",
-  },
-];
-
 function EcosistemaSection() {
   return (
-    <section className="py-20 px-4 bg-gamellito-space relative overflow-hidden">
-      <div className="absolute inset-0 pointer-events-none" aria-hidden>
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-gamellito-orange/6 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-gamellito-health-green/5 rounded-full blur-3xl" />
-      </div>
-      <div className="container mx-auto max-w-4xl relative">
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
-          <span className="inline-block bg-gamellito-orange/20 text-gamellito-orange font-body font-semibold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            Soluções do ecossistema
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5 leading-tight">
-            Um ecossistema completo —<br className="hidden sm:block" />
-            <span className="text-gamellito-orange"> para famílias, escolas e saúde</span>
+    <section className="py-14 px-4 bg-gamellito-space">
+      <div className="container mx-auto max-w-3xl text-center">
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <AssetImage asset="gamellitoContente" alt="Gamellito" className="w-16 h-auto mx-auto mb-5" width={64} height={64} />
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-primary mb-3">
+            Quer o Gamellito no seu contexto?
           </h2>
-          <p className="font-body text-primary-foreground/75 text-lg leading-relaxed max-w-2xl mx-auto">
-            Estamos construindo um espaço onde famílias com DM1 encontram acolhimento, aprendizado e comunidade — tudo com a leveza e o rigor clínico que são a alma do Gamellito.
+          <p className="font-body text-primary-foreground/70 leading-relaxed mb-8 max-w-xl mx-auto">
+            Seja na escola, no ambulatório ou em casa — a equipe Gamellito adapta o método para o seu contexto. Fale com a gente.
           </p>
-        </motion.div>
-        <div className="grid md:grid-cols-3 gap-5 mb-12">
-          {cursosPreview.map((curso, i) => (
-            <motion.div key={curso.titulo} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="relative bg-white/6 border border-white/12 rounded-2xl p-6 flex flex-col gap-4 overflow-hidden">
-              <span className="absolute top-4 right-4 bg-white/10 text-primary-foreground/60 font-body text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full flex items-center gap-1">
-                🔒 {curso.tag}
-              </span>
-              <div className="text-4xl">{curso.emoji}</div>
-              <div>
-                <p className="font-body text-xs font-semibold uppercase tracking-wider text-primary-foreground/50 mb-1">{curso.subtitulo}</p>
-                <h3 className="font-display font-bold text-primary text-xl mb-2">{curso.titulo}</h3>
-                <p className="font-body text-primary-foreground/65 text-sm leading-relaxed">{curso.descricao}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="bg-white/5 border border-white/15 rounded-3xl p-8 md:p-10 text-center">
-          <AssetImage asset="gamellitoContente" alt="Gamellito contente" className="w-20 h-auto mx-auto mb-5" width={80} height={80} />
-          <h3 className="font-display text-2xl md:text-3xl font-bold text-primary mb-3">Cadastre-se e seja o primeiro a saber</h3>
-          <p className="font-body text-primary-foreground/70 leading-relaxed mb-8 max-w-lg mx-auto">
-            Os cursos estão em desenvolvimento — mas você já pode criar sua conta gratuita no ecossistema Gamellito. Quando os conteúdos chegarem, você será o primeiro a acessar. E sua conta já serve para acompanhar o Diário do Gamellito.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-            <a href="/diario/login" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gamellito-orange text-white font-body font-bold rounded-full hover:bg-gamellito-orange/90 transition-colors text-base shadow-lg shadow-gamellito-orange/20">
-              ✨ Criar minha conta gratuita
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="mailto:gamellitoltda@gmail.com" className="inline-flex items-center justify-center gap-2 px-7 py-3 bg-gamellito-orange text-white font-body font-bold rounded-full hover:bg-gamellito-orange/90 transition-colors shadow-lg shadow-gamellito-orange/20">
+              Falar com a equipe
             </a>
-            <a href="/diario/login" className="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-white/20 text-primary-foreground/80 font-body font-semibold rounded-full hover:border-primary/50 hover:text-primary transition-colors text-base">
-              Já tenho conta — entrar
+            <a href="/diario/login" className="inline-flex items-center justify-center gap-2 px-7 py-3 border border-white/20 text-primary-foreground/80 font-body font-semibold rounded-full hover:border-primary/50 hover:text-primary transition-colors">
+              Criar conta no Diário
             </a>
           </div>
-          <p className="font-body text-primary-foreground/35 text-xs">Gratuito. Sem spam. Só atualizamos quando há novidade real.</p>
         </motion.div>
       </div>
     </section>
@@ -1136,6 +1079,32 @@ export default function ParaFamiliasPage() {
               />
             </div>
           </motion.div>
+
+          {/* ── Pilares do ecossistema ── */}
+          <div className="grid md:grid-cols-3 gap-3 mb-8">
+            {(
+              [
+                { id: "familias", emoji: "🏠", titulo: "Para famílias", desc: "Guia prático, apoio emocional e o Diário do Gamellito." },
+                { id: "educadores", emoji: "🏫", titulo: "Para escolas", desc: "Programa completo, kit físico e formação de professores." },
+                { id: "enfermagem", emoji: "🏥", titulo: "Para saúde", desc: "Método validado com USP e UEL para equipes clínicas." },
+              ] as { id: Tab; emoji: string; titulo: string; desc: string }[]
+            ).map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => setActiveTab(p.id)}
+                className={`text-left rounded-2xl p-4 border transition-all ${
+                  activeTab === p.id
+                    ? "bg-white/12 border-primary/40"
+                    : "bg-white/5 border-white/10 hover:bg-white/10"
+                }`}
+              >
+                <span className="text-2xl block mb-2">{p.emoji}</span>
+                <p className="font-display font-bold text-primary text-sm mb-1">{p.titulo}</p>
+                <p className="font-body text-primary-foreground/60 text-xs leading-relaxed">{p.desc}</p>
+              </button>
+            ))}
+          </div>
 
           {/* ── Navegação por abas ── */}
           <div className="flex gap-2 overflow-x-auto pb-0 -mb-px scrollbar-none">
