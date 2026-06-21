@@ -28,6 +28,8 @@ import {
   FileText,
   Baby,
   BookMarked,
+  Smartphone,
+  ChefHat,
 } from "@/components/icons";
 import { trackIntent } from "@/lib/trackIntent";
 
@@ -218,7 +220,38 @@ const metodologiaSaude = [
 
 /* ── Página ── */
 
+const sentimentosDiagnostico = [
+  {
+    svg: "/characters/gamellito-diagnostico-medo.svg",
+    fase: "Medo e choque",
+    texto: "A primeira reação é normal. O diagnóstico chega de surpresa e o medo é uma resposta saudável — não uma fraqueza.",
+    cor: "#F26A00",
+  },
+  {
+    svg: "/characters/gamellito-diagnostico-tristeza.svg",
+    fase: "Tristeza",
+    texto: 'Sentir luto pelo "antes" do diagnóstico é esperado. Dar espaço para esse sentimento faz parte da cura emocional.',
+    cor: "#9B8CF0",
+  },
+  {
+    svg: "/characters/gamellito-diagnostico-raiva.svg",
+    fase: "Raiva e culpa",
+    texto: '"Por que comigo?" ou "Será que foi culpa minha?" são perguntas comuns. Ninguém é responsável pelo DM1.',
+    cor: "#E27400",
+  },
+  {
+    svg: "/characters/gamellito-diagnostico-adaptacao.svg",
+    fase: "Adaptação",
+    texto: "Com o tempo, o DM1 se torna parte da rotina. Crianças e famílias se adaptam — e o Gamellito está aqui nessa jornada.",
+    cor: "#2B9956",
+  },
+];
+
 export default function ParaFamiliasPage() {
+  function handlePartnershipClick() {
+    window.location.href = "mailto:gamellitoltda@gmail.com?subject=Quero%20saber%20sobre%20parceria";
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -340,6 +373,49 @@ export default function ParaFamiliasPage() {
                 <p className="font-body text-muted-foreground text-sm leading-relaxed">
                   {d.texto}
                 </p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Sentimentos normais do diagnóstico */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-16 mb-4"
+          >
+            <p className="text-sm font-body font-semibold text-primary uppercase tracking-wider mb-2">
+              É normal sentir assim
+            </p>
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
+              Sentimentos normais após o diagnóstico
+            </h2>
+            <p className="font-body text-muted-foreground max-w-xl">
+              O diagnóstico de DM1 provoca uma série de emoções — todas válidas. Reconhecê-las é o primeiro passo.
+            </p>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-16">
+            {sentimentosDiagnostico.map((s, i) => (
+              <motion.div
+                key={s.fase}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-card rounded-2xl border border-border p-5 flex flex-col items-center text-center gap-4"
+                style={{ borderTopColor: s.cor, borderTopWidth: 3 }}
+              >
+                <img
+                  src={s.svg}
+                  alt={s.fase}
+                  className="w-28 h-auto"
+                  loading="lazy"
+                />
+                <div>
+                  <p className="font-display font-bold text-foreground mb-1" style={{ color: s.cor }}>{s.fase}</p>
+                  <p className="font-body text-muted-foreground text-sm leading-relaxed">{s.texto}</p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -514,7 +590,9 @@ export default function ParaFamiliasPage() {
           </motion.div>
         </div>
       </section>
-    </>
+
+      <FooterSection />
+    </div>
   );
 }
 
@@ -605,137 +683,3 @@ function EcosistemaSection() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   PAGE COMPONENT
-════════════════════════════════════════════════════════ */
-
-export default function ParaFamiliasPage() {
-  const [activeTab, setActiveTab] = useState<Tab>("familias");
-
-  const heroContent: Record<Tab, { titulo: string; subtitulo: string; tag: string }> = {
-    familias: {
-      tag: "Espaço para famílias",
-      titulo: "Você não está sozinho nessa jornada",
-      subtitulo: "Informações confiáveis, dicas práticas e apoio para navegar o diagnóstico de DM1 com mais segurança e leveza.",
-    },
-    educadores: {
-      tag: "Para educadores",
-      titulo: "A escola faz parte do tratamento",
-      subtitulo: "Professores informados são aliados fundamentais para a segurança e inclusão da criança com DM1.",
-    },
-    enfermagem: {
-      tag: "Para profissionais de saúde",
-      titulo: "Educação em saúde que transforma",
-      subtitulo: "Conheça o método Gamellito e como ele pode ser integrado à sua prática clínica e educativa.",
-    },
-  };
-
-  const hero = heroContent[activeTab];
-
-  return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-
-      {/* ── Hero ── */}
-      <section className="pt-28 pb-0 bg-gamellito-space px-4">
-        <div className="container mx-auto max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-8 text-center"
-          >
-            <h2 className="font-display text-2xl font-bold text-primary">
-              Fontes confiáveis de apoio
-            </h2>
-            <p className="font-body text-primary-foreground/70 mt-2 text-sm">
-              Organizações que oferecem informação, suporte e defesa de direitos para famílias com DM1.
-            </p>
-          </motion.div>
-          <div className="flex flex-col gap-3">
-            {links.map((l, i) => (
-              <motion.a
-                key={l.nome}
-                href={l.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
-                className="bg-primary-foreground/8 hover:bg-primary-foreground/14 border border-primary-foreground/15 rounded-2xl p-4 flex flex-col gap-1 transition-colors group"
-              >
-                <span className="font-display font-semibold text-primary group-hover:underline">
-                  {l.nome}
-                </span>
-                <span className="font-body text-sm text-primary-foreground/70">
-                  {l.descricao}
-                </span>
-              </motion.a>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Conteúdo da aba ativa ── */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-        >
-          {activeTab === "familias" && <TabFamilias />}
-          {activeTab === "educadores" && <TabEducadores />}
-          {activeTab === "enfermagem" && <TabEnfermagem />}
-        </motion.div>
-      </AnimatePresence>
-
-      <EcosistemaSection />
-
-      {/* ── CTA Contato (sempre visível) ── */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto max-w-2xl text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <AssetImage
-              asset="gamellitoContente"
-              alt="Gamellito contente"
-              className="w-24 h-auto mx-auto mb-6"
-              width={96}
-              height={96}
-            />
-            <h2 className="font-display text-3xl font-bold text-foreground mb-4">
-              Tem dúvidas? Fale com a gente
-            </h2>
-            <p className="font-body text-muted-foreground leading-relaxed mb-8">
-              Podemos conversar sobre como levar o Gamellito para o dia a dia da sua família, escola ou ambulatório.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="mailto:gamellitoltda@gmail.com"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
-              >
-                Enviar e-mail
-              </a>
-              <a
-                href="https://instagram.com/gamellito"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border text-foreground font-body font-semibold rounded-full hover:border-primary/40 transition-colors"
-              >
-                Siga no Instagram
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <FooterSection />
-    </div>
-  );
-}
