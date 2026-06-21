@@ -559,11 +559,11 @@ function EcosistemaSection() {
       <div className="container mx-auto max-w-4xl relative">
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
           <span className="inline-block bg-gamellito-orange/20 text-gamellito-orange font-body font-semibold text-xs uppercase tracking-widest px-4 py-1.5 rounded-full mb-5">
-            O ecossistema Gamellito
+            Soluções do ecossistema
           </span>
           <h2 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5 leading-tight">
-            Mais do que um jogo —<br className="hidden sm:block" />
-            <span className="text-gamellito-orange"> uma jornada para a sua família</span>
+            Um ecossistema completo —<br className="hidden sm:block" />
+            <span className="text-gamellito-orange"> para famílias, escolas e saúde</span>
           </h2>
           <p className="font-body text-primary-foreground/75 text-lg leading-relaxed max-w-2xl mx-auto">
             Estamos construindo um espaço onde famílias com DM1 encontram acolhimento, aprendizado e comunidade — tudo com a leveza e o rigor clínico que são a alma do Gamellito.
