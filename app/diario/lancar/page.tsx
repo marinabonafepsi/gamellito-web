@@ -84,18 +84,18 @@ export default function LancarPage() {
 
       <div className="max-w-lg mx-auto">
         <header className="mb-8">
-          <h1 className="text-3xl font-display font-bold text-foreground">
+          <h1 className="text-3xl font-display font-bold" style={{ color: "#2B2233" }}>
             Registrar glicemia
           </h1>
-          <p className="text-sm font-body mt-1 text-primary">
+          <p className="text-sm font-body mt-1" style={{ color: "#F26A00" }}>
             Preencha os campos e toque em Salvar.
           </p>
         </header>
 
-        <div className="bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-6 flex flex-col gap-6">
+        <div className="ds-card p-6 flex flex-col gap-6">
           {/* Valor */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="valor" className="text-sm font-body font-semibold text-foreground">
+            <label htmlFor="valor" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Valor da glicemia (mg/dL)
             </label>
             <input
@@ -103,16 +103,16 @@ export default function LancarPage() {
               type="number"
               inputMode="numeric"
               pattern="[0-9]*"
-              placeholder="120"
+              placeholder="Ex.: 120"
               value={valor}
               onChange={(e) => setValor(e.target.value)}
-              className="w-full rounded-2xl border border-border bg-background px-4 py-3 text-2xl font-display font-bold text-foreground text-center focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="ds-input-number"
             />
           </div>
 
           {/* Data e hora */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="data_hora" className="text-sm font-body font-semibold text-foreground">
+            <label htmlFor="data_hora" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Data e hora
             </label>
             <input
@@ -120,13 +120,13 @@ export default function LancarPage() {
               type="datetime-local"
               value={dataHora}
               onChange={(e) => setDataHora(e.target.value)}
-              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="ds-input"
             />
           </div>
 
           {/* Rótulos */}
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-body font-semibold text-foreground">
+            <span className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Momento
             </span>
             <div className="flex flex-wrap gap-2">
@@ -135,11 +135,7 @@ export default function LancarPage() {
                   key={id}
                   type="button"
                   onClick={() => setRotulo(id)}
-                  className={`rounded-full px-3 py-1.5 text-xs font-body font-medium transition-colors ${
-                    rotulo === id
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-muted text-muted-foreground hover:bg-muted/80"
-                  }`}
+                  className={`ds-label${rotulo === id ? " ds-label--active" : ""}`}
                 >
                   {label}
                 </button>
@@ -149,7 +145,7 @@ export default function LancarPage() {
 
           {/* Quem registra */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="lancado_por" className="text-sm font-body font-semibold text-foreground">
+            <label htmlFor="lancado_por" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Registrado por
             </label>
             <input
@@ -158,15 +154,15 @@ export default function LancarPage() {
               placeholder="Ex.: mãe, pai, criança"
               value={lancadoPor}
               onChange={(e) => setLancadoPor(e.target.value)}
-              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+              className="ds-input"
             />
           </div>
 
           {/* Observação opcional */}
           <div className="flex flex-col gap-2">
-            <label htmlFor="observacao" className="text-sm font-body font-semibold text-foreground">
+            <label htmlFor="observacao" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
               Observação{" "}
-              <span className="font-normal text-muted-foreground">(opcional)</span>
+              <span className="font-normal" style={{ color: "#6B7280" }}>(opcional)</span>
             </label>
             <textarea
               id="observacao"
@@ -174,12 +170,12 @@ export default function LancarPage() {
               placeholder="Ex.: após atividade física, mal-estar…"
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
-              className="w-full rounded-2xl border border-border bg-background px-4 py-2.5 font-body text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 resize-none"
+              className="ds-textarea"
             />
           </div>
 
           {erro && (
-            <p className="text-sm font-body border border-destructive bg-destructive/10 text-destructive rounded-2xl px-4 py-3">
+            <p className="text-sm font-body border-2 rounded-2xl px-4 py-3" style={{ borderColor: "#DC2626", background: "#FEF2F2", color: "#DC2626" }}>
               {erro}
             </p>
           )}
@@ -187,14 +183,15 @@ export default function LancarPage() {
           <button
             onClick={salvar}
             disabled={salvando}
-            className="w-full mt-2 bg-primary text-primary-foreground rounded-full font-display font-bold text-base py-3.5 hover:bg-primary/90 transition-colors disabled:opacity-60"
+            className="ds-btn ds-btn--lg w-full mt-2"
           >
             {salvando ? "Salvando…" : "Salvar registro"}
           </button>
 
           <button
             onClick={() => router.back()}
-            className="text-sm font-body text-center text-muted-foreground hover:underline"
+            className="text-sm font-body text-center hover:underline"
+            style={{ color: "#6B7280" }}
           >
             ← Cancelar
           </button>
