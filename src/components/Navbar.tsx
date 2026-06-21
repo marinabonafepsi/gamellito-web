@@ -1,10 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "@/components/icons";
 import { siteAssets } from "@/components/SiteAssets";
 import { track } from "@/lib/analytics";
+import { createClient } from "@/lib/supabase/client";
+import type { User } from "@supabase/supabase-js";
 
 const navLinks = [
   { label: "Início",        href: "/#inicio" },
@@ -16,11 +18,39 @@ const navLinks = [
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_, session) => setUser(session?.user ?? null)
+    );
+    return () => subscription.unsubscribe();
+  }, []);
 
   function handleNavClick(label: string, href: string) {
     track("nav_click", window.location.pathname, { label, href });
     setIsOpen(false);
   }
+
+  const authButton = user ? (
+    <a
+      href="/diario"
+      onClick={() => handleNavClick("Diário", "/diario")}
+      className="font-body font-bold py-2.5 px-5 rounded-full text-center bg-gamellito-yellow text-gamellito-space border-2 border-gamellito-space shadow-[3px_3px_0_#2B2233] text-sm"
+    >
+      Diário
+    </a>
+  ) : (
+    <a
+      href="/diario/login"
+      onClick={() => handleNavClick("Login", "/diario/login")}
+      className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors"
+    >
+      Login
+    </a>
+  );
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-gamellito-space/95 backdrop-blur-md border-b border-gamellito-purple/30">
@@ -44,13 +74,7 @@ const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <a
-            href="/diario/login"
-            onClick={() => handleNavClick("Login", "/diario/login")}
-            className="inline-flex items-center px-5 py-2 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors"
-          >
-            Login
-          </a>
+          {authButton}
         </div>
 
         {/* Mobile toggle */}
@@ -72,13 +96,7 @@ const Navbar = () => {
             className="md:hidden bg-gamellito-space/98 overflow-hidden"
           >
             <div className="px-4 py-4 flex flex-col gap-3">
-              <a
-                href="/diario/login"
-                onClick={() => handleNavClick("Login", "/diario/login")}
-                className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors mb-1"
-              >
-                Login
-              </a>
+              {authButton}
               {navLinks.map((link) => (
                 <a
                   key={link.href}
@@ -89,13 +107,6 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="/diario"
-                onClick={() => handleNavClick("Diário", "/diario")}
-                className="font-body text-base font-bold py-3 px-4 rounded-full text-center mt-2 bg-gamellito-yellow text-gamellito-space border-2 border-gamellito-space shadow-[3px_3px_0_#2B2233]"
-              >
-                Diário
-              </a>
             </div>
           </motion.div>
         )}
