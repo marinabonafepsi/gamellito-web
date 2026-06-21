@@ -184,7 +184,7 @@ export function IdentifyModal({
                     <button
                       type="submit"
                       disabled={loading || !email.trim()}
-                      className="w-full py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 disabled:opacity-50 transition-colors"
+                      className="w-full py-3 bg-primary text-primary-foreground font-display font-bold rounded-full hover:bg-primary/90 disabled:opacity-50 transition-colors"
                     >
                       {loading ? "Salvando..." : "Entrar na jornada"}
                     </button>

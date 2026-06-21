@@ -129,7 +129,7 @@ export function EditarRegistroModal({ registro, onSalvo, onCancelar }: Props) {
           />
         </div>
 
-        {erro && <p className="text-sm text-destructive font-body">{erro}</p>}
+        {erro && <p className="text-sm font-body bg-destructive/10 text-destructive px-3 py-2 rounded-xl">{erro}</p>}
 
         <div className="flex gap-3 pt-1">
           <button onClick={onCancelar}
@@ -137,7 +137,7 @@ export function EditarRegistroModal({ registro, onSalvo, onCancelar }: Props) {
             Cancelar
           </button>
           <button onClick={salvar} disabled={salvando}
-            className="flex-1 rounded-full bg-primary py-2.5 font-display font-bold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-60">
+            className="flex-1 rounded-full bg-primary py-2.5 font-display font-bold text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-60">
             {salvando ? "Salvando…" : "Salvar"}
           </button>
         </div>

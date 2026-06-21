@@ -106,15 +106,11 @@ function ProductModal({
           <X size={20} />
         </button>
 
-        <div className="text-5xl text-center mb-3">{produto.emoji}</div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-1">
           {produto.nome}
         </h2>
-        <p className="font-body text-muted-foreground text-center text-sm mb-2">
+        <p className="font-body text-muted-foreground text-center text-sm mb-5">
           {produto.subtitulo}
-        </p>
-        <p className="font-display text-3xl font-bold text-primary text-center mb-4">
-          {produto.preco}
         </p>
 
         {notifyDone ? (
@@ -123,33 +119,32 @@ function ProductModal({
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-4"
           >
-            <div className="text-4xl mb-2">🎉</div>
-            <p className="font-body font-semibold text-foreground">
+            <AssetImage asset="gamellitoContente" alt="Gamellito" className="w-14 h-auto mx-auto mb-3" width={56} height={56} />
+            <p className="font-display font-bold text-lg text-foreground">
               Anotamos seu interesse!
             </p>
             <p className="font-body text-muted-foreground text-sm mt-1">
-              Te avisamos assim que a loja abrir.
+              Te avisamos quando a loja abrir.
             </p>
           </motion.div>
         ) : (
           <div className="space-y-3">
-            <div className="bg-muted/60 rounded-xl p-4 text-center">
+            <div className="bg-muted/60 rounded-2xl p-4 text-center">
               <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                🚧 Nossa loja está em construção! Estamos validando a demanda
-                para garantir os melhores produtos pra vocês.
+                Nossa loja está em construção! Estamos validando a demanda para garantir os melhores produtos.
               </p>
             </div>
             <a
-              href={`mailto:gamellitoltda@gmail.com?subject=Interesse na loja: ${produto.nome}&body=Olá! Tenho interesse em comprar: ${produto.nome} (${produto.preco}). Por favor me avise quando a loja abrir!`}
-              className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
+              href={`mailto:gamellitoltda@gmail.com?subject=Interesse: ${produto.nome}&body=Olá! Tenho interesse em: ${produto.nome}. Me avise quando a loja abrir!`}
+              className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-display font-bold rounded-full hover:bg-primary/90 transition-colors"
               onClick={() => { setNotifyDone(true); }}
             >
-              💌 Me avise quando abrir
+              Me avise quando abrir
             </a>
             <button
               type="button"
               onClick={onClose}
-              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors"
+              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:bg-muted transition-colors"
             >
               Continuar explorando
             </button>
