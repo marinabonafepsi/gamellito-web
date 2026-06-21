@@ -3,7 +3,7 @@ import { siteAssets } from "@/components/SiteAssets";
 
 const FooterSection = () => {
   return (
-    <footer id="contato" className="bg-gamellito-space py-16">
+    <footer id="contato" className="bg-gradient-to-r from-gamellito-space via-gamellito-purple/60 to-gamellito-space border-t border-gamellito-purple/30 py-16">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
           {/* Brand */}
