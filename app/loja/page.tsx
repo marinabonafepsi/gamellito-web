@@ -262,7 +262,7 @@ export default function LojaPage() {
               <motion.button
                 key={produto.id}
                 type="button"
-                onClick={() => handleClick(produto)}
+                onClick={() => handleProductClick(produto)}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
