@@ -106,11 +106,11 @@ const HeroSection = () => {
         >
           <PersonagemAnimado className="p-0">
             <img
-              src="/assets/gamellito-contente.svg"
+              src="/characters/gamellito-hero-gigante.svg"
               alt="Gamellito — mascote"
-              className="w-48 md:w-64 lg:w-80 h-auto drop-shadow-2xl max-w-full"
-              width={320}
-              height={400}
+              className="w-64 md:w-80 lg:w-[440px] h-auto drop-shadow-2xl max-w-full"
+              width={896}
+              height={787}
               decoding="async"
               suppressHydrationWarning
             />
