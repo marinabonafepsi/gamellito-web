@@ -186,7 +186,7 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
       onClick={onClose}
     >
       <motion.div
-        className="relative w-full max-w-md bg-card rounded-3xl p-8 shadow-2xl border-2 border-gamellito-hospital-purple/30"
+        className="relative w-full max-w-md bg-card rounded-3xl p-8 shadow-2xl border-2 border-gamellito-hospital-purple/25"
         initial={{ scale: 0.88, opacity: 0, y: 20 }}
         animate={{ scale: 1, opacity: 1, y: 0 }}
         exit={{ scale: 0.92, opacity: 0 }}
@@ -207,11 +207,11 @@ function GameInterestModal({ onClose }: { onClose: () => void }) {
           <a
             href="mailto:gamellitoltda@gmail.com?subject=Interesse no jogo Gamellito Adventures"
             onClick={onClose}
-            className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
+            className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-display font-bold rounded-full hover:bg-primary/90 transition-colors"
           >
             Me avise quando lançar
           </a>
-          <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:border-primary/40 transition-colors">
+          <button type="button" onClick={onClose} className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:bg-muted transition-colors">
             Voltar
           </button>
         </div>
@@ -343,7 +343,7 @@ const SolutionsSection = () => {
                     <button
                       type="button"
                       onClick={handleGameCTA}
-                      className="inline-flex items-center gap-2 px-5 py-2 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors text-sm"
+                      className="inline-flex items-center gap-2 px-5 py-2 bg-primary text-primary-foreground font-display font-bold rounded-full hover:bg-primary/90 transition-colors text-sm"
                     >
                       {sol.cta.label}
                     </button>
@@ -463,7 +463,7 @@ const SolutionsSection = () => {
                 <a
                   href={setor.href}
                   onClick={() => track("nav_click", window.location.pathname, { label: setor.cta, href: setor.href })}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors text-sm"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-display font-bold rounded-full hover:bg-primary/90 transition-colors text-sm"
                 >
                   {setor.cta}
                 </a>

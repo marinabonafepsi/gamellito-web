@@ -1,12 +1,12 @@
-import { createClient, SupabaseClient } from "@supabase/supabase-js";
+/**
+ * Cliente Supabase para uso no browser (analytics, tracking).
+ * Retorna null se as variáveis de ambiente não estiverem configuradas.
+ * Para auth + dados do Diário, use @/lib/supabase/client (DIA-002).
+ */
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 let _client: SupabaseClient | null = null;
 
-/**
- * Retorna o client Supabase de forma lazy.
- * Retorna null se as env vars não estiverem configuradas
- * (ex: durante build estático ou em desenvolvimento sem .env.local).
- */
 export function getSupabaseClient(): SupabaseClient | null {
   if (_client) return _client;
 

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { AssetImage } from "@/components/SiteAssets";
 
 export default function ConsentimentoPage() {
   const router = useRouter();
@@ -27,51 +28,45 @@ export default function ConsentimentoPage() {
 
   return (
     <div className="min-h-[70vh] flex items-center justify-center">
-      <div className="w-full max-w-md ds-card p-8 md:p-10 flex flex-col gap-6">
+      <div className="w-full max-w-md bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-8 md:p-10 flex flex-col gap-6">
 
         <div className="text-center">
-          <span className="text-5xl">📋</span>
-          <h1 className="text-2xl font-display font-bold mt-3" style={{ color: "#2B2233" }}>
+          <AssetImage asset="gamellitoCorpinho" alt="Gamellito" className="w-16 h-auto mx-auto" width={64} height={64} />
+          <h1 className="text-2xl font-display font-bold text-foreground mt-3">
             Antes de começar
           </h1>
-          <p className="text-sm font-body mt-2" style={{ color: "rgba(43,34,51,0.6)" }}>
+          <p className="text-sm font-body mt-2 text-muted-foreground">
             Leia como seus dados são usados neste diário.
           </p>
         </div>
 
-        <div
-          className="rounded-2xl p-5 text-sm font-body leading-relaxed flex flex-col gap-3"
-          style={{ background: "#FFF3C9", border: "2px solid #2B2233" }}
-        >
-          <p style={{ color: "#2B2233" }}>
+        <div className="rounded-2xl p-5 text-sm font-body leading-relaxed flex flex-col gap-3 bg-muted/60 border border-border">
+          <p className="text-foreground">
             <strong>O que coletamos:</strong>{" "}
             seu e-mail de cadastro e os registros de glicemia que você digitar
             (valor, data/hora, rótulo e observação opcional).
           </p>
-          <p style={{ color: "#2B2233" }}>
+          <p className="text-foreground">
             <strong>Para que serve:</strong>{" "}
             guardar seus registros com segurança para levar o histórico
             organizado à consulta médica.
           </p>
-          <p style={{ color: "#2B2233" }}>
+          <p className="text-foreground">
             <strong>O que não fazemos:</strong>{" "}
             não interpretamos valores, não emitimos alertas clínicos e não
             compartilhamos seus dados com terceiros sem sua autorização.
           </p>
-          <p style={{ color: "#2B2233" }}>
+          <p className="text-foreground">
             <strong>Seus direitos (LGPD art. 18):</strong>{" "}
             você pode apagar todos os seus dados a qualquer momento em
             Conta → Apagar todos os dados.
           </p>
-          <p style={{ color: "#2B2233" }}>
+          <p className="text-foreground">
             <strong>Dados de crianças:</strong>{" "}
             ao continuar, você declara ser pai, mãe ou responsável legal
             pela criança cujos dados serão registrados, conforme LGPD art. 14.
           </p>
-          <p
-            className="text-xs pt-2"
-            style={{ color: "rgba(43,34,51,0.5)", borderTop: "1px solid rgba(43,34,51,0.2)" }}
-          >
+          <p className="text-xs pt-2 text-muted-foreground border-t border-border">
             Versão 1.0 — Política de privacidade completa: <em>[link pendente — validação jurídica em andamento]</em>
           </p>
         </div>
@@ -81,10 +76,9 @@ export default function ConsentimentoPage() {
             type="checkbox"
             checked={aceito}
             onChange={(e) => setAceito(e.target.checked)}
-            className="mt-1 h-5 w-5 shrink-0 rounded cursor-pointer"
-            style={{ accentColor: "#F26A00" }}
+            className="mt-1 h-5 w-5 shrink-0 rounded cursor-pointer accent-primary"
           />
-          <span className="text-sm font-body leading-relaxed" style={{ color: "#2B2233" }}>
+          <span className="text-sm font-body leading-relaxed text-foreground">
             Li e aceito o uso dos meus dados conforme descrito acima.
             Declaro ser responsável legal pela criança cujos registros
             serão incluídos neste diário.
@@ -92,10 +86,7 @@ export default function ConsentimentoPage() {
         </label>
 
         {erro && (
-          <p
-            className="text-sm font-body px-3 py-2 rounded-xl"
-            style={{ background: "#FEE2E2", color: "#991B1B" }}
-          >
+          <p className="text-sm font-body bg-destructive/10 text-destructive px-3 py-2 rounded-xl">
             {erro}
           </p>
         )}
@@ -103,7 +94,7 @@ export default function ConsentimentoPage() {
         <button
           onClick={confirmar}
           disabled={!aceito || salvando}
-          className="ds-btn w-full font-display font-bold text-base"
+          className="w-full bg-primary text-primary-foreground rounded-full font-display font-bold text-base py-3 hover:bg-primary/90 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {salvando ? "Registrando…" : "Aceitar e acessar o diário →"}
         </button>

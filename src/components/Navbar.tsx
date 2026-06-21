@@ -10,7 +10,6 @@ const navLinks = [
   { label: "Início",        href: "/#inicio" },
   { label: "Sobre",         href: "/#sobre" },
   { label: "Para Famílias", href: "/para-familias" },
-  { label: "Programas",     href: "/#solucoes" },
   { label: "Contato",       href: "/#contato" },
   { label: "Loja",          href: "/loja" },
 ];
@@ -93,8 +92,7 @@ const Navbar = () => {
               <a
                 href="/diario"
                 onClick={() => handleNavClick("Diário", "/diario")}
-                className="font-body text-base font-bold py-3 px-4 rounded-full text-center mt-2"
-                style={{ background: "#FFC400", color: "#2B2233", border: "2px solid #2B2233", boxShadow: "3px 3px 0 #2B2233" }}
+                className="font-body text-base font-bold py-3 px-4 rounded-full text-center mt-2 bg-gamellito-yellow text-gamellito-space border-2 border-gamellito-space shadow-[3px_3px_0_#2B2233]"
               >
                 Diário
               </a>

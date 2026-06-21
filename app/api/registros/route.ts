@@ -82,6 +82,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "id obrigatório." }, { status: 400 });
   }
 
+  // RLS garante que só o próprio dono pode atualizar
   const { data, error } = await supabase
     .from("registros")
     .update(campos)

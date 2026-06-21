@@ -64,21 +64,13 @@ const ParceriaSection = () => {
               ))}
             </ul>
 
-            <div className="flex flex-wrap gap-3">
-              <a
-                href="mailto:gamellitoltda@gmail.com?subject=Quero conversar sobre parceria com o Gamellito"
-                onClick={() => track("nav_click", "/", { label: "parceria_cta", href: "mailto" })}
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
-              >
-                Quero conversar
-              </a>
-              <a
-                href="/parcerias-uel"
-                className="inline-flex items-center gap-2 px-7 py-3.5 border-2 border-primary-foreground/30 text-primary-foreground font-body font-semibold rounded-full hover:border-primary transition-colors"
-              >
-                Ver parceria UEL →
-              </a>
-            </div>
+            <a
+              href="mailto:gamellitoltda@gmail.com?subject=Quero conversar sobre parceria com o Gamellito"
+              onClick={() => track("nav_click", "/", { label: "parceria_cta", href: "mailto" })}
+              className="inline-flex items-center gap-2 px-7 py-3.5 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
+            >
+              Quero conversar
+            </a>
           </div>
         </motion.div>
       </div>
