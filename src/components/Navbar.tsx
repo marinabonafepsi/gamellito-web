@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "@/components/icons";
-import { siteAssets } from "@/components/SiteAssets";
 import { track } from "@/lib/analytics";
 
 const navLinks = [
@@ -23,10 +22,17 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gamellito-space/95 backdrop-blur-md border-b border-gamellito-purple/30">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+    <nav className="fixed top-0 left-0 right-0 z-50 overflow-hidden">
+      {/* Navbar background SVG */}
+      <img
+        src="/characters/gamellito-navbar-bg.svg"
+        alt=""
+        aria-hidden
+        className="absolute inset-0 w-full h-full object-cover object-left"
+      />
+      <div className="relative container mx-auto px-4 py-3 flex items-center justify-between">
         <a href="/" className="flex items-center gap-2" onClick={() => handleNavClick("Logo", "/")}>
-          <img src={siteAssets.gamellitoFelizMaoNaBarriga} alt="Gamellito" className="w-10 h-10 object-contain" />
+          <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="w-10 h-10 object-contain" />
           <span className="font-display text-2xl font-bold text-primary">
             Gamellito
           </span>
@@ -69,7 +75,7 @@ const Navbar = () => {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="md:hidden bg-gamellito-space/98 overflow-hidden"
+            className="md:hidden overflow-hidden" style={{ background: "#6F567E" }}
           >
             <div className="px-4 py-4 flex flex-col gap-3">
               <a
