@@ -9,11 +9,6 @@ interface Props {
   onFim: () => void;
 }
 
-/**
- * Microcomemoração ao salvar um registro.
- * Celebra O ATO DE REGISTRAR — nunca o valor.
- * REGRA Nº 1: nenhuma mensagem avalia ou interpreta o número digitado.
- */
 export function RecompensaSalvar({ visivel, onFim }: Props) {
   const reducedMotion = useReducedMotion();
 
@@ -32,25 +27,18 @@ export function RecompensaSalvar({ visivel, onFim }: Props) {
       className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
     >
       <div
-        className={`
-          flex flex-col items-center gap-3
-          bg-card/95 backdrop-blur-sm rounded-3xl
-          border-2 border-gamellito-health-green/60
-          shadow-2xl px-10 py-8
-          ${reducedMotion ? "" : "animate-gamellito-celebrate"}
-        `}
+        className={`ds-card flex flex-col items-center gap-3 px-10 py-8 ${reducedMotion ? "" : "animate-gamellito-celebrate"}`}
+        style={{ borderColor: "#27AE60" }}
       >
         <AssetImage asset="gamellitoContente" alt="Gamellito comemorando" className="w-16 h-auto" width={64} height={64} />
 
-        {/* Mensagem: celebra o registro, NUNCA o valor */}
-        <p className="font-display font-bold text-2xl text-foreground">
+        <p className="font-display font-bold text-2xl" style={{ color: "#2B2233" }}>
           Boa! Anotado!
         </p>
-        <p className="font-body text-sm text-muted-foreground text-center max-w-[200px]">
+        <p className="font-body text-sm text-center max-w-[200px]" style={{ color: "#6B7280" }}>
           Mais um registro no seu diário!
         </p>
 
-        {/* Confete visual — respeita prefers-reduced-motion */}
         {!reducedMotion && (
           <div className="flex gap-2 mt-1" aria-hidden="true">
             {["#E8540A", "#F5C518", "#27AE60", "#E8540A", "#F5C518"].map(
@@ -58,11 +46,7 @@ export function RecompensaSalvar({ visivel, onFim }: Props) {
                 <span
                   key={i}
                   className="inline-block w-2 h-2 rounded-full animate-bounce"
-                  style={{
-                    backgroundColor: cor,
-                    animationDelay: `${i * 80}ms`,
-                    animationDuration: "0.6s",
-                  }}
+                  style={{ backgroundColor: cor, animationDelay: `${i * 80}ms`, animationDuration: "0.6s" }}
                 />
               )
             )}

@@ -274,6 +274,33 @@ const ondeAplicar = [
   "Formação de cuidadores e agentes comunitários",
 ];
 
+const sentimentosDiagnostico = [
+  {
+    svg: "/characters/gamellito-diagnostico-medo.svg",
+    fase: "Medo e choque",
+    texto: "A primeira reação é normal. O diagnóstico chega de surpresa e o medo é uma resposta saudável — não uma fraqueza.",
+    cor: "#F26A00",
+  },
+  {
+    svg: "/characters/gamellito-diagnostico-tristeza.svg",
+    fase: "Tristeza",
+    texto: 'Sentir luto pelo "antes" do diagnóstico é esperado. Dar espaço para esse sentimento faz parte da cura emocional.',
+    cor: "#9B8CF0",
+  },
+  {
+    svg: "/characters/gamellito-diagnostico-raiva.svg",
+    fase: "Raiva e culpa",
+    texto: '"Por que comigo?" ou "Será que foi culpa minha?" são perguntas comuns. Ninguém é responsável pelo DM1.',
+    cor: "#E27400",
+  },
+  {
+    svg: "/characters/gamellito-diagnostico-adaptacao.svg",
+    fase: "Adaptação",
+    texto: "Com o tempo, o DM1 se torna parte da rotina. Crianças e famílias se adaptam — e o Gamellito está aqui nessa jornada.",
+    cor: "#2B9956",
+  },
+];
+
 /* ═══════════════════════════════════════════════════════
    ABAS — componente de navegação
 ════════════════════════════════════════════════════════ */
@@ -345,6 +372,47 @@ function TabFamilias() {
                 </motion.div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Sentimentos normais ── */}
+      <section className="py-16 px-4 bg-background">
+        <div className="container mx-auto max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-10"
+          >
+            <p className="text-sm font-body font-semibold text-primary uppercase tracking-wider mb-2">
+              É normal sentir assim
+            </p>
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-2">
+              Sentimentos normais após o diagnóstico
+            </h2>
+            <p className="font-body text-muted-foreground max-w-xl">
+              O diagnóstico de DM1 provoca uma série de emoções — todas válidas. Reconhecê-las é o primeiro passo.
+            </p>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {sentimentosDiagnostico.map((s, i) => (
+              <motion.div
+                key={s.fase}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-card rounded-2xl border border-border p-5 flex flex-col items-center text-center gap-4"
+                style={{ borderTopColor: s.cor, borderTopWidth: 3 }}
+              >
+                <img src={s.svg} alt={s.fase} className="w-28 h-auto" loading="lazy" />
+                <div>
+                  <p className="font-display font-bold text-foreground mb-1" style={{ color: s.cor }}>{s.fase}</p>
+                  <p className="font-body text-muted-foreground text-sm leading-relaxed">{s.texto}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
