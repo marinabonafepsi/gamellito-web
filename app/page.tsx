@@ -1,11 +1,11 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
-import SolutionsSection from "@/components/SolutionsSection";
 import AwardsSection from "@/components/AwardsSection";
 import PartnersSection from "@/components/PartnersSection";
 import ParceriaSection from "@/components/ParceriaSection";
 import FooterSection from "@/components/FooterSection";
+import EcosystemCTA from "@/components/EcosystemCTA";
 
 export default function HomePage() {
   return (
@@ -15,13 +15,13 @@ export default function HomePage() {
       <HeroSection />
       {/* 2. O problema + A virada */}
       <AboutSection />
-{/* 4. O que fazemos (3 frentes) + Para quem é + Credibilidade */}
-      <SolutionsSection />
-      {/* 5. Prêmios */}
+      {/* 3. Ecossistema CTA */}
+      <EcosystemCTA />
+      {/* 4. Prêmios */}
       <AwardsSection />
-      {/* 6. Parceiros */}
+      {/* 5. Parceiros */}
       <PartnersSection />
-      {/* 7. Seja um parceiro */}
+      {/* 6. Seja um parceiro */}
       <ParceriaSection />
       <FooterSection />
     </div>
