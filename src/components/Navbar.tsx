@@ -42,16 +42,9 @@ const Navbar = () => {
         aria-hidden
         className="absolute inset-0 w-full h-full object-cover object-left"
       />
-      <div className="relative container mx-auto px-4 py-0 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-2 min-w-0" onClick={() => handleNavClick("Logo", "/")}>
-          <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="w-12 h-12 object-contain flex-shrink-0" />
-          <div className="flex flex-col min-w-0 relative">
-            <div className="relative h-12 flex items-center">
-              <span className="font-display text-4xl font-bold text-gamellito-space/80 leading-none absolute">Gamellito</span>
-              <span className="font-display text-4xl font-bold text-gamellito-orange leading-none relative">Gamellito</span>
-            </div>
-            <span className="font-body text-sm font-bold text-white leading-tight">Ltda.</span>
-          </div>
+      <div className="relative container mx-auto px-6 py-3 flex items-center justify-between">
+        <a href="/" className="flex items-center min-w-0" onClick={() => handleNavClick("Logo", "/")} title="Voltar para home">
+          <img src="/characters/gamellito-naming.svg" alt="Gamellito Ltda" className="h-16 w-auto object-contain flex-shrink-0" />
         </a>
 
         {/* Desktop */}
