@@ -62,6 +62,14 @@ export const siteAssets = {
   heroGigante: "/characters/gamellito-hero-gigante.svg",
   /** Gamellito empurrando caixa – ação/movimento */
   empurrandoCaixa: "/characters/gamellito-empurrando-caixa.svg",
+  /** Diagnóstico – Gamellito com medo */
+  diagnosticoMedo: "/characters/gamellito-diagnostico-medo.svg",
+  /** Diagnóstico – Gamellito triste */
+  diagnosticoTristeza: "/characters/gamellito-diagnostico-tristeza.svg",
+  /** Diagnóstico – Gamellito com raiva */
+  diagnosticoRaiva: "/characters/gamellito-diagnostico-raiva.svg",
+  /** Diagnóstico – Gamellito se adaptando */
+  diagnosticoAdaptacao: "/characters/gamellito-diagnostico-adaptacao.svg",
 } as const;
 
 export type SiteAssetKey = keyof typeof siteAssets;
