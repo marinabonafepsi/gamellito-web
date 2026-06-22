@@ -75,7 +75,7 @@ export default function UserMenu() {
       </button>
 
       {open && (
-        <div className="absolute right-0 top-12 w-48 bg-gamellito-space border border-gamellito-purple/40 rounded-2xl shadow-lg overflow-hidden z-50">
+        <div className="absolute right-0 top-12 w-48 bg-gamellito-space border border-gamellito-purple/40 rounded-2xl shadow-lg overflow-hidden z-[9999]">
           {coins !== null && (
             <div className="px-4 py-2.5 border-b border-gamellito-purple/20 flex items-center gap-2">
               <span className="text-base">🪙</span>

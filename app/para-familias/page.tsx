@@ -520,9 +520,10 @@ function TabFamilias() {
               <span className="inline-block rounded-full bg-gamellito-yellow/20 text-gamellito-yellow text-xs font-display px-3 py-1 mb-5">
                 Capítulo 2
               </span>
-              <div className="grid md:grid-cols-[1fr_56px_1fr] gap-4 md:gap-6 items-start">
-                <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
-                  <div className="text-center mb-4">
+              <div className="grid md:grid-cols-[auto_56px_auto] gap-4 md:gap-6 items-center justify-center">
+                <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="flex flex-col items-center">
+                  <AssetImage asset="thinkingTipo1" alt="Gamellito - Tipo 1" className="w-32 h-auto mb-4" width={128} height={128} />
+                  <div className="text-center">
                     <span className="inline-block rounded-full bg-gamellito-orange text-white font-display text-sm px-4 py-1 mb-3">Tipo 1</span>
                   </div>
                   <ul className="space-y-2">
@@ -534,11 +535,12 @@ function TabFamilias() {
                     ))}
                   </ul>
                 </motion.div>
-                <div className="flex items-center justify-center py-4 md:py-0 md:mt-16">
+                <div className="flex items-center justify-center">
                   <span className="font-display text-4xl md:text-5xl text-gamellito-yellow font-bold select-none">≠</span>
                 </div>
-                <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
-                  <div className="text-center mb-4">
+                <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }} className="flex flex-col items-center">
+                  <AssetImage asset="thinkingTipo2" alt="Gamellito - Tipo 2" className="w-32 h-auto mb-4" width={128} height={128} />
+                  <div className="text-center">
                     <span className="inline-block rounded-full bg-gamellito-blue text-white font-display text-sm px-4 py-1 mb-3">Tipo 2</span>
                   </div>
                   <ul className="space-y-2">
@@ -597,13 +599,13 @@ function TabFamilias() {
               </p>
               <div className="grid grid-cols-2 gap-2">
                 {[
-                  { asset: "seringa", label: "Insulinoterapia" },
+                  { asset: "seringaSvg", label: "Insulinoterapia" },
                   { asset: "glicosimetro", label: "Monitoramento" },
                   { asset: "geladeira", label: "Alimentação" },
                   { asset: "bicicleta", label: "Atividade física" },
                 ].map((pilar) => (
                   <div key={pilar.label} className="rounded-xl bg-white/40 dark:bg-white/5 border border-gamellito-health-green/25 p-3 text-center">
-                    <AssetImage asset={pilar.asset as any} alt={pilar.label} className="w-9 h-9 mx-auto mb-1 object-contain" width={36} height={36} />
+                    <AssetImage asset={pilar.asset as any} alt={pilar.label} className="w-10 h-10 mx-auto mb-1 object-contain" width={40} height={40} />
                     <span className="font-display text-xs text-gamellito-health-green font-bold block">{pilar.label}</span>
                   </div>
                 ))}
