@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "@/components/icons";
 import { track } from "@/lib/analytics";
 import { createClient } from "@/lib/supabase/client";
+import UserMenu from "@/components/UserMenu";
 
 const navLinks = [
   { label: "Início",        href: "/#inicio" },
@@ -41,17 +42,10 @@ const Navbar = () => {
         aria-hidden
         className="absolute inset-0 w-full h-full object-cover object-left"
       />
-      <div className="relative container mx-auto px-4 py-2 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-4 min-w-0" onClick={() => handleNavClick("Logo", "/")}>
-          <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="w-20 h-20 object-contain flex-shrink-0" />
-          <div className="flex flex-col min-w-0">
-            <span className="font-display text-4xl font-bold text-primary leading-tight break-words">
-              Gamellito
-            </span>
-            <span className="font-body text-base font-semibold text-primary/90">
-              LTDA
-            </span>
-          </div>
+      <div className="relative container mx-auto px-4 py-0 flex items-center justify-between">
+        <a href="/" className="flex items-center gap-3" onClick={() => handleNavClick("Logo", "/")}>
+          <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="w-16 h-16 object-contain" />
+          <img src="/characters/gamellito-wordmark.svg" alt="Gamellito Ltda." className="h-12 object-contain" />
         </a>
 
         {/* Desktop */}
@@ -63,22 +57,21 @@ const Navbar = () => {
               onClick={() => handleNavClick(link.label, link.href)}
               className="font-body text-sm font-semibold text-primary-foreground/95 hover:text-primary transition-colors"
             >
-              {link.label}
+              {link.label === "Loja" ? "🛍️ Loja" : link.label}
             </a>
           ))}
           {loggedIn ? (
-            <a
-              href="/diario"
-              onClick={() => handleNavClick("Diário", "/diario")}
-              className="inline-flex items-center px-5 py-2 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors"
-            >
-              📖 Diário
-            </a>
+            <UserMenu />
           ) : (
             <a
               href="/diario/login"
               onClick={() => handleNavClick("Login", "/diario/login")}
-              className="inline-flex items-center px-5 py-2 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center px-6 py-2.5 rounded-full font-display font-bold text-sm text-white transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+              style={{
+                background: "#F26A00",
+                border: "3px solid #2B2233",
+                boxShadow: "4px 4px 0 #2B2233",
+              }}
             >
               Login
             </a>
@@ -105,18 +98,20 @@ const Navbar = () => {
           >
             <div className="px-4 py-4 flex flex-col gap-3">
               {loggedIn ? (
-                <a
-                  href="/diario"
-                  onClick={() => handleNavClick("Diário", "/diario")}
-                  className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors mb-1"
-                >
-                  📖 Voltar ao Diário
-                </a>
+                <div className="flex items-center gap-3 mb-1">
+                  <UserMenu />
+                  <span className="font-body text-sm font-semibold text-primary-foreground/80">Minha conta</span>
+                </div>
               ) : (
                 <a
                   href="/diario/login"
                   onClick={() => handleNavClick("Login", "/diario/login")}
-                  className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors mb-1"
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-full font-display font-bold text-sm text-white mb-1 transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+                  style={{
+                    background: "#F26A00",
+                    border: "3px solid #2B2233",
+                    boxShadow: "4px 4px 0 #2B2233",
+                  }}
                 >
                   Login
                 </a>
@@ -128,7 +123,7 @@ const Navbar = () => {
                   onClick={() => handleNavClick(link.label, link.href)}
                   className="font-body text-base font-semibold text-primary-foreground/95 hover:text-primary transition-colors py-2"
                 >
-                  {link.label}
+                  {link.label === "Loja" ? "🛍️ Loja" : link.label}
                 </a>
               ))}
             </div>

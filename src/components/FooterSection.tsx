@@ -1,5 +1,4 @@
 import { Instagram, Globe, Mail } from "@/components/icons";
-import { siteAssets } from "@/components/SiteAssets";
 
 const FooterSection = () => {
   return (
@@ -9,12 +8,8 @@ const FooterSection = () => {
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
-              <img src={siteAssets.gamellitoFelizMaoNaBarriga} alt="Gamellito" className="w-10 h-10 object-contain" />
-              <div>
-                <h3 className="font-display text-2xl font-bold text-primary">
-                  Gamellito <span className="text-sm font-normal text-primary-foreground/85">Ltda.</span>
-                </h3>
-              </div>
+              <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="w-12 h-12 object-contain" />
+              <img src="/characters/gamellito-wordmark.svg" alt="Gamellito Ltda." className="h-8 object-contain" />
             </div>
             <p className="text-primary-foreground/90 font-body text-sm leading-relaxed">
               Tecnologia que acolhe, educa e gera resultados.
