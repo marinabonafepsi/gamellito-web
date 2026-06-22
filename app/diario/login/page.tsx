@@ -53,15 +53,15 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="w-full max-w-md bg-card rounded-3xl border-2 border-gamellito-hospital-purple/25 shadow-2xl p-8 md:p-10">
+      <div className="ds-card w-full max-w-md p-8 md:p-10">
 
         {etapa === "form" && (
           <div className="flex flex-col gap-5">
             <div className="text-center">
-              <h1 className="text-2xl font-display font-bold text-foreground">
+              <h1 className="text-2xl font-display font-bold" style={{ color: "#2B2233" }}>
                 Entrar
               </h1>
-              <p className="text-sm font-body mt-2 text-muted-foreground">
+              <p className="text-sm font-body mt-2" style={{ color: "#6B7280" }}>
                 Escolha como prefere acessar o diário.
               </p>
             </div>
@@ -70,7 +70,7 @@ export default function LoginPage() {
             <button
               onClick={entrarComGoogle}
               disabled={loadingGoogle}
-              className="w-full flex items-center justify-center gap-3 py-3 px-4 rounded-full font-body font-semibold bg-white text-gamellito-space border-2 border-gamellito-space/20 hover:border-gamellito-hospital-purple/50 transition-colors min-h-[44px]"
+              className="ds-btn ds-btn--ghost w-full"
             >
               {loadingGoogle ? (
                 "Conectando…"
@@ -89,14 +89,14 @@ export default function LoginPage() {
 
             {/* Divisor */}
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-px bg-foreground/20" />
-              <span className="text-xs font-body text-muted-foreground">ou por e-mail</span>
-              <div className="flex-1 h-px bg-foreground/20" />
+              <div className="flex-1 h-px" style={{ background: "#2B223320" }} />
+              <span className="text-xs font-body" style={{ color: "#6B7280" }}>ou por e-mail</span>
+              <div className="flex-1 h-px" style={{ background: "#2B223320" }} />
             </div>
 
             {/* E-mail magic link */}
             <div className="flex flex-col gap-2">
-              <label htmlFor="email" className="text-sm font-body font-medium text-foreground">
+              <label htmlFor="email" className="text-sm font-body font-medium" style={{ color: "#2B2233" }}>
                 E-mail da família
               </label>
               <input
@@ -108,10 +108,10 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && enviarMagicLink()}
-                className="w-full rounded-xl border border-border bg-background px-4 py-2.5 font-body text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50"
+                className="ds-input"
               />
               {erro && (
-                <p className="text-sm font-body bg-destructive/10 text-destructive px-3 py-2 rounded-xl">
+                <p className="text-sm font-body rounded-xl px-3 py-2" style={{ background: "#FEF2F2", color: "#DC2626" }}>
                   {erro}
                 </p>
               )}
@@ -120,31 +120,29 @@ export default function LoginPage() {
             <button
               onClick={enviarMagicLink}
               disabled={carregando}
-              className="w-full bg-primary text-primary-foreground rounded-full font-display font-bold py-3 hover:bg-primary/90 transition-colors disabled:opacity-60"
+              className="ds-btn ds-btn--lg w-full"
             >
               {carregando ? "Enviando…" : "Enviar link mágico"}
             </button>
-
           </div>
         )}
 
-        {/* ── Etapa 3: Confirmação ── */}
         {etapa === "confirmacao" && (
           <div className="flex flex-col items-center gap-5 text-center">
             <AssetImage asset="gamellitoContente" alt="Gamellito comemorando" className="w-16 h-auto" width={64} height={64} />
-            <h1 className="text-2xl font-display font-bold text-foreground">
+            <h1 className="text-2xl font-display font-bold" style={{ color: "#2B2233" }}>
               Link enviado!
             </h1>
-            <p className="text-sm font-body leading-relaxed max-w-xs text-muted-foreground">
+            <p className="text-sm font-body leading-relaxed max-w-xs" style={{ color: "#6B7280" }}>
               Verifique a caixa de entrada de{" "}
-              <strong className="text-foreground">{email}</strong> e clique no
+              <strong style={{ color: "#2B2233" }}>{email}</strong> e clique no
               link para entrar. Pode fechar esta aba.
             </p>
-            <p className="text-xs font-body text-muted-foreground/70">
+            <p className="text-xs font-body" style={{ color: "#9CA3AF" }}>
               Não recebeu? Verifique o spam ou{" "}
               <button
                 onClick={() => { setEtapa("form"); setErro(null); }}
-                className="underline hover:text-muted-foreground transition-colors"
+                className="underline hover:opacity-70 transition-opacity"
               >
                 tente novamente
               </button>
