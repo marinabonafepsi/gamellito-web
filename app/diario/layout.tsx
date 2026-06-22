@@ -5,7 +5,7 @@ import "./diario.css";
 
 export default function DiarioLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: "#FFF3C9" }}>
+    <div className="min-h-screen flex flex-col pt-16" style={{ background: "#FFF3C9" }}>
       <Navbar />
 
       {/* Aviso não-clínico — obrigatório em todas as telas do diário (REGRA Nº 1) */}
