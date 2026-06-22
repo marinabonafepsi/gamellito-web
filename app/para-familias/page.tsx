@@ -1153,11 +1153,11 @@ export default function ParaFamiliasPage() {
             </div>
             <div className="flex-shrink-0">
               <AssetImage
-                asset="medicoMaeGamellito"
-                alt="Médico e família Gamellito"
-                className="w-52 h-auto"
-                width={208}
-                height={160}
+                asset="heroGigante"
+                alt="Gamellito"
+                className="w-56 h-auto"
+                width={224}
+                height={280}
               />
             </div>
           </motion.div>

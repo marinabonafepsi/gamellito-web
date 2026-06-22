@@ -58,6 +58,10 @@ export const siteAssets = {
   thinkingTipo1: "/characters/gamellito-thinking-tipo1.svg",
   /** DM1 vs DM2 – Gamellito pensando Tipo 2 */
   thinkingTipo2: "/characters/gamellito-thinking-tipo2.svg",
+  /** Hero grande – Gamellito fofo em destaque */
+  heroGigante: "/characters/gamellito-hero-gigante.svg",
+  /** Gamellito empurrando caixa – ação/movimento */
+  empurrandoCaixa: "/characters/gamellito-empurrando-caixa.svg",
 } as const;
 
 export type SiteAssetKey = keyof typeof siteAssets;
