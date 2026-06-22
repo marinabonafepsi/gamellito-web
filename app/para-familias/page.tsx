@@ -669,7 +669,7 @@ function TabFamilias() {
       <section className="py-16 px-4 bg-gamellito-space">
         <div className="container mx-auto max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex flex-col md:flex-row items-center gap-8">
-            <AssetImage asset="gamellitoEAmigos" alt="Mãe monitorando glicemia com Gamellito" className="w-44 h-auto flex-shrink-0" width={176} height={130} />
+            <AssetImage asset="empurrandoCaixa" alt="Gamellito empurrando caixa - ação" className="w-56 h-auto flex-shrink-0" width={280} height={180} />
             <div>
               <h2 className="font-display text-3xl font-bold text-primary mb-4">Como o Gamellito pode ajudar sua família</h2>
               <p className="font-body text-primary-foreground/90 leading-relaxed mb-4">
