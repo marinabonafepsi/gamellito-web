@@ -65,12 +65,7 @@ const Navbar = () => {
             <a
               href="/diario/login"
               onClick={() => handleNavClick("Login", "/diario/login")}
-              className="inline-flex items-center px-6 py-2.5 rounded-full font-display font-bold text-sm text-white transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
-              style={{
-                background: "#F26A00",
-                border: "3px solid #2B2233",
-                boxShadow: "4px 4px 0 #2B2233",
-              }}
+              className="ds-btn"
             >
               Login
             </a>
@@ -105,12 +100,7 @@ const Navbar = () => {
                 <a
                   href="/diario/login"
                   onClick={() => handleNavClick("Login", "/diario/login")}
-                  className="inline-flex items-center justify-center px-6 py-3 rounded-full font-display font-bold text-sm text-white mb-1 transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
-                  style={{
-                    background: "#F26A00",
-                    border: "3px solid #2B2233",
-                    boxShadow: "4px 4px 0 #2B2233",
-                  }}
+                  className="ds-btn w-full justify-center"
                 >
                   Login
                 </a>

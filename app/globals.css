@@ -3,6 +3,9 @@
 /* Pangolin mantido como fallback */
 @import url('https://fonts.googleapis.com/css2?family=Pangolin&display=swap');
 
+/* ── Gamellito Design System CSS (global) ── */
+@import url('./diario/diario.css');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
