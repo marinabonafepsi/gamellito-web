@@ -33,6 +33,24 @@ const Navbar = () => {
     setIsOpen(false);
   }
 
+  const authButton = user ? (
+    <a
+      href="/diario"
+      onClick={() => handleNavClick("Diário", "/diario")}
+      className="font-body font-bold py-2.5 px-5 rounded-full text-center bg-gamellito-yellow text-gamellito-space border-2 border-gamellito-space shadow-[3px_3px_0_#2B2233] text-sm"
+    >
+      Diário
+    </a>
+  ) : (
+    <a
+      href="/diario/login"
+      onClick={() => handleNavClick("Login", "/diario/login")}
+      className="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary text-white font-body font-semibold text-sm hover:bg-primary/90 transition-colors"
+    >
+      Login
+    </a>
+  );
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 overflow-hidden">
       {/* Navbar background SVG */}
@@ -118,13 +136,6 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <a
-                href="/diario"
-                onClick={() => handleNavClick("Diário", "/diario")}
-                className="font-body text-base font-bold py-3 px-4 rounded-full text-center mt-2 bg-gamellito-yellow text-gamellito-space border-2 border-gamellito-space shadow-[3px_3px_0_#2B2233]"
-              >
-                Diário
-              </a>
             </div>
           </motion.div>
         )}
