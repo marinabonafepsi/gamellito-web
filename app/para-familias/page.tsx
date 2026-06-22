@@ -591,7 +591,7 @@ function TabFamilias() {
               transition={{ delay: 0.15 }}
               className="bg-gamellito-health-green/8 border-2 border-gamellito-health-green/30 rounded-2xl p-6"
             >
-              <AssetImage asset="maeGamellitoGlicemia" alt="Mãe e criança monitorando glicemia" className="w-28 h-auto mx-auto block mb-3" width={112} height={80} />
+              <AssetImage asset="gamellitoEAmigos" alt="Mãe e criança monitorando glicemia" className="w-28 h-auto mx-auto block mb-3" width={112} height={80} />
               <span className="inline-block rounded-full bg-gamellito-health-green/15 text-gamellito-health-green text-xs font-display px-3 py-1 mb-3">Capítulo 4</span>
               <h3 className="font-display font-bold text-xl text-gamellito-health-green mb-3">O tratamento atual</h3>
               <p className="font-body text-foreground/70 text-sm leading-relaxed mb-4">
@@ -669,7 +669,7 @@ function TabFamilias() {
       <section className="py-16 px-4 bg-gamellito-space">
         <div className="container mx-auto max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="flex flex-col md:flex-row items-center gap-8">
-            <AssetImage asset="maeGamellitoGlicemia" alt="Mãe monitorando glicemia com Gamellito" className="w-44 h-auto flex-shrink-0" width={176} height={130} />
+            <AssetImage asset="gamellitoEAmigos" alt="Mãe monitorando glicemia com Gamellito" className="w-44 h-auto flex-shrink-0" width={176} height={130} />
             <div>
               <h2 className="font-display text-3xl font-bold text-primary mb-4">Como o Gamellito pode ajudar sua família</h2>
               <p className="font-body text-primary-foreground/90 leading-relaxed mb-4">
@@ -1011,7 +1011,7 @@ function TabEnfermagem() {
       <section className="py-16 px-4 bg-gamellito-space">
         <div className="container mx-auto max-w-3xl text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <AssetImage asset="medicoMaeGamellito" alt="Equipe Gamellito" className="w-40 h-auto mx-auto mb-6" width={160} height={120} />
+            <AssetImage asset="gamellitoEAmigos" alt="Equipe Gamellito" className="w-40 h-auto mx-auto mb-6" width={160} height={120} />
             <h2 className="font-display text-3xl font-bold text-primary mb-4">
               Leve o Gamellito para o seu serviço de saúde
             </h2>
