@@ -3,40 +3,28 @@ import Link from "next/link";
 export default function DiarioPage() {
   return (
     <div className="max-w-md mx-auto">
-      <div className="bg-card rounded-3xl border-2 border-gamellito-space shadow-[4px_4px_0_#2B2233] p-8 text-center">
-        <h1 className="text-3xl font-display font-bold text-foreground mb-2">
+      <div className="ds-card p-8 text-center">
+        <h1 className="text-3xl font-display font-bold mb-2" style={{ color: "#2B2233" }}>
           Diário do Gamellito
         </h1>
-        <p className="font-body text-muted-foreground mb-8">
+        <p className="font-body mb-8" style={{ color: "#6B7280" }}>
           Organize os registros para levar à consulta.
         </p>
 
         <div className="flex flex-col gap-3">
-          <Link
-            href="/diario/lancar"
-            className="w-full flex items-center justify-center rounded-full bg-primary border-2 border-gamellito-space shadow-[3px_3px_0_#2B2233] py-3 font-display font-bold text-primary-foreground hover:-translate-y-px hover:shadow-[4px_4px_0_#2B2233] active:translate-y-0.5 active:shadow-[1px_1px_0_#2B2233] transition-all"
-          >
+          <Link href="/diario/lancar" className="ds-btn ds-btn--lg w-full">
             + Registrar glicemia
           </Link>
-          <Link
-            href="/diario/historico"
-            className="w-full flex items-center justify-center rounded-full border-2 border-gamellito-space bg-card text-foreground py-3 font-display font-bold hover:-translate-y-px hover:shadow-[2px_2px_0_#2B2233] transition-all"
-          >
+          <Link href="/diario/historico" className="ds-btn ds-btn--ghost w-full">
             Ver histórico
           </Link>
-          <Link
-            href="/diario/exportar"
-            className="w-full flex items-center justify-center rounded-full border-2 border-gamellito-space bg-card text-foreground py-3 font-display font-bold hover:-translate-y-px hover:shadow-[2px_2px_0_#2B2233] transition-all"
-          >
+          <Link href="/diario/exportar" className="ds-btn ds-btn--ghost w-full">
             Exportar PDF
           </Link>
         </div>
 
         <div className="mt-6">
-          <Link
-            href="/diario/conta"
-            className="text-sm font-body text-muted-foreground hover:text-foreground transition-colors"
-          >
+          <Link href="/diario/conta" className="text-sm font-body hover:underline" style={{ color: "#6B7280" }}>
             Minha conta
           </Link>
         </div>

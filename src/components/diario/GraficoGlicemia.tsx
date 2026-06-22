@@ -44,10 +44,10 @@ function TooltipNeutro({ active, payload }: any) {
   if (!active || !payload?.length) return null;
   const ponto = payload[0].payload as PontoGrafico;
   return (
-    <div className="bg-card border border-border rounded-2xl shadow-lg px-4 py-3 text-sm font-body">
-      <p className="font-bold text-foreground">{ponto.valor} mg/dL</p>
-      <p className="text-muted-foreground">{ROTULO_LABEL[ponto.rotulo] ?? ponto.rotulo}</p>
-      <p className="text-muted-foreground text-xs mt-1">{formatarEixoX(ponto.data_hora)}</p>
+    <div className="rounded-2xl shadow-lg px-4 py-3 text-sm font-body" style={{ background: "#FFFFFF", border: "2px solid #2B2233" }}>
+      <p className="font-bold" style={{ color: "#2B2233" }}>{ponto.valor} mg/dL</p>
+      <p className="text-xs" style={{ color: "#6B7280" }}>{ROTULO_LABEL[ponto.rotulo] ?? ponto.rotulo}</p>
+      <p className="text-xs mt-1" style={{ color: "#6B7280" }}>{formatarEixoX(ponto.data_hora)}</p>
     </div>
   );
 }
