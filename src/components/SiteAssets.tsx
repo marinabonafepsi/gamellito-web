@@ -48,8 +48,10 @@ export const siteAssets = {
   balao: "/assets/balao-pensamento.svg",
   /** Tratamento DM1 – seringa de insulina */
   seringa: "/assets/app-ui/Seringa.png",
-  /** Tratamento DM1 – glicosímetro */
-  glicosimetro: "/assets/app-ui/Glicosimetro.png",
+  /** Tratamento DM1 – glicosímetro (PNG) */
+  glicosimetroPng: "/assets/app-ui/Glicosimetro.png",
+  /** Tratamento DM1 – glicosímetro (SVG) */
+  glicosimetro: "/characters/gamellito-glicosimetro.svg",
 } as const;
 
 export type SiteAssetKey = keyof typeof siteAssets;

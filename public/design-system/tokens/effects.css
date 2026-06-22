@@ -1,0 +1,36 @@
+/* ============================================================
+   GAMELLITO — EFFECTS: radii, borders, shadows
+   Cartoon language: rounded everything + thick ink outline +
+   hard offset "pop" shadow (no blur), echoing Roger's line.
+   ============================================================ */
+
+:root {
+  /* Corner radii — round, never sharp */
+  --radius-sm:   10px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-xl:   32px;
+  --radius-pill: 999px;
+
+  /* Ink outline (the cartoon contour) */
+  --outline-w:        3px;
+  --outline-w-thick:  4px;
+  --border-cartoon:        var(--outline-w) solid var(--color-ink);
+  --border-cartoon-thick:  var(--outline-w-thick) solid var(--color-ink);
+
+  /* Hard "pop" shadow — offset, no blur, ink-colored */
+  --shadow-pop:      4px 4px 0 var(--color-ink);
+  --shadow-pop-lg:   6px 6px 0 var(--color-ink);
+  --shadow-pop-sm:   2px 2px 0 var(--color-ink);
+  /* Pressed = shadow collapses + element nudges down/right */
+  --shadow-pop-press: 1px 1px 0 var(--color-ink);
+
+  /* Soft shadow for floating UI (menus, toasts) — used sparingly */
+  --shadow-soft:     0 8px 24px rgba(43, 34, 51, 0.16);
+
+  /* Motion */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* @kind other */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1); /* @kind other */
+  --dur-fast:    120ms; /* @kind other */
+  --dur-base:    200ms; /* @kind other */
+}
