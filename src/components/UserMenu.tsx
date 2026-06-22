@@ -87,7 +87,7 @@ export default function UserMenu() {
             onClick={() => setOpen(false)}
             className="flex items-center gap-2 px-4 py-3 text-sm font-body font-semibold text-primary-foreground hover:bg-gamellito-purple/20 transition-colors"
           >
-            <span className="text-base">👤</span> Minha conta
+            <span className="text-base">👤</span> Perfil
           </Link>
           <Link
             href="/diario"
