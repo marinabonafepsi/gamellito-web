@@ -255,10 +255,14 @@ const SolutionsSection = () => {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
-              Soluções para{" "}
-              <span className="text-primary">Saúde Pública</span>
-            </h2>
+            <a
+              href="/para-familias"
+              className="inline-block cursor-pointer hover:opacity-80 transition-opacity"
+            >
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-foreground mb-4">
+                Veja nossas soluções
+              </h2>
+            </a>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto font-body mb-4">
               Promoção do autocuidado e educação em saúde para crianças e adolescentes com Diabetes Mellitus Tipo 1.
             </p>
