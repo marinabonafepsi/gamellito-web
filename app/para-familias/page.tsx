@@ -20,7 +20,6 @@ import {
   Activity,
   School,
   MessageCircle,
-  Phone,
   Stethoscope,
   GraduationCap,
   ShieldCheck,
@@ -100,22 +99,18 @@ const dicasDiarias = [
 
 const adolescenciaItems = [
   {
-    emoji: "🧠",
     titulo: "Autonomia progressiva",
     texto: "Adolescentes precisam assumir o próprio manejo gradualmente. Evite superproteger — o excesso de controle gera rebeldia em relação ao tratamento.",
   },
   {
-    emoji: "🎉",
     titulo: "Baladas e festas",
     texto: "Álcool pode mascarar sintomas de hipoglicemia. Oriente sobre os riscos com empatia, não com proibições absolutas. Tenha um plano combinado com o adolescente.",
   },
   {
-    emoji: "📱",
     titulo: "Saúde mental digital",
     texto: "Redes sociais podem gerar comparação e angústia. Incentive grupos online de jovens com DM1 — a identificação com pares é poderosa nessa fase.",
   },
   {
-    emoji: "🏃",
     titulo: "Esportes e atividades",
     texto: "A prática esportiva é muito benéfica. Monitore a glicemia antes e depois, leve gel de glicose e avise o professor/treinador sobre o DM1.",
   },
@@ -700,12 +695,11 @@ function TabEducadores() {
 
           <div className="grid md:grid-cols-3 gap-5">
             {[
-              { emoji: "⏱️", titulo: "Resposta rápida salva vidas", texto: "Em uma crise de hipoglicemia, cada minuto conta. Professores treinados sabem agir antes da chegada dos pais." },
-              { emoji: "🤝", titulo: "Inclusão de verdade", texto: "Um aluno que se sente seguro na escola aprende melhor, faz amigos e desenvolve autonomia no manejo da doença." },
-              { emoji: "📋", titulo: "Obrigação legal", texto: "A legislação brasileira obriga as escolas a acolherem e apoiarem alunos com DM1. Estar preparado é cumprir a lei — e é fazer o bem." },
+              { titulo: "Resposta rápida salva vidas", texto: "Em uma crise de hipoglicemia, cada minuto conta. Professores treinados sabem agir antes da chegada dos pais." },
+              { titulo: "Inclusão de verdade", texto: "Um aluno que se sente seguro na escola aprende melhor, faz amigos e desenvolve autonomia no manejo da doença." },
+              { titulo: "Obrigação legal", texto: "A legislação brasileira obriga as escolas a acolherem e apoiarem alunos com DM1. Estar preparado é cumprir a lei — e é fazer o bem." },
             ].map((item, i) => (
               <motion.div key={item.titulo} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="bg-card rounded-2xl p-6 border border-border text-center">
-                <span className="text-3xl block mb-3">{item.emoji}</span>
                 <h3 className="font-display font-bold text-foreground mb-2">{item.titulo}</h3>
                 <p className="font-body text-muted-foreground text-sm leading-relaxed">{item.texto}</p>
               </motion.div>
@@ -833,7 +827,7 @@ function TabEducadores() {
                   href="mailto:gamellitoltda@gmail.com?subject=Quero%20o%20Gamellito%20na%20minha%20escola"
                   className="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gamellito-health-green text-white font-body font-bold rounded-full hover:bg-gamellito-health-green/90 transition-colors text-base shadow-lg shadow-gamellito-health-green/20"
                 >
-                  🏫 Quero o Gamellito na minha escola
+                  Quero o Gamellito na minha escola
                 </a>
               </div>
               <div className="flex flex-col gap-4 md:min-w-[140px]">
@@ -959,7 +953,7 @@ function TabEnfermagem() {
                 onClick={handlePartnershipClick}
                 className="px-8 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors"
               >
-                🩺 Solicitar demonstração
+                Solicitar demonstração
               </button>
               <a
                 href="mailto:gamellitoltda@gmail.com"
@@ -1129,10 +1123,10 @@ export default function ParaFamiliasPage() {
           <div className="grid md:grid-cols-3 gap-3 mb-8">
             {(
               [
-                { id: "familias", emoji: "🏠", titulo: "Para famílias", desc: "Guia prático, apoio emocional e o Diário do Gamellito." },
-                { id: "educadores", emoji: "🏫", titulo: "Para escolas", desc: "Programa completo, kit físico e formação de professores." },
-                { id: "enfermagem", emoji: "🏥", titulo: "Para saúde", desc: "Método validado com USP e UEL para equipes clínicas." },
-              ] as { id: Tab; emoji: string; titulo: string; desc: string }[]
+                { id: "familias", titulo: "Para famílias", desc: "Guia prático, apoio emocional e o Diário do Gamellito." },
+                { id: "educadores", titulo: "Para escolas", desc: "Programa completo, kit físico e formação de professores." },
+                { id: "enfermagem", titulo: "Para saúde", desc: "Método validado com USP e UEL para equipes clínicas." },
+              ] as { id: Tab; titulo: string; desc: string }[]
             ).map((p) => (
               <button
                 key={p.id}
@@ -1144,7 +1138,6 @@ export default function ParaFamiliasPage() {
                     : "bg-white/5 border-white/10 hover:bg-white/10"
                 }`}
               >
-                <span className="text-2xl block mb-2">{p.emoji}</span>
                 <p className="font-display font-bold text-primary text-sm mb-1">{p.titulo}</p>
                 <p className="font-body text-primary-foreground/60 text-xs leading-relaxed">{p.desc}</p>
               </button>
@@ -1188,28 +1181,6 @@ export default function ParaFamiliasPage() {
       </AnimatePresence>
 
       <EcosistemaSection />
-
-      {/* ── CTA Contato (sempre visível) ── */}
-      <section className="py-16 px-4 bg-background">
-        <div className="container mx-auto max-w-2xl text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <AssetImage asset="gamellitoContente" alt="Gamellito contente" className="w-24 h-auto mx-auto mb-6" width={96} height={96} />
-            <h2 className="font-display text-3xl font-bold text-foreground mb-4">Tem dúvidas ou quer saber mais?</h2>
-            <p className="font-body text-muted-foreground leading-relaxed mb-8">
-              Entre em contato com a equipe Gamellito. Podemos conversar sobre como levar o método para o ambulatório, escola ou comunidade da sua família.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="mailto:gamellitoltda@gmail.com" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-full hover:bg-primary/90 transition-colors">
-                <Phone className="w-4 h-4" />
-                Fale conosco
-              </a>
-              <a href="https://instagram.com/gamellito" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-border text-foreground font-body font-semibold rounded-full hover:border-primary/40 hover:text-primary transition-colors">
-                Siga no Instagram
-              </a>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       <FooterSection />
     </div>
