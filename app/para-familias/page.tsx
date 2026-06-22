@@ -29,6 +29,7 @@ import {
   BookMarked,
 } from "@/components/icons";
 import { trackIntent } from "@/lib/trackIntent";
+import GamButton from "@/components/ds/GamButton";
 
 /* ═══════════════════════════════════════════════════════
    DADOS — PAIS E FAMÍLIA
@@ -1045,70 +1046,44 @@ function TabEnfermagem() {
 ════════════════════════════════════════════════════════ */
 
 function EcosistemaSection() {
-  const solucoes = [
-    {
-      titulo: "Jogo Digital",
-      descricao: "Aprendizado gamificado sobre diabetes tipo 1 para crianças e adolescentes.",
-    },
-    {
-      titulo: "Livros Ilustrados",
-      descricao: "Materiais impressos que ajudam famílias a compreender e abraçar o diagnóstico.",
-    },
-    {
-      titulo: "Diário do Gamellito",
-      descricao: "Rastreamento seguro e sem julgamentos. Espaço protegido para registrar a jornada.",
-    },
-    {
-      titulo: "Programas",
-      descricao: "Implementação em escolas, ambulatórios e serviços de saúde. Formação para profissionais.",
-    },
-  ];
-
   return (
-    <section className="py-16 px-4 bg-gamellito-space">
-      <div className="container mx-auto max-w-5xl">
-        {/* Introdução */}
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-primary mb-4">
-            Um ecossistema completo de soluções
+    <section className="py-16 px-4 bg-background">
+      <div className="container mx-auto max-w-4xl">
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground text-center mb-4">
+            O Gamellito é um ecossistema completo
           </h2>
-          <p className="font-body text-lg text-primary-foreground/75 max-w-2xl mx-auto leading-relaxed">
-            O Gamellito integra jogo, recursos impressos, tecnologia e suporte profissional para acompanhar a jornada do diabetes tipo 1 em crianças e adolescentes.
+          <p className="font-body text-lg text-muted-foreground text-center max-w-2xl mx-auto leading-relaxed">
+            Integra jogo digital, livros, Diário e programas para acompanhar crianças e adolescentes na jornada do Diabetes Tipo 1.
           </p>
         </motion.div>
 
-        {/* Grid de Soluções */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          {solucoes.map((solucao, idx) => (
+        <div className="space-y-6">
+          {[
+            { titulo: "Jogo Digital", desc: "Aprendizado gamificado sobre DM1, insulina e glicemia de forma lúdica." },
+            { titulo: "Livros Ilustrados", desc: "Guias impressos para famílias compreenderem o diagnóstico." },
+            { titulo: "Diário do Gamellito", desc: "Rastreamento seguro e sem julgamentos. Registro protegido da jornada." },
+            { titulo: "Programas & Formação", desc: "Implementação em escolas, ambulatórios e serviços de saúde." },
+          ].map((item, i) => (
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="p-6 rounded-2xl bg-card border border-gamellito-hospital-purple/20 hover:border-gamellito-hospital-purple/40 transition-colors"
+              transition={{ delay: i * 0.08 }}
+              className="bg-card rounded-2xl p-6 border border-border hover:border-primary/30 transition-colors"
             >
-              <h3 className="font-display text-xl font-bold text-primary mb-2">
-                {solucao.titulo}
-              </h3>
-              <p className="font-body text-primary-foreground/70 leading-relaxed">
-                {solucao.descricao}
-              </p>
+              <h3 className="font-display font-bold text-lg text-foreground mb-2">{item.titulo}</h3>
+              <p className="font-body text-muted-foreground leading-relaxed text-sm">{item.desc}</p>
             </motion.div>
           ))}
         </div>
 
-        {/* CTA Final */}
-        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center">
-          <p className="font-body text-primary-foreground/70 mb-6 max-w-xl mx-auto">
-            Quer implementar o Gamellito no seu contexto? A equipe Gamellito adapta o método para sua realidade.
-          </p>
-          <a
-            href="mailto:gamellitoltda@gmail.com"
-            className="inline-flex items-center justify-center px-8 py-3 bg-gamellito-orange text-white font-body font-bold rounded-full hover:bg-gamellito-orange/90 transition-colors shadow-lg shadow-gamellito-orange/20"
-          >
+        <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-10">
+          <p className="font-body text-muted-foreground mb-6">Quer levar o Gamellito para o seu contexto?</p>
+          <GamButton href="mailto:gamellitoltda@gmail.com" variant="primary" size="lg">
             Falar com a equipe
-          </a>
+          </GamButton>
         </motion.div>
       </div>
     </section>
