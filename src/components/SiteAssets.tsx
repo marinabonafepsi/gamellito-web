@@ -52,6 +52,12 @@ export const siteAssets = {
   glicosimetroPng: "/assets/app-ui/Glicosimetro.png",
   /** Tratamento DM1 – glicosímetro (SVG) */
   glicosimetro: "/characters/gamellito-glicosimetro.svg",
+  /** Tratamento DM1 – seringa de insulina (SVG) */
+  seringaSvg: "/characters/gamellito-seringa.svg",
+  /** DM1 vs DM2 – Gamellito pensando Tipo 1 */
+  thinkingTipo1: "/characters/gamellito-thinking-tipo1.svg",
+  /** DM1 vs DM2 – Gamellito pensando Tipo 2 */
+  thinkingTipo2: "/characters/gamellito-thinking-tipo2.svg",
 } as const;
 
 export type SiteAssetKey = keyof typeof siteAssets;
