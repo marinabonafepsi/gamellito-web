@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { adicionarCoins, upsertPerfil, trackProductEvent, COINS_REGISTRO } from "@/lib/perfil";
 
 // ── POST /api/registros ─────────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
@@ -34,7 +35,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json(data, { status: 201 });
+  // Coins por cada registro salvo
+  await upsertPerfil(supabase, user.id);
+  await adicionarCoins(supabase, user.id, COINS_REGISTRO);
+  await trackProductEvent(supabase, "registro_salvo", user.id, { rotulo });
+
+  return NextResponse.json({ ...data, coins_adicionados: COINS_REGISTRO }, { status: 201 });
 }
 
 // ── GET /api/registros ──────────────────────────────────────────────────────

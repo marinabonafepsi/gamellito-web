@@ -4,75 +4,126 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/FooterSection";
-import { AssetImage } from "@/components/SiteAssets";
-import { X, Heart, ShieldCheck, Stethoscope } from "@/components/icons";
+import { AssetImage, siteAssets } from "@/components/SiteAssets";
+import { X } from "@/components/icons";
 import { track } from "@/lib/analytics";
+
+/* ═══════════════════════════════════════════════════════
+   TIPOS
+════════════════════════════════════════════════════════ */
+type Disponibilidade = "disponivel" | "em-breve";
+
+interface Produto {
+  id: string;
+  nome: string;
+  subtitulo: string;
+  descricao: string;
+  tag: string;
+  tagColor: string;
+  asset: keyof typeof siteAssets;
+  disponibilidade: Disponibilidade;
+  cta?: string;
+  ctaHref?: string;
+}
 
 /* ═══════════════════════════════════════════════════════
    PRODUTOS
 ════════════════════════════════════════════════════════ */
+const produtosDisponiveis: Produto[] = [
+  {
+    id: "sherlockito",
+    nome: "Sherlockito",
+    subtitulo: "O detetive do diabetes — jogo digital",
+    descricao:
+      "Jogo digital onde a criança investiga pistas sobre DM1 com o Sherlockito. Aprende sobre glicemia, alimentação e insulina resolvendo mistérios. Gratuito, roda no navegador.",
+    tag: "Disponível agora",
+    tagColor: "bg-gamellito-health-green",
+    asset: "controleVideogame",
+    disponibilidade: "disponivel",
+    cta: "Jogar grátis",
+    ctaHref: "/jogar",
+  },
+  {
+    id: "jogo-geladeira",
+    nome: "Jogo da Geladeira",
+    subtitulo: "Mini-jogo de contagem de carboidratos",
+    descricao:
+      "Escolha os alimentos certos para o Gamellito sem estourar a meta de carboidratos. Jogo rápido, educativo e viciante — direto no site.",
+    tag: "Disponível agora",
+    tagColor: "bg-gamellito-health-green",
+    asset: "geladeira",
+    disponibilidade: "disponivel",
+    cta: "Jogar agora",
+    ctaHref: "/#jogos",
+  },
+];
 
-const produtos = [
+const produtosEmBreve: Produto[] = [
   {
     id: "livro-dm1",
     nome: "Livro Ilustrado",
     subtitulo: "Enfrentando o Diabetes Tipo 1",
     descricao:
-      "Série de livros infantis com as aventuras do Gamellito, ilustrações de Roger Cartoons. Linguagem acessível para crianças de 5 a 14 anos aprenderem sobre DM1 de forma leve e divertida.",
-    preco: "R$ 45,00",
-    tag: "Mais querido",
+      "Série de livros infantis com as aventuras do Gamellito. Linguagem acessível para crianças de 5 a 14 anos aprenderem sobre DM1 de forma leve.",
+    tag: "Mais pedido",
     tagColor: "bg-gamellito-orange",
-    cor: "from-gamellito-orange/20 to-gamellito-bg-yellow/30",
-    borda: "border-gamellito-orange/30",
-    destaque: true,
+    asset: "gamellitoEAmigos",
+    disponibilidade: "em-breve",
   },
   {
     id: "pelucia-gamellito",
     nome: "Pelúcia Gamellito",
     subtitulo: "O alien fofo com DM1",
     descricao:
-      "A pelúcia oficial do Gamellito! Material macio e seguro. O companheiro perfeito para crianças que vivem com DM1 se sentirem acompanhadas.",
-    tag: "Novo",
-    cor: "bg-gamellito-health-green",
+      "A pelúcia oficial do Gamellito. Material macio e seguro — o companheiro perfeito para crianças que vivem com DM1 se sentirem acompanhadas.",
+    tag: "Muito pedido",
+    tagColor: "bg-gamellito-orange",
+    asset: "gamellitoCorpinho",
+    disponibilidade: "em-breve",
   },
   {
     id: "pelucia-pancreas",
     nome: "Pelúcia Pâncreas Preguiçoso",
     subtitulo: "O vilão mais fofo do universo",
     descricao:
-      "O Pâncreas Preguiçoso em versão pelúcia! Perfeito para explicar o DM1 de forma lúdica para crianças e famílias. Excelente recurso educativo.",
+      "O Pâncreas Preguiçoso em versão pelúcia. Perfeito para explicar o DM1 de forma lúdica para crianças e famílias.",
     tag: "Fan favorite",
-    cor: "bg-gamellito-hospital-purple",
+    tagColor: "bg-gamellito-hospital-purple",
+    asset: "pancreasPreguicoso",
+    disponibilidade: "em-breve",
   },
   {
     id: "kit-gadgets",
-    emoji: "🩺",
     nome: "Kit Gadgets Personalizados",
     subtitulo: "Case + adesivos para sensor e bomba",
     descricao:
-      "Case para glicosímetro, adesivos para bomba de insulina e sensor CGM (Libre, Dexcom) — tudo com estilo Gamellito. Porque cuidar da saúde pode ser estiloso!",
-    tag: "Personalizado",
-    cor: "bg-gamellito-blue",
+      "Case para glicosímetro, adesivos para bomba de insulina e sensor CGM (Libre, Dexcom) com estilo Gamellito. Cuidar da saúde pode ser estiloso.",
+    tag: "Em desenvolvimento",
+    tagColor: "bg-gamellito-blue",
+    asset: "maeGamellitoGlicemia",
+    disponibilidade: "em-breve",
   },
   {
     id: "kit-educativo",
-    emoji: "🎒",
     nome: "Kit Educativo Completo",
     subtitulo: "Livro + Pelúcia + Jogo + Guia",
     descricao:
-      "O kit completo para famílias, escolas e ambulatórios. Inclui livro, pelúcia, jogo de tabuleiro e guia para educadores — tudo em uma caixa.",
-    tag: "Kit completo",
-    cor: "bg-gamellito-orange",
+      "O kit completo para famílias, escolas e ambulatórios. Inclui livro, pelúcia, jogo de tabuleiro e guia para educadores.",
+    tag: "Para profissionais",
+    tagColor: "bg-gamellito-orange",
+    asset: "medicoMaeGamellito",
+    disponibilidade: "em-breve",
   },
   {
     id: "curso-primeiros-passos",
-    emoji: "🎓",
     nome: "Curso Primeiros Passos",
     subtitulo: "Acolhimento para famílias no diagnóstico",
     descricao:
-      "6 aulas curtas (~45 min total) para famílias que acabaram de receber o diagnóstico de DM1. Linguagem acolhedora, sem jargão médico, com materiais em PDF.",
-    tag: "Em breve",
-    cor: "bg-gamellito-mae-red",
+      "6 aulas curtas para famílias que acabaram de receber o diagnóstico de DM1. Linguagem acolhedora, sem jargão médico, com materiais em PDF.",
+    tag: "Planejado",
+    tagColor: "bg-gamellito-mae-red",
+    asset: "balao",
+    disponibilidade: "em-breve",
   },
 ];
 
@@ -83,7 +134,7 @@ function ProductModal({
   produto,
   onClose,
 }: {
-  produto: (typeof produtos)[0];
+  produto: Produto;
   onClose: () => void;
 }) {
   const [notifyDone, setNotifyDone] = useState(false);
@@ -106,15 +157,15 @@ function ProductModal({
           <X size={20} />
         </button>
 
-        <div className="text-5xl text-center mb-3">{produto.emoji}</div>
+        <div className="flex justify-center mb-4">
+          <AssetImage asset={produto.asset} alt={produto.nome} className="w-20 h-auto" width={80} height={80} />
+        </div>
+
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-1">
           {produto.nome}
         </h2>
-        <p className="font-body text-muted-foreground text-center text-sm mb-2">
+        <p className="font-body text-muted-foreground text-center text-sm mb-5">
           {produto.subtitulo}
-        </p>
-        <p className="font-display text-3xl font-bold text-primary text-center mb-4">
-          {produto.preco}
         </p>
 
         {notifyDone ? (
@@ -123,33 +174,33 @@ function ProductModal({
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-4"
           >
-            <div className="text-4xl mb-2">🎉</div>
-            <p className="font-body font-semibold text-foreground">
+            <AssetImage asset="gamellitoContente" alt="Gamellito" className="w-14 h-auto mx-auto mb-3" width={56} height={56} />
+            <p className="font-display font-bold text-lg text-foreground">
               Anotamos seu interesse!
             </p>
             <p className="font-body text-muted-foreground text-sm mt-1">
-              Te avisamos assim que a loja abrir.
+              Te avisamos quando isso lançar.
             </p>
           </motion.div>
         ) : (
           <div className="space-y-3">
-            <div className="bg-muted/60 rounded-xl p-4 text-center">
+            <div className="bg-muted/60 rounded-2xl p-4 text-center">
               <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                🚧 Nossa loja está em construção! Estamos validando a demanda
-                para garantir os melhores produtos pra vocês.
+                Este produto ainda está em desenvolvimento. Seu interesse nos ajuda a
+                decidir o que lançar primeiro.
               </p>
             </div>
             <a
-              href={`mailto:gamellitoltda@gmail.com?subject=Interesse na loja: ${produto.nome}&body=Olá! Tenho interesse em comprar: ${produto.nome} (${produto.preco}). Por favor me avise quando a loja abrir!`}
-              className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-body font-semibold rounded-xl hover:bg-primary/90 transition-colors"
-              onClick={() => { setNotifyDone(true); }}
+              href={`mailto:gamellitoltda@gmail.com?subject=Interesse: ${produto.nome}&body=Olá! Tenho interesse em: ${produto.nome}. Me avise quando lançar!`}
+              className="block w-full text-center px-6 py-3 bg-primary text-primary-foreground font-display font-bold rounded-full hover:bg-primary/90 transition-colors"
+              onClick={() => setNotifyDone(true)}
             >
-              💌 Me avise quando abrir
+              Me avise quando lançar
             </a>
             <button
               type="button"
               onClick={onClose}
-              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-xl hover:border-primary/40 transition-colors"
+              className="w-full px-6 py-3 border border-border text-foreground font-body rounded-full hover:bg-muted transition-colors"
             >
               Continuar explorando
             </button>
@@ -160,18 +211,87 @@ function ProductModal({
   );
 }
 
+/* ══════════════════════════════════════════
+   CARD — disponível
+══════════════════════════════════════════ */
+function CardDisponivel({ produto }: { produto: Produto }) {
+  return (
+    <motion.a
+      href={produto.ctaHref}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="block bg-card rounded-2xl p-6 border-2 border-gamellito-health-green/40 hover:border-gamellito-health-green hover:shadow-lg transition-all group"
+      style={{ boxShadow: "var(--shadow-card)" }}
+      onClick={() =>
+        track("product_cta", "/loja", { product_id: produto.id, disponivel: true })
+      }
+    >
+      <div className="flex items-start justify-between mb-4">
+        <span className={`${produto.tagColor} text-white font-display text-xs px-3 py-1 rounded-full`}>
+          {produto.tag}
+        </span>
+        <AssetImage asset={produto.asset} alt={produto.nome} className="w-14 h-14 object-contain" width={56} height={56} />
+      </div>
+      <h3 className="font-display font-bold text-xl text-foreground mb-1">{produto.nome}</h3>
+      <p className="font-body text-xs text-muted-foreground mb-3">{produto.subtitulo}</p>
+      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-5">{produto.descricao}</p>
+      <span className="inline-block font-display font-bold text-sm text-gamellito-health-green group-hover:underline">
+        {produto.cta} →
+      </span>
+    </motion.a>
+  );
+}
+
+/* ══════════════════════════════════════════
+   CARD — em breve
+══════════════════════════════════════════ */
+function CardEmBreve({
+  produto,
+  index,
+  onClick,
+}: {
+  produto: Produto;
+  index: number;
+  onClick: () => void;
+}) {
+  return (
+    <motion.button
+      type="button"
+      onClick={onClick}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.07 }}
+      className="text-left w-full bg-card rounded-2xl p-6 border border-border hover:border-primary/30 hover:shadow-lg transition-all group opacity-90 hover:opacity-100"
+      style={{ boxShadow: "var(--shadow-card)" }}
+    >
+      <div className="flex items-start justify-between mb-4">
+        <span className={`${produto.tagColor} text-white font-display text-xs px-3 py-1 rounded-full`}>
+          {produto.tag}
+        </span>
+        <AssetImage asset={produto.asset} alt={produto.nome} className="w-14 h-14 object-contain opacity-75 group-hover:opacity-100 transition-opacity" width={56} height={56} />
+      </div>
+      <h3 className="font-display font-bold text-xl text-foreground mb-1">{produto.nome}</h3>
+      <p className="font-body text-xs text-muted-foreground mb-3">{produto.subtitulo}</p>
+      <p className="font-body text-sm text-muted-foreground leading-relaxed mb-5">{produto.descricao}</p>
+      <span className="font-body text-sm font-semibold text-primary group-hover:underline">
+        Tenho interesse →
+      </span>
+    </motion.button>
+  );
+}
+
 /* ═══════════════════════════════════════════════════════
    PAGE
 ════════════════════════════════════════════════════════ */
-
 export default function LojaPage() {
-  const [activeProduct, setActiveProduct] = useState<(typeof produtos)[0] | null>(null);
+  const [activeProduct, setActiveProduct] = useState<Produto | null>(null);
 
-  async function handleProductClick(produto: (typeof produtos)[0]) {
+  async function handleEmBreveClick(produto: Produto) {
     await track("product_interest", "/loja", {
       product_id: produto.id,
       product_name: produto.nome,
-      price: produto.preco,
     });
     setActiveProduct(produto);
   }
@@ -214,78 +334,104 @@ export default function LojaPage() {
                 Ecossistema Gamellito
               </p>
               <h1 className="font-display text-4xl md:text-5xl font-bold text-primary mb-5 leading-tight">
-                Produtos que tornam o DM1{" "}
-                <span className="text-gamellito-orange">mais leve</span>
+                Tudo que o Gamellito{" "}
+                <span className="text-gamellito-orange">já criou</span>
               </h1>
               <p className="font-body text-primary-foreground/85 text-lg leading-relaxed mb-6 max-w-xl">
-                Livros, pelúcias, gadgets e cursos — tudo pensado com carinho
-                para crianças, famílias e profissionais que vivem o DM1 no dia a dia.
+                Começamos com jogos digitais gratuitos. Estamos construindo livros,
+                pelúcias e kits — cada passo financiado pelo interesse de vocês.
               </p>
-              <div className="inline-flex items-center gap-2 bg-gamellito-orange/20 border border-gamellito-orange/40 rounded-full px-5 py-2">
-                <span className="text-gamellito-orange font-body font-semibold text-sm">
-                  Loja em construção — registre seu interesse!
-                </span>
+              <div className="flex flex-wrap gap-3 justify-center md:justify-start">
+                <div className="inline-flex items-center gap-2 bg-gamellito-health-green/20 border border-gamellito-health-green/40 rounded-full px-4 py-2">
+                  <span className="w-2 h-2 rounded-full bg-gamellito-health-green inline-block" />
+                  <span className="text-gamellito-health-green font-body font-semibold text-sm">
+                    2 produtos disponíveis agora
+                  </span>
+                </div>
+                <div className="inline-flex items-center gap-2 bg-gamellito-orange/20 border border-gamellito-orange/40 rounded-full px-4 py-2">
+                  <span className="w-2 h-2 rounded-full bg-gamellito-orange inline-block" />
+                  <span className="text-gamellito-orange font-body font-semibold text-sm">
+                    6 em desenvolvimento
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 flex gap-4 items-end">
               <AssetImage
-                asset="gamellitoContente"
-                alt="Gamellito feliz"
-                className="w-44 h-auto drop-shadow-2xl"
-                width={176}
-                height={176}
+                asset="gamellitoCorpinho"
+                alt="Gamellito"
+                className="w-32 h-auto drop-shadow-2xl"
+                width={128}
+                height={128}
+              />
+              <AssetImage
+                asset="pancreasPreguicoso"
+                alt="Pâncreas Preguiçoso"
+                className="w-24 h-auto drop-shadow-xl opacity-80"
+                width={96}
+                height={96}
               />
             </div>
           </motion.div>
         </div>
       </section>
 
-      {/* ── Produtos ── */}
-      <section data-track-section="loja-produtos" className="py-24 bg-background px-4">
+      {/* ── Disponíveis agora ── */}
+      <section data-track-section="loja-disponivel" className="py-20 bg-background px-4">
         <div className="container mx-auto max-w-5xl">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-14"
+            className="mb-10"
           >
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-3">
-              O que está chegando
-            </h2>
-            <p className="font-body text-muted-foreground max-w-xl mx-auto">
-              Clique em qualquer produto para registrar seu interesse — isso nos ajuda a decidir o que produzir primeiro!
+            <div className="flex items-center gap-3 mb-2">
+              <span className="w-3 h-3 rounded-full bg-gamellito-health-green" />
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                Disponíveis agora — gratuitos
+              </h2>
+            </div>
+            <p className="font-body text-muted-foreground ml-6">
+              Você pode usar hoje, direto no site, sem instalar nada.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {produtosDisponiveis.map((produto) => (
+              <CardDisponivel key={produto.id} produto={produto} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Em breve ── */}
+      <section data-track-section="loja-em-breve" className="py-20 bg-muted/30 px-4">
+        <div className="container mx-auto max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-10"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <span className="w-3 h-3 rounded-full bg-gamellito-orange" />
+              <h2 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                Em desenvolvimento
+              </h2>
+            </div>
+            <p className="font-body text-muted-foreground ml-6">
+              Clique no que te interessa — isso nos ajuda a decidir o que produzir primeiro.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {produtos.map((produto, i) => (
-              <motion.button
+            {produtosEmBreve.map((produto, i) => (
+              <CardEmBreve
                 key={produto.id}
-                type="button"
-                onClick={() => handleClick(produto)}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.07 }}
-                className="text-left w-full bg-card rounded-2xl p-6 border border-border hover:border-primary/30 hover:shadow-lg transition-all group"
-                style={{ boxShadow: "var(--shadow-card)" }}
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className={`${produto.cor} text-white font-display text-xs px-3 py-1 rounded-full`}>
-                    {produto.tag}
-                  </span>
-                </div>
-
-                <h3 className="font-display font-bold text-xl text-foreground mb-1">{produto.nome}</h3>
-                <p className="font-body text-xs text-muted-foreground mb-3">{produto.subtitulo}</p>
-                <p className="font-body text-sm text-muted-foreground leading-relaxed mb-5">{produto.descricao}</p>
-
-                <div className="flex items-center justify-end">
-                  <span className="font-body text-sm font-semibold text-primary group-hover:underline">
-                    Tenho interesse →
-                  </span>
-                </div>
-              </motion.button>
+                produto={produto}
+                index={i}
+                onClick={() => handleEmBreveClick(produto)}
+              />
             ))}
           </div>
         </div>
@@ -323,9 +469,9 @@ export default function LojaPage() {
                 A loja financia o ecossistema
               </h2>
               <p className="font-body text-primary-foreground/85 leading-relaxed mb-4">
-                Cada produto vendido reinveste diretamente em pesquisa, novos jogos e materiais educativos.
-                Você compra um livro para seu filho — e ajuda a levar educação em saúde para mais crianças
-                em ambulatórios públicos.
+                Cada produto vendido reinveste diretamente em pesquisa, novos jogos e
+                materiais educativos. Você compra um livro — e ajuda a levar educação em
+                saúde para mais crianças em ambulatórios públicos.
               </p>
               <ul className="space-y-2 font-body text-primary-foreground/75 text-sm">
                 {[
@@ -349,8 +495,9 @@ export default function LojaPage() {
       <section className="py-16 px-4 bg-background">
         <div className="container mx-auto max-w-2xl text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <AssetImage asset="gamellitoContente" alt="Gamellito" className="w-16 h-auto mx-auto mb-4" width={64} height={64} />
             <h2 className="font-display text-3xl font-bold text-foreground mb-4">
-              Quer ser avisado no lançamento?
+              Quer ser avisado nos lançamentos?
             </h2>
             <p className="font-body text-muted-foreground mb-6">
               Quem registrar interesse recebe <strong>10% de desconto</strong> na primeira compra.

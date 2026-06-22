@@ -9,22 +9,20 @@ import { createClient } from "@/lib/supabase/client";
 const navLinks = [
   { label: "Início",        href: "/#inicio" },
   { label: "Sobre",         href: "/#sobre" },
-  { label: "Para Famílias", href: "/para-familias" },
+  { label: "Ecossistema",   href: "/para-familias" },
   { label: "Contato",       href: "/#contato" },
   { label: "Loja",          href: "/loja" },
 ];
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isOpen,    setIsOpen]    = useState(false);
+  const [loggedIn,  setLoggedIn]  = useState(false);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsLoggedIn(!!session);
-    });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsLoggedIn(!!session);
+    const client = createClient();
+    client.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
+    const { data: { subscription } } = client.auth.onAuthStateChange((_, session) => {
+      setLoggedIn(!!session?.user);
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -34,8 +32,8 @@ const Navbar = () => {
     setIsOpen(false);
   }
 
-  const ctaHref = isLoggedIn ? "/diario" : "/diario/login";
-  const ctaLabel = isLoggedIn ? "Diário" : "Login";
+  const ctaHref  = loggedIn ? "/diario" : "/diario/login";
+  const ctaLabel = loggedIn ? "Diário"  : "Login";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 overflow-hidden">

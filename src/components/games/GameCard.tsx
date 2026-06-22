@@ -2,9 +2,9 @@ import Link from "next/link";
 import type { Game } from "@/lib/games";
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  disponivel:   { label: "Disponível",   color: "bg-[#8DC63F] text-[#2B2233]" },
-  em_pesquisa:  { label: "Em pesquisa",  color: "bg-[#9B8CF0] text-white"     },
-  em_teste:     { label: "Em teste",     color: "bg-[#FFC400] text-[#2B2233]" },
+  disponivel:         { label: "Disponível",         color: "bg-[#8DC63F] text-[#2B2233]" },
+  em_desenvolvimento: { label: "Em desenvolvimento", color: "bg-[#9B8CF0] text-white"     },
+  em_pesquisa:        { label: "Em pesquisa",        color: "bg-[#FFC400] text-[#2B2233]" },
 };
 
 type Props = { game: Game };
@@ -21,8 +21,7 @@ export function GameCard({ game }: Props) {
           Público-alvo: <span className="font-semibold text-[#6E59C9]">{game.publicoAlvo}</span>
         </p>
         <p className="text-xs font-body text-[#2B2233]/60">
-          Em saúde:{" "}
-          <span className="font-semibold text-[#6E59C9]">{game.objetivosEmSaude}</span>
+          Gênero: <span className="font-semibold text-[#6E59C9]">{game.genero}</span>
         </p>
       </div>
       <div className="mt-4 flex items-center justify-between">
