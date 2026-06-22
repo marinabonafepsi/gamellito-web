@@ -3,10 +3,10 @@ import { siteAssets } from "@/components/SiteAssets";
 
 const FooterSection = () => {
   return (
-    <footer id="contato" className="bg-gamellito-space py-16">
+    <footer id="contato" className="bg-gradient-to-r from-gamellito-space via-gamellito-purple/60 to-gamellito-space border-t border-gamellito-purple/30 py-16">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-12 mb-12">
-          {/* Brand — mesmo mascote do header */}
+          {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img src={siteAssets.gamellitoFelizMaoNaBarriga} alt="Gamellito" className="w-10 h-10 object-contain" />
@@ -26,18 +26,25 @@ const FooterSection = () => {
             <h4 className="font-display font-bold text-primary-foreground mb-4">
               Navegação
             </h4>
-            <div className="space-y-2">
-              {["Sobre", "Jogos", "Soluções", "Prêmios", "Parceiros"].map(
-                (label) => (
-                  <a
-                    key={label}
-                    href={`#${label.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "")}`}
-                    className="block text-sm text-primary-foreground/90 hover:text-primary transition-colors font-body"
-                  >
-                    {label}
-                  </a>
-                )
-              )}
+            <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+              {[
+                { label: "Início", href: "#inicio" },
+                { label: "Sobre", href: "#sobre" },
+                { label: "Para Famílias", href: "#familias" },
+                { label: "Programas", href: "#solucoes" },
+                { label: "Prêmios", href: "#premios" },
+                { label: "Parceiros", href: "#parceiros" },
+                { label: "Contato", href: "#contato" },
+                { label: "Loja", href: "/loja" },
+              ].map(({ label, href }) => (
+                <a
+                  key={label}
+                  href={href}
+                  className="text-sm text-primary-foreground/90 hover:text-primary transition-colors font-body"
+                >
+                  {label}
+                </a>
+              ))}
             </div>
           </div>
 
@@ -48,13 +55,13 @@ const FooterSection = () => {
             </h4>
             <div className="space-y-3">
               <a
-                href="https://instagram.com/gamellito"
+                href="https://instagram.com/gamellitoltda"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-primary-foreground/90 hover:text-primary transition-colors font-body"
               >
                 <Instagram className="w-4 h-4" />
-                @gamellito
+                @gamellitoltda
               </a>
               <a
                 href="https://gamellito.org.br"
