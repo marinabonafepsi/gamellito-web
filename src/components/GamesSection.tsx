@@ -2,48 +2,73 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Smartphone, BookOpen, Puzzle, ChefHat, X } from "@/components/icons";
-import { siteAssets } from "@/components/SiteAssets";
-import { GamellitoSprite } from "@/components/GamellitoSprite";
+import { X } from "@/components/icons";
+import { AssetImage, siteAssets } from "@/components/SiteAssets";
 import { track } from "@/lib/analytics";
 
-const games = [
+type GameStatus = "disponivel" | "em-breve";
+
+interface GameItem {
+  id: string;
+  title: string;
+  description: string;
+  tag: string;
+  tagColor: string;
+  asset: keyof typeof siteAssets;
+  status: GameStatus;
+  cta?: string;
+  ctaHref?: string;
+}
+
+const games: GameItem[] = [
   {
-    icon: Smartphone,
-    title: "Gamellito Adventures",
-    description: "Jogo para celular e tablet onde as crianças cuidam do Gamellito, aprendendo contagem de carboidratos, insulinoterapia e monitoramento de glicose.",
-    tag: "Mobile Game",
-    color: "bg-primary",
-    emoji: "📱",
+    id: "sherlockito",
+    title: "Sherlockito",
+    description:
+      "O detetive do diabetes. A criança resolve mistérios investigando pistas sobre glicemia, alimentação e insulina. Gratuito, roda direto no navegador.",
+    tag: "Disponível agora",
+    tagColor: "bg-gamellito-health-green",
+    asset: "controleVideogame",
+    status: "disponivel",
+    cta: "Jogar grátis",
+    ctaHref: "/jogar",
   },
   {
-    icon: Puzzle,
+    id: "jogo-geladeira",
+    title: "Jogo da Geladeira",
+    description:
+      "Monte o prato do Gamellito sem estourar a meta de carboidratos. Mini-jogo rápido de contagem — educativo e viciante.",
+    tag: "Disponível agora",
+    tagColor: "bg-gamellito-health-green",
+    asset: "geladeira",
+    status: "disponivel",
+    cta: "Jogar agora",
+    ctaHref: "/#jogos",
+  },
+  {
+    id: "jogo-tabuleiro",
     title: "Jogo de Tabuleiro",
-    description: "Versão física que promove interação em grupo, ideal para oficinas educativas em hospitais e escolas.",
-    tag: "Board Game",
-    color: "bg-gamellito-green",
-    emoji: "🎲",
+    description:
+      "Versão física para grupos — ideal para oficinas em hospitais e escolas. Promove cooperação e educação sobre DM1.",
+    tag: "Em desenvolvimento",
+    tagColor: "bg-gamellito-orange",
+    asset: "gamellitoFurioso",
+    status: "em-breve",
   },
   {
-    icon: BookOpen,
+    id: "livros",
     title: "Livros Ilustrados",
-    description: '"Enfrentando o Diabetes Tipo 1" — série de livros infantis com as aventuras do Gamellito, ilustrações de Roger Cartoons.',
-    tag: "Livros",
-    color: "bg-gamellito-blue",
-    emoji: "📚",
-  },
-  {
-    icon: ChefHat,
-    title: "Oficinas Culinárias",
-    description: "Atividades práticas onde crianças aprendem sobre alimentação saudável e contagem de carboidratos de forma divertida.",
-    tag: "Oficinas",
-    color: "bg-gamellito-pink",
-    emoji: "🍳",
+    description:
+      '"Enfrentando o Diabetes Tipo 1" — série infantil com as aventuras do Gamellito, ilustrações de Roger Cartoons.',
+    tag: "Em desenvolvimento",
+    tagColor: "bg-gamellito-blue",
+    asset: "gamellitoEAmigos",
+    status: "em-breve",
   },
 ];
 
 /* ── Modal fake door ── */
-function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () => void }) {
+function FakeDoorModal({ item, onClose }: { item: GameItem; onClose: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gamellito-space/70 backdrop-blur-sm"
@@ -63,16 +88,18 @@ function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () =
         <button type="button" onClick={onClose} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground">
           <X size={20} />
         </button>
+        <div className="flex justify-center mb-4">
+          <AssetImage asset={item.asset} alt={item.title} className="w-20 h-auto" width={80} height={80} />
+        </div>
         <h2 className="font-display text-2xl font-bold text-foreground text-center mb-2">
           {item.title}
         </h2>
         <p className="font-body text-muted-foreground text-center text-sm leading-relaxed mb-6">
-          Este conteúdo está em desenvolvimento! Seu interesse nos ajuda a
-          priorizar o que lançar primeiro.
+          Este produto está em desenvolvimento! Seu interesse nos ajuda a priorizar o que lançar primeiro.
         </p>
         <div className="flex flex-col gap-3">
           <a
-            href="mailto:gamellitoltda@gmail.com?subject=Tenho interesse: {{ item.title }}"
+            href={`mailto:gamellitoltda@gmail.com?subject=Tenho interesse: ${item.title}`}
             className="w-full text-center px-6 py-3 bg-primary text-primary-foreground font-display font-bold rounded-full hover:bg-primary/90 transition-colors"
             onClick={onClose}
           >
@@ -88,19 +115,17 @@ function FakeDoorModal({ item, onClose }: { item: typeof games[0]; onClose: () =
 }
 
 const GamesSection = () => {
-  const [activeModal, setActiveModal] = useState<typeof games[0] | null>(null);
+  const [activeModal, setActiveModal] = useState<GameItem | null>(null);
 
-  async function handleGameClick(game: typeof games[0]) {
+  async function handleGameClick(game: GameItem) {
     await track("game_interest", window.location.pathname, {
       game: game.title,
       tag: game.tag,
+      status: game.status,
     });
-    setActiveModal(game);
-  }
-
-  async function handlePlayClick() {
-    await track("play_button", window.location.pathname, { source: "games_section_cta" });
-    setActiveModal(games[0]);
+    if (game.status === "em-breve") {
+      setActiveModal(game);
+    }
   }
 
   return (
@@ -136,70 +161,95 @@ const GamesSection = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-5xl font-display font-bold text-primary-foreground mb-4">
-              Nossos <span className="text-primary">Jogos & Soluções</span>
+              Nosso <span className="text-primary">ecossistema de jogos</span>
             </h2>
-            <p className="text-lg text-primary-foreground/90 max-w-2xl mx-auto font-body mb-6">
-              De jogos digitais a livros e oficinas — todo um ecossistema lúdico
-              para educação em saúde.
+            <p className="text-lg text-primary-foreground/90 max-w-2xl mx-auto font-body">
+              Dois jogos disponíveis hoje. Mais chegando — cada um financiado pelo interesse de vocês.
             </p>
-            <button
-              type="button"
-              onClick={handlePlayClick}
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 font-display font-bold text-primary-foreground hover:opacity-90 transition-opacity"
-            >
-              Experimente um jogo
-            </button>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="flex flex-col items-center gap-6"
-            >
-              <img
-                src={siteAssets.controleVideogame}
-                alt="Controle de videogame"
-                className="w-44 md:w-56 h-auto opacity-90"
-              />
-              <GamellitoSprite className="drop-shadow-2xl" />
-            </motion.div>
-
-            <div className="grid sm:grid-cols-2 gap-4">
-              {games.map((game, i) => (
-                <motion.button
-                  key={game.title}
-                  type="button"
-                  onClick={() => handleGameClick(game)}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5 max-w-5xl mx-auto">
+            {games.map((game, i) => {
+              const isDisponivel = game.status === "disponivel";
+              return (
+                <motion.div
+                  key={game.id}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="text-left bg-primary-foreground/10 backdrop-blur-sm rounded-2xl p-5 border border-primary-foreground/10 hover:border-primary/40 hover:bg-primary-foreground/15 transition-all group cursor-pointer"
+                  className={`rounded-2xl p-5 border flex flex-col ${
+                    isDisponivel
+                      ? "bg-primary-foreground/10 backdrop-blur-sm border-gamellito-health-green/40"
+                      : "bg-primary-foreground/5 backdrop-blur-sm border-primary-foreground/10 opacity-80"
+                  }`}
                 >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className={`w-10 h-10 rounded-xl ${game.color} flex items-center justify-center`}>
-                      <game.icon className="w-5 h-5 text-primary-foreground" />
-                    </div>
-                    <span className="text-xs font-body font-bold text-primary uppercase tracking-wider">
+                  <div className="flex items-start justify-between mb-3">
+                    <span
+                      className={`text-xs font-body font-bold uppercase tracking-wider px-2 py-1 rounded-full ${
+                        isDisponivel
+                          ? "bg-gamellito-health-green/20 text-gamellito-health-green"
+                          : "bg-gamellito-orange/20 text-gamellito-orange"
+                      }`}
+                    >
                       {game.tag}
                     </span>
                   </div>
+
+                  <div className="flex justify-center my-3">
+                    <AssetImage
+                      asset={game.asset}
+                      alt={game.title}
+                      className={`w-16 h-16 object-contain ${isDisponivel ? "" : "opacity-60"}`}
+                      width={64}
+                      height={64}
+                    />
+                  </div>
+
                   <h3 className="font-display font-bold text-primary-foreground text-lg mb-2">
                     {game.title}
                   </h3>
-                  <p className="text-sm text-primary-foreground/90 font-body leading-relaxed">
+                  <p className="text-sm text-primary-foreground/80 font-body leading-relaxed flex-1">
                     {game.description}
                   </p>
-                  <span className="inline-block mt-3 text-xs text-primary font-body font-semibold group-hover:underline">
-                    Saber mais →
-                  </span>
-                </motion.button>
-              ))}
-            </div>
+
+                  <div className="mt-4">
+                    {isDisponivel ? (
+                      <a
+                        href={game.ctaHref}
+                        className="inline-block w-full text-center px-4 py-2 rounded-full bg-gamellito-health-green text-white font-display font-bold text-sm hover:bg-gamellito-health-green/90 transition-colors"
+                        onClick={() => track("game_play_click", window.location.pathname, { game: game.id })}
+                      >
+                        {game.cta}
+                      </a>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => handleGameClick(game)}
+                        className="inline-block w-full text-center px-4 py-2 rounded-full border border-primary-foreground/20 text-primary-foreground/70 font-body text-sm hover:border-primary/40 hover:text-primary transition-colors"
+                      >
+                        Tenho interesse →
+                      </button>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mt-12"
+          >
+            <a
+              href="/loja"
+              className="inline-flex items-center gap-2 font-body text-primary-foreground/70 hover:text-primary transition-colors text-sm"
+            >
+              Ver todos os produtos →
+            </a>
+          </motion.div>
         </div>
       </section>
     </>

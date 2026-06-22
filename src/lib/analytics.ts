@@ -73,7 +73,15 @@ export type AnalyticsEvent =
   | "nursing_partnership_request"
   | "identify_modal_shown"
   | "identify_modal_dismissed"
-  | "user_identified";
+  | "user_identified"
+  | "user_signout"
+  | "humor_marcado"
+  | "avatar_changed"
+  | "registro_salvo"
+  | "novo_usuario"
+  | "login"
+  | "product_cta"
+  | "game_play_click";
 
 /* ─── track() ─────────────────────────────────────────── */
 
