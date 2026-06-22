@@ -488,23 +488,7 @@ function TabFamilias() {
                   </span>
                 </div>
                 <div className="flex justify-center">
-                  <svg viewBox="0 0 120 200" width="120" height="200" aria-label="Diagrama do corpo mostrando o pâncreas" className="flex-shrink-0">
-                    <circle cx="60" cy="22" r="18" fill="#FFE5B4" stroke="#FF8C00" strokeWidth="3" />
-                    <circle cx="53" cy="20" r="2.5" fill="#FF8C00" />
-                    <circle cx="67" cy="20" r="2.5" fill="#FF8C00" />
-                    <path d="M54 27 Q60 32 66 27" stroke="#FF8C00" strokeWidth="2" fill="none" strokeLinecap="round" />
-                    <rect x="28" y="44" width="64" height="100" rx="22" fill="#FFF3E0" stroke="#FF8C00" strokeWidth="3" />
-                    <ellipse cx="56" cy="84" rx="16" ry="10" fill="#E8003D" fillOpacity="0.18" stroke="#E8003D" strokeWidth="2" />
-                    <line x1="50" y1="78" x2="58" y2="86" stroke="#E8003D" strokeWidth="2.5" strokeLinecap="round" />
-                    <line x1="58" y1="78" x2="50" y2="86" stroke="#E8003D" strokeWidth="2.5" strokeLinecap="round" />
-                    <text x="74" y="88" fontSize="7.5" fill="#E8003D" fontFamily="Pangolin, cursive" fontWeight="bold">pâncreas</text>
-                    <line x1="56" y1="96" x2="56" y2="112" stroke="#E8003D" strokeWidth="1.5" strokeDasharray="3,2" />
-                    <polygon points="52,110 60,110 56,116" fill="#E8003D" opacity="0.7" />
-                    <text x="38" y="124" fontSize="7" fill="#E8003D" fontFamily="Pangolin, cursive">insulina?</text>
-                    <path d="M76 100 Q82 96 88 100 Q94 104 100 100" stroke="#FF8C00" strokeWidth="1.5" fill="none" opacity="0.6" />
-                    <path d="M76 108 Q82 104 88 108 Q94 112 100 108" stroke="#FF8C00" strokeWidth="1.5" fill="none" opacity="0.4" />
-                    <text x="76" y="120" fontSize="7" fill="#FF8C00" fontFamily="Pangolin, cursive">glicose↑</text>
-                  </svg>
+                  <AssetImage asset="pancreasComLousa" alt="Pâncreas ensinando na lousa - fisiologia do diabetes" className="w-40 h-auto flex-shrink-0" width={160} height={200} />
                 </div>
               </div>
             </motion.div>

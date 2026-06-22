@@ -70,6 +70,8 @@ export const siteAssets = {
   diagnosticoRaiva: "/characters/gamellito-diagnostico-raiva.svg",
   /** Diagnóstico – Gamellito se adaptando */
   diagnosticoAdaptacao: "/characters/gamellito-diagnostico-adaptacao.svg",
+  /** Pâncreas ensinando na lousa */
+  pancreasComLousa: "/characters/gamellito-pancreas-lousa.svg",
 } as const;
 
 export type SiteAssetKey = keyof typeof siteAssets;
