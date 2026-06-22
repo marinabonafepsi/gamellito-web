@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "@/components/icons";
 import { track } from "@/lib/analytics";
 import { createClient } from "@/lib/supabase/client";
+import UserMenu from "@/components/UserMenu";
 
 const navLinks = [
   { label: "Início",        href: "/#inicio" },
@@ -31,9 +32,6 @@ const Navbar = () => {
     track("nav_click", window.location.pathname, { label, href });
     setIsOpen(false);
   }
-
-  const ctaHref  = loggedIn ? "/diario" : "/diario/login";
-  const ctaLabel = loggedIn ? "Diário"  : "Login";
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 overflow-hidden">
@@ -62,18 +60,22 @@ const Navbar = () => {
               {link.label === "Loja" ? "🛍️ Loja" : link.label}
             </a>
           ))}
-          <a
-            href={ctaHref}
-            onClick={() => handleNavClick(ctaLabel, ctaHref)}
-            className="inline-flex items-center px-6 py-2.5 rounded-full font-display font-bold text-sm text-white transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
-            style={{
-              background: "#F26A00",
-              border: "3px solid #2B2233",
-              boxShadow: "4px 4px 0 #2B2233",
-            }}
-          >
-            {ctaLabel}
-          </a>
+          {loggedIn ? (
+            <UserMenu />
+          ) : (
+            <a
+              href="/diario/login"
+              onClick={() => handleNavClick("Login", "/diario/login")}
+              className="inline-flex items-center px-6 py-2.5 rounded-full font-display font-bold text-sm text-white transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+              style={{
+                background: "#F26A00",
+                border: "3px solid #2B2233",
+                boxShadow: "4px 4px 0 #2B2233",
+              }}
+            >
+              Login
+            </a>
+          )}
         </div>
 
         {/* Mobile toggle */}
@@ -95,18 +97,25 @@ const Navbar = () => {
             className="md:hidden overflow-hidden" style={{ background: "#6F567E" }}
           >
             <div className="px-4 py-4 flex flex-col gap-3">
-              <a
-                href={ctaHref}
-                onClick={() => handleNavClick(ctaLabel, ctaHref)}
-                className="inline-flex items-center justify-center px-6 py-3 rounded-full font-display font-bold text-sm text-white mb-1 transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
-                style={{
-                  background: "#F26A00",
-                  border: "3px solid #2B2233",
-                  boxShadow: "4px 4px 0 #2B2233",
-                }}
-              >
-                {ctaLabel}
-              </a>
+              {loggedIn ? (
+                <div className="flex items-center gap-3 mb-1">
+                  <UserMenu />
+                  <span className="font-body text-sm font-semibold text-primary-foreground/80">Minha conta</span>
+                </div>
+              ) : (
+                <a
+                  href="/diario/login"
+                  onClick={() => handleNavClick("Login", "/diario/login")}
+                  className="inline-flex items-center justify-center px-6 py-3 rounded-full font-display font-bold text-sm text-white mb-1 transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none"
+                  style={{
+                    background: "#F26A00",
+                    border: "3px solid #2B2233",
+                    boxShadow: "4px 4px 0 #2B2233",
+                  }}
+                >
+                  Login
+                </a>
+              )}
               {navLinks.map((link) => (
                 <a
                   key={link.href}
