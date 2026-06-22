@@ -43,9 +43,12 @@ const Navbar = () => {
         className="absolute inset-0 w-full h-full object-cover object-left"
       />
       <div className="relative container mx-auto px-4 py-0 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-3" onClick={() => handleNavClick("Logo", "/")}>
-          <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="w-16 h-16 object-contain" />
-          <img src="/characters/gamellito-wordmark.svg" alt="Gamellito Ltda." className="h-12 object-contain" />
+        <a href="/" className="flex items-center gap-3 min-w-0" onClick={() => handleNavClick("Logo", "/")}>
+          <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="w-16 h-16 object-contain flex-shrink-0" />
+          <div className="flex flex-col min-w-0">
+            <span className="font-display text-2xl font-bold text-primary leading-tight">Gamellito</span>
+            <span className="font-body text-xs font-semibold text-primary/90">LTDA</span>
+          </div>
         </a>
 
         {/* Desktop */}
