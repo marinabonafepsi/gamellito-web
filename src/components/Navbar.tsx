@@ -43,8 +43,12 @@ const Navbar = () => {
         className="absolute inset-0 w-full h-full object-cover object-left"
       />
       <div className="relative container mx-auto px-6 py-3 flex items-center justify-between">
-        <a href="/" className="flex items-center min-w-0" onClick={() => handleNavClick("Logo", "/")} title="Voltar para home">
-          <img src="/characters/gamellito-naming.svg" alt="Gamellito Ltda" className="h-16 w-auto object-contain flex-shrink-0" />
+        <a href="/" className="flex items-center gap-3 min-w-0" onClick={() => handleNavClick("Logo", "/")} title="Voltar para home">
+          <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="h-14 w-14 object-contain flex-shrink-0" />
+          <div className="flex flex-col gap-0 min-w-0">
+            <span className="font-display text-2xl font-bold text-gamellito-orange leading-tight">Gamellito</span>
+            <span className="font-body text-xs font-bold text-white leading-tight">Ltda.</span>
+          </div>
         </a>
 
         {/* Desktop */}
@@ -56,7 +60,7 @@ const Navbar = () => {
               onClick={() => handleNavClick(link.label, link.href)}
               className="font-body text-sm font-semibold text-primary-foreground/95 hover:text-primary transition-colors"
             >
-              {link.label === "Loja" ? "🛍️ Loja" : link.label}
+              {link.label}
             </a>
           ))}
           {loggedIn ? (
@@ -112,7 +116,7 @@ const Navbar = () => {
                   onClick={() => handleNavClick(link.label, link.href)}
                   className="font-body text-base font-semibold text-primary-foreground/95 hover:text-primary transition-colors py-2"
                 >
-                  {link.label === "Loja" ? "🛍️ Loja" : link.label}
+                  {link.label}
                 </a>
               ))}
             </div>
