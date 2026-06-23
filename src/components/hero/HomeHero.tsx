@@ -57,16 +57,27 @@ export function HomeHero() {
           </p>
           <div className="flex flex-col gap-4 sm:flex-row justify-center lg:justify-start">
             <Link
-              href="/jogos"
-              className="inline-flex items-center justify-center rounded-full bg-gamellito-orange px-8 py-4 font-display text-lg font-bold text-white shadow-lg hover:opacity-90 transition-opacity"
+              href="/para-familias"
+              className="inline-flex items-center justify-center gap-2 rounded-full font-display text-lg font-bold text-white transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none px-8 py-4"
+              style={{
+                background: "#F26A00",
+                border: "3px solid #2B2233",
+                boxShadow: "4px 4px 0 #2B2233",
+              }}
             >
-              Conheça os Jogos
+              Conheça os programas →
             </Link>
             <Link
-              href="/solucoes"
-              className="inline-flex items-center justify-center rounded-full border-2 border-white bg-white/10 px-8 py-4 font-display text-lg font-semibold text-white hover:bg-white/20 transition-colors"
+              href="/#contato"
+              className="inline-flex items-center justify-center rounded-full font-display text-lg font-bold transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none px-8 py-4"
+              style={{
+                background: "#FFD600",
+                color: "#2B2233",
+                border: "3px solid #2B2233",
+                boxShadow: "4px 4px 0 #2B2233",
+              }}
             >
-              Soluções em Saúde
+              Seja um parceiro
             </Link>
           </div>
         </div>
