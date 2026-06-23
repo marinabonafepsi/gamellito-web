@@ -15,8 +15,8 @@ const AboutSection = () => {
   return (
     <>
       {/* ── O problema ── */}
-      <section id="sobre" data-track-section="sobre" className="py-24 bg-background">
-        <div className="container mx-auto px-4 max-w-5xl">
+      <section id="sobre" data-track-section="sobre" className="py-32 bg-gamellito-light-gray">
+        <div className="container mx-auto px-6 max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -66,7 +66,7 @@ const AboutSection = () => {
       </section>
 
       {/* ── A virada ── */}
-      <section data-track-section="metodo" className="py-20 bg-gamellito-space relative overflow-hidden">
+      <section data-track-section="metodo" className="py-32 bg-gamellito-space relative overflow-hidden">
         {[...Array(8)].map((_, i) => (
           <div
             key={i}
