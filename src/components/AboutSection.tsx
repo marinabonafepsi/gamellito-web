@@ -15,7 +15,7 @@ const AboutSection = () => {
   return (
     <>
       {/* ── O problema ── */}
-      <section id="sobre" data-track-section="sobre" className="py-32 bg-gamellito-light-gray">
+      <section id="sobre" data-track-section="sobre" className="py-32 bg-gamellito-cream">
         <div className="container mx-auto px-6 max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

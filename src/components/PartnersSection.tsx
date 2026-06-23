@@ -37,7 +37,7 @@ const partners = [
 
 const PartnersSection = () => {
   return (
-    <section id="parceiros" className="py-32 bg-gamellito-light-gray">
+    <section id="parceiros" className="py-32 bg-gamellito-cream">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}

@@ -58,24 +58,13 @@ export function HomeHero() {
           <div className="flex flex-col gap-4 sm:flex-row justify-center lg:justify-start">
             <Link
               href="/para-familias"
-              className="inline-flex items-center justify-center gap-2 rounded-full font-display text-lg font-bold text-white transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none px-8 py-4"
-              style={{
-                background: "#F26A00",
-                border: "3px solid #2B2233",
-                boxShadow: "4px 4px 0 #2B2233",
-              }}
+              className="ds-btn ds-btn--lg"
             >
               Conheça os programas →
             </Link>
             <Link
               href="/#contato"
-              className="inline-flex items-center justify-center rounded-full font-display text-lg font-bold transition-all duration-100 active:translate-x-[3px] active:translate-y-[3px] active:shadow-none px-8 py-4"
-              style={{
-                background: "#FFD600",
-                color: "#2B2233",
-                border: "3px solid #2B2233",
-                boxShadow: "4px 4px 0 #2B2233",
-              }}
+              className="ds-btn ds-btn--sun ds-btn--lg"
             >
               Seja um parceiro
             </Link>
