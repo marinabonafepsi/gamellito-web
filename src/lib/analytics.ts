@@ -81,7 +81,8 @@ export type AnalyticsEvent =
   | "novo_usuario"
   | "login"
   | "product_cta"
-  | "game_play_click";
+  | "game_play_click"
+  | "ecosystem_cta_click";
 
 /* ─── track() ─────────────────────────────────────────── */
 
