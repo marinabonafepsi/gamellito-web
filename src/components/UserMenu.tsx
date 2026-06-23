@@ -1,110 +1,122 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
-import { siteAssets } from "@/components/SiteAssets";
+import { Modal } from "@/components/Modal";
 import { track } from "@/lib/analytics";
 
 // Avatares baseados em emoções — usados tanto no perfil quanto no humor do dia
 export const GAMELLITO_AVATARS = [
-  { key: "feliz",   label: "Feliz",      diagnostico: "Humor: Feliz",      src: siteAssets.gamellitoFelizMaoNaBarriga },
-  { key: "animado", label: "Animado",    diagnostico: "Humor: Animado",    src: siteAssets.gamellitoContente },
-  { key: "raiva",   label: "Com raiva",  diagnostico: "Humor: Com raiva",  src: siteAssets.gamellitoFurioso },
-  { key: "medo",    label: "Com medo",   diagnostico: "Humor: Com medo",   src: siteAssets.olhoDesconfiado },
+  { key: "feliz",   label: "Feliz",      src: "/assets/gamellito-feliz-mao-na-barriga.svg" },
+  { key: "animado", label: "Animado",    src: "/assets/gamellito-contente.svg" },
+  { key: "raiva",   label: "Com raiva",  src: "/assets/gamellito-furioso.svg" },
+  { key: "medo",    label: "Com medo",   src: "/assets/olho-desconfiado.svg" },
 ] as const;
 
 export type AvatarKey = typeof GAMELLITO_AVATARS[number]["key"];
 
 export function getAvatarSrc(key: string | null | undefined): string {
   const found = GAMELLITO_AVATARS.find((a) => a.key === key);
-  return found?.src ?? siteAssets.gamellitoFelizMaoNaBarriga;
+  return found?.src ?? "/assets/gamellito-feliz-mao-na-barriga.svg";
 }
 
 export default function UserMenu() {
   const router = useRouter();
-  const [avatarKey, setAvatarKey] = useState<string | null>(null);
-  const [coins,     setCoins]     = useState<number | null>(null);
+
   const [open,      setOpen]      = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
+  const [coins,     setCoins]     = useState<number | null>(null);
+  const [avatarKey, setAvatarKey] = useState<string | null>(null);
 
   useEffect(() => {
-    createClient().auth.getUser().then(({ data }) => {
+    const client = createClient();
+    client.auth.getUser().then(({ data }) => {
+      if (!data.user) return;
       const key = data.user?.user_metadata?.avatar as string | undefined;
       setAvatarKey(key ?? "feliz");
     });
+
     fetch("/api/perfil")
       .then((r) => r.json())
       .then((d) => { if (typeof d.coins === "number") setCoins(d.coins); })
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
   async function sair() {
     track("user_signout", window.location.pathname, {});
     await createClient().auth.signOut();
-    setOpen(false);
     router.push("/diario/login");
   }
 
+  if (!avatarKey) return null;
+
   return (
-    <div ref={ref} className="relative">
+    <>
+      {/* Botão na navbar */}
       <button
-        onClick={() => setOpen(!open)}
-        aria-label="Menu do usuário"
-        className="flex items-center gap-2 rounded-full pl-2 pr-3 py-1 border-2 border-primary bg-gamellito-yellow/10 hover:border-gamellito-yellow transition-colors"
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-1 px-3 py-1.5 rounded-full border-2 border-gamellito-yellow bg-gamellito-yellow/10 hover:bg-gamellito-yellow/20 transition-colors"
+        aria-label="Abrir perfil"
       >
-        <div className="w-7 h-7 rounded-full overflow-hidden flex items-center justify-center">
-          {avatarKey && (
-            <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-7 h-7 object-contain" />
-          )}
-        </div>
+        <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-5 h-5 object-contain" />
         {coins !== null && (
-          <span className="text-xs font-body font-bold text-gamellito-yellow tabular-nums">
+          <span className="text-xs font-display font-bold text-gamellito-yellow">
             🪙 {coins}
           </span>
         )}
       </button>
 
-      {open && (
-        <div className="absolute right-0 top-12 w-48 bg-gamellito-space border border-gamellito-purple/40 rounded-2xl shadow-lg overflow-hidden z-[9999]">
+      {/* Modal de perfil */}
+      <Modal isOpen={open} onClose={() => setOpen(false)} variant="white">
+        <div className="text-center space-y-6">
+          {/* Avatar */}
+          <div className="flex justify-center">
+            <div className="w-24 h-24 rounded-full bg-[#FFF3C9] border-4 border-[#2B2233] shadow-md flex items-center justify-center">
+              <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-20 h-20 object-contain" />
+            </div>
+          </div>
+
+          {/* Moedas */}
           {coins !== null && (
-            <div className="px-4 py-2.5 border-b border-gamellito-purple/20 flex items-center gap-2">
-              <span className="text-base">🪙</span>
-              <span className="text-sm font-body font-bold text-gamellito-yellow">{coins} moedas</span>
+            <div className="text-center">
+              <p className="text-xs text-[#6B7280] mb-1">Saldo de moedas</p>
+              <p className="text-3xl font-display font-bold text-[#F26A00]">
+                🪙 {coins}
+              </p>
             </div>
           )}
-          <Link
-            href="/diario/conta"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2 px-4 py-3 text-sm font-body font-semibold text-primary-foreground hover:bg-gamellito-purple/20 transition-colors"
-          >
-            <span className="text-base">👤</span> Perfil
-          </Link>
-          <Link
-            href="/diario"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2 px-4 py-3 text-sm font-body font-semibold text-primary-foreground hover:bg-gamellito-purple/20 transition-colors"
-          >
-            <span className="text-base">📒</span> Meu diário
-          </Link>
-          <div className="border-t border-gamellito-purple/20 mx-3" />
-          <button
-            onClick={sair}
-            className="w-full text-left flex items-center gap-2 px-4 py-3 text-sm font-body font-semibold text-red-400 hover:bg-red-500/10 transition-colors"
-          >
-            <span className="text-base">🚪</span> Sair
-          </button>
+
+          {/* Botões */}
+          <div className="space-y-2">
+            <button
+              onClick={() => {
+                setOpen(false);
+                router.push("/diario/conta");
+              }}
+              className="w-full ds-btn ds-btn--lg"
+            >
+              Meu perfil
+            </button>
+
+            <button
+              onClick={() => {
+                setOpen(false);
+                router.push("/diario");
+              }}
+              className="w-full ds-btn ds-btn--outline"
+            >
+              Meu diário
+            </button>
+
+            <button
+              onClick={sair}
+              className="w-full ds-btn ds-btn--outline text-red-600 hover:text-red-700"
+            >
+              Sair
+            </button>
+          </div>
         </div>
-      )}
-    </div>
+      </Modal>
+    </>
   );
 }

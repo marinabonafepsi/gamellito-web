@@ -183,7 +183,7 @@ export default function ContaPage() {
                 key={h.key}
                 onClick={() => marcarHumor(h.key as HumorKey)}
                 disabled={salvandoHumor}
-                title={h.diagnostico}
+                title={h.label}
                 className={`rounded-2xl border-[2px] p-2 flex flex-col items-center gap-1 transition-all disabled:opacity-50 ${
                   selecionado
                     ? "border-[#F26A00] bg-[#FFF3C9] shadow-[2px_2px_0_#F26A00] scale-105"
@@ -198,20 +198,6 @@ export default function ContaPage() {
             );
           })}
         </div>
-
-        {/* Diagnóstico do humor selecionado */}
-        {humor && (
-          <div className="flex items-center gap-2 bg-[#F5F0FF] rounded-xl px-3 py-2 border border-[#6E59C9]/20">
-            <img
-              src={HUMORES.find((h) => h.key === humor)?.src}
-              alt={humor}
-              className="w-8 h-8 object-contain"
-            />
-            <span className="text-xs font-body font-semibold text-[#6E59C9]">
-              {HUMORES.find((h) => h.key === humor)?.diagnostico}
-            </span>
-          </div>
-        )}
       </div>
 
       {/* ── Avatar ──────────────────────────────────────────────────────────── */}
