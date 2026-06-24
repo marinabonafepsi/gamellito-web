@@ -230,7 +230,6 @@ export default function ContaPage() {
                 <img src={a.src} alt={a.label} className="w-10 h-10 object-contain flex-shrink-0" />
                 <div className="text-left">
                   <div className="font-body font-bold text-sm text-[#2B2233]">{a.label}</div>
-                  <div className="font-body text-xs text-[#6E59C9]">{a.diagnostico}</div>
                 </div>
                 {selecionado && (
                   <div className="ml-auto w-4 h-4 rounded-full bg-[#F26A00] flex-shrink-0" />
