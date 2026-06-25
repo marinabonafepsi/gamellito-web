@@ -59,7 +59,7 @@ const Navbar = () => {
               key={link.href}
               href={link.href}
               onClick={() => handleNavClick(link.label, link.href)}
-              className="gm-btn gm-btn--ghost gm-btn--md"
+              className="gm-btn gm-btn--nav gm-btn--md"
             >
               {link.label}
             </a>
