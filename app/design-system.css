@@ -161,6 +161,7 @@
 .gm-btn--lilac   { --_bg: var(--color-lilac); --_fg: var(--color-white); }
 .gm-btn--ghost   { --_bg: var(--color-white); --_fg: var(--color-ink); }
 .gm-btn--ink     { --_bg: var(--color-ink); --_fg: var(--color-white); }
+.gm-btn--nav     { --_bg: rgba(255, 255, 255, 0.15); --_fg: var(--color-white); border-color: rgba(255, 255, 255, 0.3); }
 
 /* Sizes */
 .gm-btn--sm { height: var(--control-sm); padding: 0 18px; font-size: 0.9375rem; }
