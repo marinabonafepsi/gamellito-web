@@ -67,9 +67,18 @@ export default function UserMenu() {
         <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-9 h-9 object-contain" />
       </button>
 
+      {/* Backdrop */}
+      {open && (
+        <div
+          className="fixed inset-0 z-[999]"
+          onClick={() => setOpen(false)}
+          aria-hidden
+        />
+      )}
+
       {/* Dropdown: Perfil com moedas */}
       {open && (
-        <div className="absolute right-0 top-14 w-72 gm-card gm-card--cream z-50">
+        <div className="absolute right-0 top-14 w-80 gm-card gm-card--cream z-[9999] shadow-2xl">
           {/* Header: Avatar + Moedas */}
           <div className="text-center pb-4 border-b-2 border-[#2B2233]/20">
             {/* Avatar grande */}
@@ -90,58 +99,88 @@ export default function UserMenu() {
             )}
           </div>
 
-          {/* Menu items */}
-          <div className="pt-4 space-y-1">
+          {/* Menu Navigation */}
+          <div className="pt-4 space-y-2">
+            {/* Seção: Progresso */}
+            <p className="px-4 py-1 text-xs font-display font-bold text-[#2B2233]/50 uppercase">
+              📊 Progresso
+            </p>
             <button
               onClick={() => {
                 setOpen(false);
                 router.push("/diario/moedas");
               }}
-              className="w-full text-left px-4 py-2 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/50 transition-colors rounded-lg flex items-center gap-3"
+              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/60 transition-colors rounded-lg flex items-center gap-3"
             >
               <span className="text-lg">💰</span>
-              <div>
+              <div className="flex-1">
                 <p>Meus ganhos</p>
                 <p className="text-xs text-[#2B2233]/50">Histórico de emoções</p>
               </div>
+              <span className="text-xl">→</span>
             </button>
 
+            {/* Seção: Conta */}
+            <p className="px-4 py-1 text-xs font-display font-bold text-[#2B2233]/50 uppercase mt-2">
+              ⚙️ Conta
+            </p>
             <button
               onClick={() => {
                 setOpen(false);
                 router.push("/diario/conta");
               }}
-              className="w-full text-left px-4 py-2 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/50 transition-colors rounded-lg flex items-center gap-3"
+              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/60 transition-colors rounded-lg flex items-center gap-3"
             >
               <span className="text-lg">👤</span>
-              <div>
+              <div className="flex-1">
                 <p>Meu perfil</p>
-                <p className="text-xs text-[#2B2233]/50">Avatar e settings</p>
+                <p className="text-xs text-[#2B2233]/50">Avatar, humor, dados</p>
               </div>
+              <span className="text-xl">→</span>
             </button>
 
+            {/* Seção: Diário */}
+            <p className="px-4 py-1 text-xs font-display font-bold text-[#2B2233]/50 uppercase mt-2">
+              📝 Diário
+            </p>
             <button
               onClick={() => {
                 setOpen(false);
                 router.push("/diario");
               }}
-              className="w-full text-left px-4 py-2 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/50 transition-colors rounded-lg flex items-center gap-3"
+              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/60 transition-colors rounded-lg flex items-center gap-3"
             >
               <span className="text-lg">📒</span>
-              <div>
-                <p>Meu diário</p>
-                <p className="text-xs text-[#2B2233]/50">Registros de glicemia</p>
+              <div className="flex-1">
+                <p>Meus registros</p>
+                <p className="text-xs text-[#2B2233]/50">Glicemia e gráficos</p>
               </div>
+              <span className="text-xl">→</span>
             </button>
 
-            <div className="border-t border-[#2B2233]/20 my-2" />
+            <button
+              onClick={() => {
+                setOpen(false);
+                router.push("/diario/lancar");
+              }}
+              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/60 transition-colors rounded-lg flex items-center gap-3"
+            >
+              <span className="text-lg">➕</span>
+              <div className="flex-1">
+                <p>Novo registro</p>
+                <p className="text-xs text-[#2B2233]/50">Registrar glicemia</p>
+              </div>
+              <span className="text-xl">→</span>
+            </button>
+
+            <div className="border-t border-[#2B2233]/20 my-3" />
 
             <button
               onClick={sair}
-              className="w-full text-left px-4 py-2 text-sm font-body font-semibold text-red-600 hover:bg-red-50 transition-colors rounded-lg flex items-center gap-3"
+              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-red-600 hover:bg-red-50 transition-colors rounded-lg flex items-center gap-3"
             >
               <span className="text-lg">🚪</span>
-              <p>Sair</p>
+              <p>Sair da conta</p>
             </button>
           </div>
         </div>
