@@ -55,6 +55,7 @@ export default function UserMenu() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [avatarKey, setAvatarKey] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
   const [coins, setCoins] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -63,7 +64,9 @@ export default function UserMenu() {
     client.auth.getUser().then(({ data }) => {
       if (!data.user) return;
       const key = data.user?.user_metadata?.avatar as string | undefined;
+      const userName = data.user?.user_metadata?.name as string | undefined;
       setAvatarKey(key ?? "feliz");
+      setName(userName ?? "Usuário");
     });
 
     fetch("/api/perfil")
@@ -90,57 +93,33 @@ export default function UserMenu() {
 
   return (
     <div ref={ref} className="relative">
-      {/* Trigger Button */}
+      {/* Trigger: Avatar + Name */}
       <button
         onClick={() => setOpen(!open)}
-        className="w-10 h-10 rounded-full border-2 border-gamellito-yellow bg-gamellito-yellow/20 overflow-hidden flex items-center justify-center hover:bg-gamellito-yellow/40 transition-colors"
+        className="flex items-center gap-2 px-3 py-1 rounded-full border-2 border-gamellito-yellow bg-gamellito-yellow/20 hover:bg-gamellito-yellow/40 transition-colors"
         aria-label="Menu do usuário"
       >
-        <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-9 h-9 object-contain" />
+        <div className="w-8 h-8 rounded-full border border-gamellito-yellow overflow-hidden flex items-center justify-center bg-white">
+          <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-7 h-7 object-contain" />
+        </div>
+        <span className="text-sm font-body font-semibold text-primary-foreground hidden sm:inline truncate max-w-[120px]">
+          {name}
+        </span>
       </button>
 
-      {/* Backdrop */}
+      {/* Dropdown Menu */}
       {open && (
-        <div
-          className="fixed inset-0 z-[999]"
-          onClick={() => setOpen(false)}
-          aria-hidden
-        />
-      )}
-
-      {/* Modal/Card do Perfil */}
-      {open && (
-        <div className="absolute right-0 top-14 w-96 gm-card gm-card--white z-[9999] shadow-2xl">
-          {/* Header: Avatar + Moedas */}
-          <div className="text-center pb-6 border-b-2 border-[#2B2233]/10">
-            {/* Avatar */}
-            <div className="flex justify-center mb-4">
-              <div className="w-20 h-20 rounded-full border-4 border-[#2B2233] bg-[#FFF3C9] flex items-center justify-center">
-                <img
-                  src={getAvatarSrc(avatarKey)}
-                  alt="Avatar"
-                  className="w-16 h-16 object-contain"
-                />
-              </div>
-            </div>
-
-            {/* Moedas */}
+        <div className="absolute right-0 top-12 w-56 bg-white rounded-lg shadow-xl border border-[#2B2233]/20 z-[9999] overflow-hidden">
+          {/* Header */}
+          <div className="bg-gamellito-cream px-4 py-3 border-b border-[#2B2233]/10">
+            <p className="text-sm font-body font-semibold text-[#2B2233]">{name}</p>
             {coins !== null && (
-              <div className="inline-block">
-                <p className="text-xs font-body text-[#2B2233]/60 font-semibold mb-1">
-                  Saldo de moedas
-                </p>
-                <div className="gm-card gm-card--sun px-4 py-2 inline-block">
-                  <p className="text-3xl font-display font-black text-[#F26A00]">
-                    {coins}
-                  </p>
-                </div>
-              </div>
+              <p className="text-xs text-[#2B2233]/60 mt-1">🪙 {coins} moedas</p>
             )}
           </div>
 
-          {/* Menu Navigation */}
-          <div className="pt-6 space-y-2">
+          {/* Menu Items */}
+          <div className="py-1">
             {MENU_ITEMS.map((item) => (
               <button
                 key={item.id}
@@ -148,49 +127,23 @@ export default function UserMenu() {
                   setOpen(false);
                   router.push(item.href);
                 }}
-                className="w-full group flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#FFF3C9]/50 transition-colors"
+                className="w-full px-4 py-2 text-left text-sm font-body text-[#2B2233] hover:bg-[#FFF3C9]/50 transition-colors flex items-center gap-2"
               >
-                {/* Ícone */}
-                <div className="w-10 h-10 rounded-lg bg-[#FFC400]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#FFC400]/40 transition-colors">
-                  <img
-                    src={item.icon}
-                    alt={item.label}
-                    className="w-6 h-6 object-contain"
-                  />
-                </div>
-
-                {/* Texto */}
-                <div className="flex-1 text-left">
-                  <p className="font-body font-semibold text-[#2B2233] group-hover:text-[#F26A00] transition-colors">
-                    {item.label}
-                  </p>
-                  <p className="text-xs font-body text-[#2B2233]/50">
-                    {item.desc}
-                  </p>
-                </div>
-
-                {/* Seta */}
-                <span className="text-[#2B2233]/30 font-display font-bold">→</span>
+                <img src={item.icon} alt={item.label} className="w-4 h-4 object-contain" />
+                {item.label}
               </button>
             ))}
 
             {/* Divider */}
-            <div className="border-t border-[#2B2233]/10 my-4" />
+            <div className="border-t border-[#2B2233]/10 my-1" />
 
             {/* Logout */}
             <button
               onClick={sair}
-              className="w-full px-4 py-3 text-left font-body font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              className="w-full px-4 py-2 text-left text-sm font-body text-red-600 hover:bg-red-50 transition-colors"
             >
-              Sair da conta
+              Sair
             </button>
-          </div>
-
-          {/* Game Dots (Design System Pattern) */}
-          <div className="absolute -top-3 -right-3 flex gap-2">
-            <span className="w-3 h-3 rounded-full border-2 border-[#2B2233] bg-[#EE2B2B]" />
-            <span className="w-3 h-3 rounded-full border-2 border-[#2B2233] bg-[#37B6E6]" />
-            <span className="w-3 h-3 rounded-full border-2 border-[#2B2233] bg-[#8DC63F]" />
           </div>
         </div>
       )}
