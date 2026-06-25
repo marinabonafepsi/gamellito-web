@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { track } from "@/lib/analytics";
 
@@ -18,6 +19,37 @@ export function getAvatarSrc(key: string | null | undefined): string {
   const found = GAMELLITO_AVATARS.find((a) => a.key === key);
   return found?.src ?? "/assets/gamellito-feliz-mao-na-barriga.svg";
 }
+
+const MENU_ITEMS = [
+  {
+    id: "ganhos",
+    label: "Meus ganhos",
+    desc: "Histórico de emoções",
+    icon: "/assets/app-ui/progress_bar_tex.png",
+    href: "/diario/moedas",
+  },
+  {
+    id: "perfil",
+    label: "Meu perfil",
+    desc: "Avatar e configurações",
+    icon: "/assets/gamellito-corpinho.svg",
+    href: "/diario/conta",
+  },
+  {
+    id: "registros",
+    label: "Meus registros",
+    desc: "Glicemia e gráficos",
+    icon: "/assets/app-ui/Glicosimetro.png",
+    href: "/diario",
+  },
+  {
+    id: "novo",
+    label: "Novo registro",
+    desc: "Registrar glicemia",
+    icon: "/assets/app-ui/Seringa.png",
+    href: "/diario/lancar",
+  },
+];
 
 export default function UserMenu() {
   const router = useRouter();
@@ -58,7 +90,7 @@ export default function UserMenu() {
 
   return (
     <div ref={ref} className="relative">
-      {/* Botão: avatar (trigger) */}
+      {/* Trigger Button */}
       <button
         onClick={() => setOpen(!open)}
         className="w-10 h-10 rounded-full border-2 border-gamellito-yellow bg-gamellito-yellow/20 overflow-hidden flex items-center justify-center hover:bg-gamellito-yellow/40 transition-colors"
@@ -76,112 +108,89 @@ export default function UserMenu() {
         />
       )}
 
-      {/* Dropdown: Perfil com moedas */}
+      {/* Modal/Card do Perfil */}
       {open && (
-        <div className="absolute right-0 top-14 w-80 gm-card gm-card--cream z-[9999] shadow-2xl">
+        <div className="absolute right-0 top-14 w-96 gm-card gm-card--white z-[9999] shadow-2xl">
           {/* Header: Avatar + Moedas */}
-          <div className="text-center pb-4 border-b-2 border-[#2B2233]/20">
-            {/* Avatar grande */}
-            <div className="flex justify-center mb-3">
-              <div className="w-16 h-16 rounded-full bg-white border-3 border-[#2B2233] flex items-center justify-center">
-                <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-14 h-14 object-contain" />
+          <div className="text-center pb-6 border-b-2 border-[#2B2233]/10">
+            {/* Avatar */}
+            <div className="flex justify-center mb-4">
+              <div className="w-20 h-20 rounded-full border-4 border-[#2B2233] bg-[#FFF3C9] flex items-center justify-center">
+                <img
+                  src={getAvatarSrc(avatarKey)}
+                  alt="Avatar"
+                  className="w-16 h-16 object-contain"
+                />
               </div>
             </div>
 
             {/* Moedas */}
             {coins !== null && (
-              <div className="bg-[#FFC400]/30 rounded-lg py-2 px-3 inline-block">
-                <p className="text-xs font-body text-[#2B2233]/60">Saldo de moedas</p>
-                <p className="text-xl font-display font-bold text-[#F26A00]">
-                  🪙 {coins}
+              <div className="inline-block">
+                <p className="text-xs font-body text-[#2B2233]/60 font-semibold mb-1">
+                  Saldo de moedas
                 </p>
+                <div className="gm-card gm-card--sun px-4 py-2 inline-block">
+                  <p className="text-3xl font-display font-black text-[#F26A00]">
+                    {coins}
+                  </p>
+                </div>
               </div>
             )}
           </div>
 
           {/* Menu Navigation */}
-          <div className="pt-4 space-y-2">
-            {/* Seção: Progresso */}
-            <p className="px-4 py-1 text-xs font-display font-bold text-[#2B2233]/50 uppercase">
-              📊 Progresso
-            </p>
-            <button
-              onClick={() => {
-                setOpen(false);
-                router.push("/diario/moedas");
-              }}
-              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/60 transition-colors rounded-lg flex items-center gap-3"
-            >
-              <span className="text-lg">💰</span>
-              <div className="flex-1">
-                <p>Meus ganhos</p>
-                <p className="text-xs text-[#2B2233]/50">Histórico de emoções</p>
-              </div>
-              <span className="text-xl">→</span>
-            </button>
+          <div className="pt-6 space-y-2">
+            {MENU_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setOpen(false);
+                  router.push(item.href);
+                }}
+                className="w-full group flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-[#FFF3C9]/50 transition-colors"
+              >
+                {/* Ícone */}
+                <div className="w-10 h-10 rounded-lg bg-[#FFC400]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[#FFC400]/40 transition-colors">
+                  <img
+                    src={item.icon}
+                    alt={item.label}
+                    className="w-6 h-6 object-contain"
+                  />
+                </div>
 
-            {/* Seção: Conta */}
-            <p className="px-4 py-1 text-xs font-display font-bold text-[#2B2233]/50 uppercase mt-2">
-              ⚙️ Conta
-            </p>
-            <button
-              onClick={() => {
-                setOpen(false);
-                router.push("/diario/conta");
-              }}
-              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/60 transition-colors rounded-lg flex items-center gap-3"
-            >
-              <span className="text-lg">👤</span>
-              <div className="flex-1">
-                <p>Meu perfil</p>
-                <p className="text-xs text-[#2B2233]/50">Avatar, humor, dados</p>
-              </div>
-              <span className="text-xl">→</span>
-            </button>
+                {/* Texto */}
+                <div className="flex-1 text-left">
+                  <p className="font-body font-semibold text-[#2B2233] group-hover:text-[#F26A00] transition-colors">
+                    {item.label}
+                  </p>
+                  <p className="text-xs font-body text-[#2B2233]/50">
+                    {item.desc}
+                  </p>
+                </div>
 
-            {/* Seção: Diário */}
-            <p className="px-4 py-1 text-xs font-display font-bold text-[#2B2233]/50 uppercase mt-2">
-              📝 Diário
-            </p>
-            <button
-              onClick={() => {
-                setOpen(false);
-                router.push("/diario");
-              }}
-              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/60 transition-colors rounded-lg flex items-center gap-3"
-            >
-              <span className="text-lg">📒</span>
-              <div className="flex-1">
-                <p>Meus registros</p>
-                <p className="text-xs text-[#2B2233]/50">Glicemia e gráficos</p>
-              </div>
-              <span className="text-xl">→</span>
-            </button>
+                {/* Seta */}
+                <span className="text-[#2B2233]/30 font-display font-bold">→</span>
+              </button>
+            ))}
 
-            <button
-              onClick={() => {
-                setOpen(false);
-                router.push("/diario/lancar");
-              }}
-              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/60 transition-colors rounded-lg flex items-center gap-3"
-            >
-              <span className="text-lg">➕</span>
-              <div className="flex-1">
-                <p>Novo registro</p>
-                <p className="text-xs text-[#2B2233]/50">Registrar glicemia</p>
-              </div>
-              <span className="text-xl">→</span>
-            </button>
+            {/* Divider */}
+            <div className="border-t border-[#2B2233]/10 my-4" />
 
-            <div className="border-t border-[#2B2233]/20 my-3" />
-
+            {/* Logout */}
             <button
               onClick={sair}
-              className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-red-600 hover:bg-red-50 transition-colors rounded-lg flex items-center gap-3"
+              className="w-full px-4 py-3 text-left font-body font-semibold text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             >
-              <span className="text-lg">🚪</span>
-              <p>Sair da conta</p>
+              Sair da conta
             </button>
+          </div>
+
+          {/* Game Dots (Design System Pattern) */}
+          <div className="absolute -top-3 -right-3 flex gap-2">
+            <span className="w-3 h-3 rounded-full border-2 border-[#2B2233] bg-[#EE2B2B]" />
+            <span className="w-3 h-3 rounded-full border-2 border-[#2B2233] bg-[#37B6E6]" />
+            <span className="w-3 h-3 rounded-full border-2 border-[#2B2233] bg-[#8DC63F]" />
           </div>
         </div>
       )}
