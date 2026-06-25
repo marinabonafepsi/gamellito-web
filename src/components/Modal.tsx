@@ -1,6 +1,7 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "@/components/icons";
 
@@ -21,14 +22,17 @@ export function Modal({
   variant = "white",
   className = "",
 }: ModalProps) {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
   const cardVariant = variant === "white" ? "" : `ds-card--${variant}`;
 
-  return (
+  const content = (
     <AnimatePresence>
       {isOpen && (
         <motion.div
           key="modal-backdrop"
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+          className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -43,7 +47,6 @@ export function Modal({
             transition={{ type: "spring", damping: 24, stiffness: 280 }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               type="button"
               onClick={onClose}
@@ -53,18 +56,19 @@ export function Modal({
               <X size={24} />
             </button>
 
-            {/* Title */}
             {title && (
               <h2 className="font-display text-2xl font-bold mb-4" style={{ color: "#2B2233" }}>
                 {title}
               </h2>
             )}
 
-            {/* Content */}
             {children}
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
   );
+
+  if (!mounted) return null;
+  return createPortal(content, document.body);
 }
