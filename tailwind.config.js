@@ -101,6 +101,7 @@ module.exports = {
           purple:           "hsl(var(--gamellito-purple))",
           "purple-light":   "hsl(var(--gamellito-purple-light))",
           "purple-dark":    "#6F567E",
+          cream:            "#FFF3C9",
           space:            "hsl(var(--gamellito-space))",
           green:            "hsl(var(--gamellito-green))",
           blue:             "hsl(var(--gamellito-blue))",

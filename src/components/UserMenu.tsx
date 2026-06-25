@@ -2,8 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
-import { Modal } from "@/components/Modal";
 import { track } from "@/lib/analytics";
 
 export const GAMELLITO_AVATARS = [
@@ -20,10 +20,43 @@ export function getAvatarSrc(key: string | null | undefined): string {
   return found?.src ?? "/assets/gamellito-feliz-mao-na-barriga.svg";
 }
 
+const MENU_ITEMS = [
+  {
+    id: "ganhos",
+    label: "Meus ganhos",
+    desc: "Histórico de emoções",
+    icon: "/assets/app-ui/progress_bar_tex.png",
+    href: "/diario/moedas",
+  },
+  {
+    id: "perfil",
+    label: "Meu perfil",
+    desc: "Avatar e configurações",
+    icon: "/assets/gamellito-corpinho.svg",
+    href: "/diario/conta",
+  },
+  {
+    id: "registros",
+    label: "Meus registros",
+    desc: "Glicemia e gráficos",
+    icon: "/assets/app-ui/Glicosimetro.png",
+    href: "/diario",
+  },
+  {
+    id: "novo",
+    label: "Novo registro",
+    desc: "Registrar glicemia",
+    icon: "/assets/app-ui/Seringa.png",
+    href: "/diario/lancar",
+  },
+];
+
 export default function UserMenu() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [avatarKey, setAvatarKey] = useState<string | null>(null);
+  const [name, setName] = useState<string | null>(null);
+  const [coins, setCoins] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -31,8 +64,15 @@ export default function UserMenu() {
     client.auth.getUser().then(({ data }) => {
       if (!data.user) return;
       const key = data.user?.user_metadata?.avatar as string | undefined;
+      const userName = data.user?.user_metadata?.name as string | undefined;
       setAvatarKey(key ?? "feliz");
+      setName(userName ?? "Usuário");
     });
+
+    fetch("/api/perfil")
+      .then((r) => r.json())
+      .then((d) => { if (typeof d.coins === "number") setCoins(d.coins); })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -53,43 +93,58 @@ export default function UserMenu() {
 
   return (
     <div ref={ref} className="relative">
-      {/* Botão avatar */}
+      {/* Trigger: Avatar + Name */}
       <button
         onClick={() => setOpen(!open)}
-        className="w-10 h-10 rounded-full border-2 border-gamellito-yellow bg-gamellito-yellow/20 overflow-hidden flex items-center justify-center hover:bg-gamellito-yellow/40 transition-colors"
+        className="flex items-center gap-2 px-3 py-1 rounded-full border-2 border-gamellito-yellow bg-gamellito-yellow/20 hover:bg-gamellito-yellow/40 transition-colors"
         aria-label="Menu do usuário"
       >
-        <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-9 h-9 object-contain" />
+        <div className="w-8 h-8 rounded-full border border-gamellito-yellow overflow-hidden flex items-center justify-center bg-white">
+          <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-7 h-7 object-contain" />
+        </div>
+        <span className="text-sm font-body font-semibold text-primary-foreground hidden sm:inline truncate max-w-[120px]">
+          {name}
+        </span>
       </button>
 
-      {/* Dropdown */}
+      {/* Dropdown Menu */}
       {open && (
-        <div className="absolute right-0 top-12 w-48 bg-white border-4 border-[#2B2233] rounded-2xl shadow-lg overflow-hidden z-50">
-          <button
-            onClick={() => {
-              setOpen(false);
-              router.push("/diario/conta");
-            }}
-            className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-[#FFF3C9] transition-colors flex items-center gap-2"
-          >
-            <span>👤</span> Meu perfil
-          </button>
-          <button
-            onClick={() => {
-              setOpen(false);
-              router.push("/diario");
-            }}
-            className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-[#FFF3C9] transition-colors flex items-center gap-2"
-          >
-            <span>📒</span> Meu diário
-          </button>
-          <div className="border-t border-[#2B2233]/20" />
-          <button
-            onClick={sair}
-            className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
-          >
-            <span>🚪</span> Sair
-          </button>
+        <div className="absolute right-0 top-12 w-56 bg-white rounded-lg shadow-xl border border-[#2B2233]/20 z-[9999] overflow-hidden">
+          {/* Header */}
+          <div className="bg-gamellito-cream px-4 py-3 border-b border-[#2B2233]/10">
+            <p className="text-sm font-body font-semibold text-[#2B2233]">{name}</p>
+            {coins !== null && (
+              <p className="text-xs text-[#2B2233]/60 mt-1">🪙 {coins} moedas</p>
+            )}
+          </div>
+
+          {/* Menu Items */}
+          <div className="py-1">
+            {MENU_ITEMS.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setOpen(false);
+                  router.push(item.href);
+                }}
+                className="w-full px-4 py-2 text-left text-sm font-body text-[#2B2233] hover:bg-[#FFF3C9]/50 transition-colors flex items-center gap-2"
+              >
+                <img src={item.icon} alt={item.label} className="w-4 h-4 object-contain" />
+                {item.label}
+              </button>
+            ))}
+
+            {/* Divider */}
+            <div className="border-t border-[#2B2233]/10 my-1" />
+
+            {/* Logout */}
+            <button
+              onClick={sair}
+              className="w-full px-4 py-2 text-left text-sm font-body text-red-600 hover:bg-red-50 transition-colors"
+            >
+              Sair
+            </button>
+          </div>
         </div>
       )}
     </div>
