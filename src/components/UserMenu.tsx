@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { Modal } from "@/components/Modal";
 import { track } from "@/lib/analytics";
 
 export const GAMELLITO_AVATARS = [
@@ -24,6 +23,7 @@ export default function UserMenu() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [avatarKey, setAvatarKey] = useState<string | null>(null);
+  const [coins, setCoins] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,6 +33,11 @@ export default function UserMenu() {
       const key = data.user?.user_metadata?.avatar as string | undefined;
       setAvatarKey(key ?? "feliz");
     });
+
+    fetch("/api/perfil")
+      .then((r) => r.json())
+      .then((d) => { if (typeof d.coins === "number") setCoins(d.coins); })
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -53,7 +58,7 @@ export default function UserMenu() {
 
   return (
     <div ref={ref} className="relative">
-      {/* Botão avatar */}
+      {/* Botão: avatar (trigger) */}
       <button
         onClick={() => setOpen(!open)}
         className="w-10 h-10 rounded-full border-2 border-gamellito-yellow bg-gamellito-yellow/20 overflow-hidden flex items-center justify-center hover:bg-gamellito-yellow/40 transition-colors"
@@ -62,34 +67,83 @@ export default function UserMenu() {
         <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-9 h-9 object-contain" />
       </button>
 
-      {/* Dropdown */}
+      {/* Dropdown: Perfil com moedas */}
       {open && (
-        <div className="absolute right-0 top-12 w-48 bg-white border-4 border-[#2B2233] rounded-2xl shadow-lg overflow-hidden z-50">
-          <button
-            onClick={() => {
-              setOpen(false);
-              router.push("/diario/conta");
-            }}
-            className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-[#FFF3C9] transition-colors flex items-center gap-2"
-          >
-            <span>👤</span> Meu perfil
-          </button>
-          <button
-            onClick={() => {
-              setOpen(false);
-              router.push("/diario");
-            }}
-            className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-[#2B2233] hover:bg-[#FFF3C9] transition-colors flex items-center gap-2"
-          >
-            <span>📒</span> Meu diário
-          </button>
-          <div className="border-t border-[#2B2233]/20" />
-          <button
-            onClick={sair}
-            className="w-full text-left px-4 py-3 text-sm font-body font-semibold text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
-          >
-            <span>🚪</span> Sair
-          </button>
+        <div className="absolute right-0 top-14 w-72 gm-card gm-card--cream z-50">
+          {/* Header: Avatar + Moedas */}
+          <div className="text-center pb-4 border-b-2 border-[#2B2233]/20">
+            {/* Avatar grande */}
+            <div className="flex justify-center mb-3">
+              <div className="w-16 h-16 rounded-full bg-white border-3 border-[#2B2233] flex items-center justify-center">
+                <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-14 h-14 object-contain" />
+              </div>
+            </div>
+
+            {/* Moedas */}
+            {coins !== null && (
+              <div className="bg-[#FFC400]/30 rounded-lg py-2 px-3 inline-block">
+                <p className="text-xs font-body text-[#2B2233]/60">Saldo de moedas</p>
+                <p className="text-xl font-display font-bold text-[#F26A00]">
+                  🪙 {coins}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Menu items */}
+          <div className="pt-4 space-y-1">
+            <button
+              onClick={() => {
+                setOpen(false);
+                router.push("/diario/moedas");
+              }}
+              className="w-full text-left px-4 py-2 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/50 transition-colors rounded-lg flex items-center gap-3"
+            >
+              <span className="text-lg">💰</span>
+              <div>
+                <p>Meus ganhos</p>
+                <p className="text-xs text-[#2B2233]/50">Histórico de emoções</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setOpen(false);
+                router.push("/diario/conta");
+              }}
+              className="w-full text-left px-4 py-2 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/50 transition-colors rounded-lg flex items-center gap-3"
+            >
+              <span className="text-lg">👤</span>
+              <div>
+                <p>Meu perfil</p>
+                <p className="text-xs text-[#2B2233]/50">Avatar e settings</p>
+              </div>
+            </button>
+
+            <button
+              onClick={() => {
+                setOpen(false);
+                router.push("/diario");
+              }}
+              className="w-full text-left px-4 py-2 text-sm font-body font-semibold text-[#2B2233] hover:bg-white/50 transition-colors rounded-lg flex items-center gap-3"
+            >
+              <span className="text-lg">📒</span>
+              <div>
+                <p>Meu diário</p>
+                <p className="text-xs text-[#2B2233]/50">Registros de glicemia</p>
+              </div>
+            </button>
+
+            <div className="border-t border-[#2B2233]/20 my-2" />
+
+            <button
+              onClick={sair}
+              className="w-full text-left px-4 py-2 text-sm font-body font-semibold text-red-600 hover:bg-red-50 transition-colors rounded-lg flex items-center gap-3"
+            >
+              <span className="text-lg">🚪</span>
+              <p>Sair</p>
+            </button>
+          </div>
         </div>
       )}
     </div>

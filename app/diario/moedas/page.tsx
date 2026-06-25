@@ -54,58 +54,68 @@ export default function MoedasPage() {
   const totalGanho = humores.reduce((sum, h) => sum + h.coins_ganhos, 0);
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8">
-      {/* Cabeçalho */}
-      <header className="mb-8">
-        <h1 className="text-3xl font-display font-bold text-[#2B2233] mb-2">
-          Minhas Moedas
+    <div className="max-w-xl mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="mb-12">
+        <h1 className="text-4xl font-display font-bold text-[#2B2233] mb-2">
+          Meus ganhos
         </h1>
         <p className="text-sm font-body text-[#2B2233]/60">
-          Acompanhe seu acúmulo e histórico de emoções
-        </p>
-      </header>
-
-      {/* Saldo total */}
-      <div className="gm-card gm-card--sun mb-8 text-center">
-        <div className="text-5xl font-display font-black text-[#2B2233] mb-2">
-          🪙
-        </div>
-        <p className="text-sm font-body text-[#2B2233]/60 mb-1">Saldo total</p>
-        <p className="text-4xl font-display font-bold text-[#F26A00]">
-          {coins !== null ? coins : "0"}
-        </p>
-        <p className="text-xs font-body text-[#2B2233]/50 mt-3">
-          +{totalGanho} moedas nos últimos 30 dias
+          Acompanhe o acúmulo de moedas e seu histórico de emoções
         </p>
       </div>
 
+      {/* Saldo Total - Destaque */}
+      <div className="gm-card gm-card--sun mb-12">
+        <div className="text-center space-y-4">
+          <div className="text-6xl">🪙</div>
+
+          <div>
+            <p className="text-sm font-body text-[#2B2233]/60 mb-1">
+              Saldo total
+            </p>
+            <p className="text-5xl font-display font-black text-[#F26A00]">
+              {coins !== null ? coins : "0"}
+            </p>
+          </div>
+
+          <div className="pt-3 border-t-2 border-[#FFC400]/40">
+            <p className="text-xs font-body text-[#2B2233]/50">
+              +{totalGanho} moedas nos últimos 30 dias
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Histórico */}
-      <div className="mb-8">
-        <h2 className="text-lg font-display font-bold text-[#2B2233] mb-4">
+      <div>
+        <h2 className="text-2xl font-display font-bold text-[#2B2233] mb-6">
           Histórico de emoções
         </h2>
 
         {loading ? (
-          <p className="text-sm font-body text-[#2B2233]/50 text-center py-8">
-            Carregando...
-          </p>
-        ) : humores.length === 0 ? (
-          <div className="gm-card gm-card--cream text-center py-8">
-            <p className="text-sm font-body text-[#2B2233]/60 mb-2">
-              Nenhum registro de humor ainda
+          <div className="gm-card text-center py-12">
+            <p className="text-sm font-body text-[#2B2233]/50">
+              Carregando...
             </p>
-            <p className="text-xs font-body text-[#2B2233]/40">
-              Comece a marcar seus humores para ganhar moedas!
+          </div>
+        ) : humores.length === 0 ? (
+          <div className="gm-card gm-card--cream text-center py-12">
+            <p className="text-sm font-body text-[#2B2233]/60 mb-3">
+              😔 Nenhum registro de humor ainda
+            </p>
+            <p className="text-xs font-body text-[#2B2233]/40 mb-6">
+              Comece a marcar como você se sente para ganhar moedas!
             </p>
             <Link
               href="/diario/conta"
-              className="gm-btn gm-btn--primary gm-btn--md mt-4 inline-block"
+              className="gm-btn gm-btn--primary gm-btn--md inline-block"
             >
-              Marcar humor
+              Marcar humor agora
             </Link>
           </div>
         ) : (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {humores.map((h) => {
               const info = HUMOR_LABELS[h.humor] || { label: h.humor, emoji: "❓" };
               const dataLocal = new Date(h.data_local + "T00:00:00");
@@ -113,16 +123,15 @@ export default function MoedasPage() {
                 weekday: "short",
                 day: "numeric",
                 month: "short",
-                year: "numeric",
               });
 
               return (
                 <div
                   key={h.id}
-                  className="gm-card gm-card--cream flex items-center justify-between"
+                  className="gm-card gm-card--cream hover:shadow-md transition-shadow flex items-center justify-between"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">{info.emoji}</span>
+                  <div className="flex items-center gap-4">
+                    <span className="text-3xl">{info.emoji}</span>
                     <div>
                       <p className="font-body font-semibold text-[#2B2233]">
                         {info.label}
@@ -132,13 +141,9 @@ export default function MoedasPage() {
                       </p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="font-display font-bold text-[#F26A00] text-lg">
-                      +{h.coins_ganhos}
-                    </p>
-                    <p className="text-xs font-body text-[#2B2233]/50">
-                      🪙
-                    </p>
+                  <div className="text-right flex items-center gap-2">
+                    <span className="text-2xl">+{h.coins_ganhos}</span>
+                    <span className="text-xl">🪙</span>
                   </div>
                 </div>
               );
@@ -148,10 +153,10 @@ export default function MoedasPage() {
       </div>
 
       {/* Footer */}
-      <div className="text-center">
+      <div className="mt-12 pt-8 border-t border-[#2B2233]/10 text-center">
         <Link
           href="/diario"
-          className="text-sm font-body text-[#2B2233]/50 hover:text-[#2B2233] transition-colors"
+          className="inline-flex items-center gap-2 text-sm font-body font-semibold text-[#2B2233] hover:text-[#F26A00] transition-colors"
         >
           ← Voltar ao diário
         </Link>

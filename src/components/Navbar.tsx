@@ -6,7 +6,6 @@ import { Menu, X } from "@/components/icons";
 import { track } from "@/lib/analytics";
 import { createClient } from "@/lib/supabase/client";
 import UserMenu from "@/components/UserMenu";
-import CoinsButton from "@/components/CoinsButton";
 
 const navLinks = [
   { label: "Início",        href: "/#inicio" },
@@ -65,10 +64,7 @@ const Navbar = () => {
             </a>
           ))}
           {loggedIn ? (
-            <div className="flex items-center gap-3">
-              <CoinsButton />
-              <UserMenu />
-            </div>
+            <UserMenu />
           ) : (
             <a
               href="/diario/login"
