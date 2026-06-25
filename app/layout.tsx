@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./design-system.css";
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { AnalyticsProvider } from "@/components/AnalyticsProvider";

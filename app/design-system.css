@@ -1,0 +1,300 @@
+/* Gamellito Design System — Design tokens and global styles */
+
+:root {
+  /* ===== COLORS ===== */
+  /* Primary */
+  --color-sun:      #FFC400;
+  --color-orange:   #F26A00;
+  --color-lilac:    #9B8CF0;
+
+  /* Support */
+  --color-purple:   #6E59C9;
+  --color-cream:    #FFF3C9;
+  --color-ink:      #2B2233;
+  --color-white:    #FFFFFF;
+
+  /* Game accents (volinhas) */
+  --game-red:       #EE2B2B;
+  --game-blue:      #37B6E6;
+  --game-green:     #8DC63F;
+  --game-pink:      #F25CA2;
+  --game-magenta:   #C82FA0;
+
+  /* Tints */
+  --color-sun-deep:    #E5A800;
+  --color-orange-deep: #D25A00;
+  --color-lilac-soft:  #C7BEF7;
+  --color-cream-deep:  #FBE7A6;
+  --color-ink-60:      rgba(43, 34, 51, 0.60);
+  --color-ink-12:      rgba(43, 34, 51, 0.12);
+
+  /* Semantic */
+  --bg-page:        var(--color-cream);
+  --bg-sun:         var(--color-sun);
+  --bg-lilac:       var(--color-lilac);
+  --surface-card:   var(--color-white);
+  --surface-cream:  var(--color-cream);
+  --text-body:      var(--color-ink);
+  --text-muted:     var(--color-ink-60);
+  --text-on-dark:   var(--color-white);
+  --text-on-yellow: var(--color-ink);
+  --text-on-lilac:  var(--color-white);
+  --text-heading:   var(--color-purple);
+  --accent:         var(--color-orange);
+  --accent-hover:   var(--color-orange-deep);
+  --accent-contrast: var(--color-white);
+  --border-ink:     var(--color-ink);
+  --divider:        var(--color-ink-12);
+
+  /* ===== TYPOGRAPHY ===== */
+  --font-display: 'Baloo 2', 'Arial Black', system-ui, sans-serif;
+  --font-body:    'Nunito', Arial, system-ui, sans-serif;
+  --fw-regular:   400;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extra:     800;
+  --fw-black:     900;
+
+  /* ===== EFFECTS ===== */
+  --radius-sm:   10px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+  --radius-xl:   32px;
+  --radius-pill: 999px;
+
+  /* Cartoon outline */
+  --outline-w:        3px;
+  --outline-w-thick:  4px;
+  --border-cartoon:        var(--outline-w) solid var(--color-ink);
+  --border-cartoon-thick:  var(--outline-w-thick) solid var(--color-ink);
+
+  /* Pop shadow — no blur, offset only */
+  --shadow-pop:      4px 4px 0 var(--color-ink);
+  --shadow-pop-lg:   6px 6px 0 var(--color-ink);
+  --shadow-pop-sm:   2px 2px 0 var(--color-ink);
+  --shadow-pop-press: 1px 1px 0 var(--color-ink);
+  --shadow-soft:     0 8px 24px rgba(43, 34, 51, 0.16);
+
+  /* Motion */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast:    120ms;
+  --dur-base:    200ms;
+
+  /* ===== SPACING ===== */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --container-narrow: 640px;
+  --container-text:   720px;
+  --container-wide:   1080px;
+
+  --control-sm: 40px;
+  --control-md: 48px;
+  --control-lg: 56px;
+}
+
+/* ===== BUTTON COMPONENT ===== */
+.gm-btn {
+  --_bg: var(--color-orange);
+  --_fg: var(--color-white);
+
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  border: var(--border-cartoon);
+  border-radius: var(--radius-pill);
+  background: var(--_bg);
+  color: var(--_fg);
+  box-shadow: var(--shadow-pop);
+
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform var(--dur-fast) var(--ease-out),
+              box-shadow var(--dur-fast) var(--ease-out),
+              background var(--dur-fast) var(--ease-out);
+
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  padding: 0 34px;
+  height: var(--control-lg);
+  font-size: 1.25rem;
+}
+
+.gm-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-pop-lg);
+}
+
+.gm-btn:active {
+  transform: translate(3px, 3px);
+  box-shadow: var(--shadow-pop-press);
+}
+
+.gm-btn:focus-visible {
+  outline: 3px solid var(--color-purple);
+  outline-offset: 3px;
+}
+
+.gm-btn[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: var(--shadow-pop-sm);
+}
+
+/* Variants */
+.gm-btn--primary { --_bg: var(--color-orange); --_fg: var(--color-white); }
+.gm-btn--sun     { --_bg: var(--color-sun); --_fg: var(--color-ink); }
+.gm-btn--lilac   { --_bg: var(--color-lilac); --_fg: var(--color-white); }
+.gm-btn--ghost   { --_bg: var(--color-white); --_fg: var(--color-ink); }
+.gm-btn--ink     { --_bg: var(--color-ink); --_fg: var(--color-white); }
+
+/* Sizes */
+.gm-btn--sm { height: var(--control-sm); padding: 0 18px; font-size: 0.9375rem; }
+.gm-btn--md { height: var(--control-md); padding: 0 26px; font-size: 1.0625rem; }
+.gm-btn--lg { height: var(--control-lg); padding: 0 34px; font-size: 1.25rem; }
+
+/* ===== CARD COMPONENT ===== */
+.gm-card {
+  position: relative;
+  background: var(--surface-card);
+  border: var(--border-cartoon);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-pop);
+  padding: var(--space-6);
+}
+
+.gm-card--cream { background: var(--color-cream); }
+.gm-card--sun   { background: var(--color-sun); }
+.gm-card--lilac { background: var(--color-lilac); color: var(--color-white); }
+.gm-card--flat  { box-shadow: none; }
+
+.gm-card--halo::before {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  z-index: 0;
+  background: var(--color-cream);
+  border-radius: var(--radius-md);
+}
+
+.gm-card > * { position: relative; z-index: 1; }
+
+.gm-card__dots {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+
+.gm-card__dots > span {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--color-ink);
+}
+
+/* ===== BADGE COMPONENT ===== */
+.gm-badge {
+  --_bg: var(--color-cream);
+  --_fg: var(--color-ink);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  font-family: var(--font-body);
+  font-weight: var(--fw-extra);
+  font-size: 0.8125rem;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--_bg);
+  color: var(--_fg);
+  line-height: 1;
+}
+
+.gm-badge--outline { border: 2px solid var(--color-ink); }
+.gm-badge--sun     { --_bg: var(--color-sun); --_fg: var(--color-ink); }
+.gm-badge--lilac   { --_bg: var(--color-lilac); --_fg: var(--color-white); }
+.gm-badge--orange  { --_bg: var(--color-orange); --_fg: var(--color-white); }
+.gm-badge--cream   { --_bg: var(--color-cream); --_fg: var(--color-purple); }
+.gm-badge--ink     { --_bg: var(--color-ink); --_fg: var(--color-white); }
+.gm-badge--red     { --_bg: var(--game-red); --_fg: var(--color-white); }
+.gm-badge--blue    { --_bg: var(--game-blue); --_fg: var(--color-ink); }
+.gm-badge--green   { --_bg: var(--game-green); --_fg: var(--color-ink); }
+.gm-badge--pink    { --_bg: var(--game-pink); --_fg: var(--color-white); }
+
+.gm-badge__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+/* ===== STAT NUMBER COMPONENT ===== */
+.gm-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gm-stat--center {
+  align-items: center;
+  text-align: center;
+}
+
+.gm-stat__value {
+  font-family: var(--font-display);
+  font-weight: var(--fw-black);
+  font-size: clamp(3rem, 7vw, 5rem);
+  line-height: 0.95;
+  color: var(--_c, var(--color-orange));
+  -webkit-text-stroke: 2px var(--color-ink);
+  paint-order: stroke fill;
+}
+
+.gm-stat__label {
+  font-family: var(--font-body);
+  font-weight: var(--fw-bold);
+  font-size: 1.0625rem;
+  color: var(--text-body);
+  max-width: 18ch;
+}
+
+/* Game dots decoration */
+.gm-dots {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.gm-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--color-ink);
+}
+
+.gm-dot--red      { background: var(--game-red); }
+.gm-dot--blue     { background: var(--game-blue); }
+.gm-dot--green    { background: var(--game-green); }
+.gm-dot--pink     { background: var(--game-pink); }
+.gm-dot--magenta  { background: var(--game-magenta); }

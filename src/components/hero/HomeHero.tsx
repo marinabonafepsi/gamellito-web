@@ -58,13 +58,13 @@ export function HomeHero() {
           <div className="flex flex-col gap-4 sm:flex-row justify-center lg:justify-start">
             <Link
               href="/para-familias"
-              className="ds-btn ds-btn--lg"
+              className="gm-btn gm-btn--primary gm-btn--lg"
             >
               Conheça os programas →
             </Link>
             <Link
               href="/#contato"
-              className="ds-btn ds-btn--sun ds-btn--lg"
+              className="gm-btn gm-btn--sun gm-btn--lg"
             >
               Seja um parceiro
             </Link>
