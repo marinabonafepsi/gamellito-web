@@ -52,13 +52,13 @@ const Navbar = () => {
         </a>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-3">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => handleNavClick(link.label, link.href)}
-              className="px-3 py-2 font-body text-sm font-semibold text-white/90 hover:bg-white/15 hover:rounded-full transition-all duration-150"
+              className="gm-btn gm-btn--nav gm-btn--md"
             >
               {link.label}
             </a>
