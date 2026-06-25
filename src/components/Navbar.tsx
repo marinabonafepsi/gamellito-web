@@ -34,14 +34,15 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 overflow-hidden">
-      {/* Navbar background SVG */}
-      <img
-        src="/characters/gamellito-navbar-bg.svg"
-        alt=""
-        aria-hidden
-        className="absolute inset-0 w-full h-full object-cover object-left"
-      />
+    <nav className="fixed top-0 left-0 right-0 z-50">
+      {/* Navbar background SVG — overflow-hidden isolado para não cortar o dropdown */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
+        <img
+          src="/characters/gamellito-navbar-bg.svg"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover object-left"
+        />
+      </div>
       <div className="relative container mx-auto px-6 py-3 flex items-center justify-between">
         <a href="/" className="flex items-center gap-3 min-w-0" onClick={() => handleNavClick("Logo", "/")} title="Voltar para home">
           <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="h-14 w-14 object-contain flex-shrink-0" />
@@ -96,10 +97,13 @@ const Navbar = () => {
           >
             <div className="px-4 py-4 flex flex-col gap-3">
               {loggedIn ? (
-                <div className="flex items-center gap-3 mb-1">
-                  <UserMenu />
-                  <span className="font-body text-sm font-semibold text-primary-foreground/80">Minha conta</span>
-                </div>
+                <a
+                  href="/diario/conta"
+                  onClick={() => handleNavClick("Conta", "/diario/conta")}
+                  className="ds-btn w-full justify-center"
+                >
+                  Minha conta
+                </a>
               ) : (
                 <a
                   href="/diario/login"
