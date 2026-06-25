@@ -53,13 +53,13 @@ const Navbar = () => {
         </a>
 
         {/* Desktop */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden md:flex items-center gap-3">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               onClick={() => handleNavClick(link.label, link.href)}
-              className="font-body text-sm font-semibold text-primary-foreground/95 hover:text-primary hover:-translate-y-px hover:shadow-[0_4px_0_rgba(255,165,0,0.3)] transition-all duration-150"
+              className="px-4 py-2 font-body text-sm font-semibold text-[#2B2233] border-2 border-[#2B2233] rounded-full hover:bg-[#FFC400] hover:border-[#2B2233] transition-all duration-150"
             >
               {link.label}
             </a>
@@ -73,7 +73,7 @@ const Navbar = () => {
             <a
               href="/diario/login"
               onClick={() => handleNavClick("Login", "/diario/login")}
-              className="ds-btn"
+              className="gm-btn gm-btn--primary gm-btn--md"
             >
               Login
             </a>
