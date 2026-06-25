@@ -72,7 +72,7 @@ export function HomeHero() {
         </div>
 
         {/* Personagem: só a imagem flutuando, como no Lovable */}
-        <div className="flex-shrink-0">
+        <div className="flex-shrink-0 -ml-6 lg:-ml-[25px]">
           <div className="animate-float relative w-64 md:w-80 lg:w-96" style={{ height: 384 }}>
             <Image
               src={siteAssets.gamellitoContente}
