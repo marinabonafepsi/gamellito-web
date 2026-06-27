@@ -92,6 +92,38 @@ export default function HistoricoPage() {
           </Link>
         </header>
 
+        {/* Gráfico */}
+        {registros.length > 0 && (
+          <div className="bg-white rounded-2xl border-[2px] border-[#2B2233] shadow-[2px_2px_0_#2B2233] p-4 mb-6">
+            <p className="text-xs font-body font-semibold text-[#2B2233]/60 mb-3">Últimos valores</p>
+            <div className="flex items-end justify-between gap-1 h-32">
+              {registros.slice(0, 14).reverse().map((r, i) => {
+                const minVal = Math.min(...registros.map(x => x.valor));
+                const maxVal = Math.max(...registros.map(x => x.valor));
+                const range = maxVal - minVal || 1;
+                const percent = ((r.valor - minVal) / range) * 100;
+                const color = r.valor < 70 ? "#EE2B2B" : r.valor > 180 ? "#F26A00" : "#8DC63F";
+
+                return (
+                  <div
+                    key={i}
+                    className="flex-1 rounded-t-lg"
+                    style={{
+                      height: `${Math.max(20, percent)}%`,
+                      background: color,
+                    }}
+                    title={`${r.valor} mg/dL`}
+                  />
+                );
+              })}
+            </div>
+            <div className="flex justify-between text-xs font-body text-[#2B2233]/60 mt-2">
+              <span>Min: {Math.min(...registros.map(x => x.valor))} mg/dL</span>
+              <span>Máx: {Math.max(...registros.map(x => x.valor))} mg/dL</span>
+            </div>
+          </div>
+        )}
+
         {/* Filtro de período */}
         <div className="flex gap-2 mb-6">
           {PERIODOS.map(({ id, label }) => (
