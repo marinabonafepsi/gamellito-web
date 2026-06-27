@@ -140,14 +140,3 @@ export default function UserMenu() {
     </div>
   );
 }
-              onClick={sair}
-              className="w-full px-4 py-2 text-left text-sm font-body text-red-600 hover:bg-red-50 transition-colors"
-            >
-              Sair
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
