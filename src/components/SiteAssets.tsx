@@ -26,8 +26,8 @@ export const siteAssets = {
   gamellitoContente: "/assets/gamellito-contente.svg",
   /** Dúvidas, FAQ, "não entendeu" – frustração/confusão */
   gamellitoFurioso: "/assets/gamellito-furioso.svg",
-  /** Personagem corpo inteiro – destaque, hero, novas variantes */
-  gamellitoCorpinho: "/assets/gamellito-corpinho.svg",
+  /** Personagem com caixa – ação, movimento, interação */
+  gamellitoComCaixa: "/assets/gamellito-e-amigos.svg",
   /** Sobre, Parceiros, Prêmios – cenas em grupo */
   gamellitoEAmigos: "/assets/gamellito-e-amigos.svg",
   /** Soluções / Educação – explicar diabetes (pâncreas) */

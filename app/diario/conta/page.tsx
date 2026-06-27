@@ -10,7 +10,7 @@ import { track } from "@/lib/analytics";
 // Humores disponíveis — mesma lista dos avatares, mais "normal"
 const HUMORES = [
   ...GAMELLITO_AVATARS,
-  { key: "normal", label: "Normal", diagnostico: "Humor: Normal", src: "/assets/gamellito-corpinho.svg" },
+  { key: "normal", label: "Normal", diagnostico: "Humor: Normal", src: "/assets/gamellito-contente.svg" },
 ] as const;
 
 type HumorKey = typeof HUMORES[number]["key"];

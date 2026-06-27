@@ -9,16 +9,13 @@ interface GameStartScreenEmbedProps {
 
 const decorativeAssets = [
   { src: "/assets/gamellito-feliz-mao-na-barriga.svg", alt: "Gamellito feliz" },
-  { src: "/assets/gamellito-corpinho.svg", alt: "Gamellito corpo inteiro" },
+  { src: "/assets/gamellito-e-amigos.svg", alt: "Gamellito com caixa" },
   { src: "/assets/mae-gamellito-glicemia.svg", alt: "Mae e Gamellito medindo glicemia" },
   { src: "/assets/geladeira.svg", alt: "Geladeira de alimentos" },
   { src: "/assets/medico-mae-gamellito.svg", alt: "Medico, mae e Gamellito" },
   { src: "/assets/controle-videogame.svg", alt: "Controle de videogame" },
   { src: "/assets/bicicleta.svg", alt: "Bicicleta" },
-  { src: "/assets/pancreas-preguicoso.svg", alt: "Pancreas preguicoso" },
   { src: "/assets/gamellito-furioso.svg", alt: "Gamellito furioso" },
-  { src: "/assets/gamellito-e-amigos.svg", alt: "Gamellito e amigos" },
-  { src: "/assets/gamellito-feliz-mao-na-barriga.svg", alt: "Gamellito" },
 ] as const;
 
 export function GameStartScreenEmbed({ gameUrl }: GameStartScreenEmbedProps) {
