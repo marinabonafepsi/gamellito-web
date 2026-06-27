@@ -382,20 +382,24 @@
     transform: translate(2px, 2px);
   }
 
-  /* Primary button (Login) */
+  /* Primary button (Login) — Laranja sólido chapado */
   .gm-btn--primary {
     background: #F26A00;
     color: #FFFFFF;
     border: 3px solid #2B2233;
     box-shadow: 4px 4px 0 #2B2233;
+    font-weight: 800;
+    letter-spacing: 0.5px;
   }
 
   .gm-btn--primary:hover {
+    background: #D25A00;
     transform: translate(-1px, -1px);
     box-shadow: 6px 6px 0 #2B2233;
   }
 
   .gm-btn--primary:active {
+    background: #B84900;
     transform: translate(3px, 3px);
     box-shadow: 1px 1px 0 #2B2233;
   }

@@ -58,7 +58,7 @@ const Navbar = () => {
               key={link.href}
               href={link.href}
               onClick={() => handleNavClick(link.label, link.href)}
-              className="gm-btn gm-btn--nav gm-btn--md"
+              className="px-3 py-2 font-body text-sm font-semibold text-white/90 hover:bg-white/15 hover:rounded-full transition-all duration-150"
             >
               {link.label}
             </a>
