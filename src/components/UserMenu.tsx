@@ -107,9 +107,18 @@ export default function UserMenu() {
         </span>
       </button>
 
+      {/* Backdrop */}
+      {open && (
+        <div
+          className="fixed inset-0 z-[99998]"
+          onClick={() => setOpen(false)}
+          aria-hidden
+        />
+      )}
+
       {/* Dropdown Menu */}
       {open && (
-        <div className="absolute right-0 top-12 w-56 bg-white rounded-lg shadow-xl border border-[#2B2233]/20 z-[9999] overflow-hidden">
+        <div className="fixed right-6 top-20 w-56 bg-white rounded-lg shadow-xl border border-[#2B2233]/20 z-[99999] overflow-hidden">
           {/* Header */}
           <div className="bg-gamellito-cream px-4 py-3 border-b border-[#2B2233]/10">
             <p className="text-sm font-body font-semibold text-[#2B2233]">{name}</p>
