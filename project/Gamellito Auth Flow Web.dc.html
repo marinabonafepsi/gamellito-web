@@ -56,8 +56,8 @@
       <h1 style="font-family:var(--font-display);font-weight:800;font-size:46px;line-height:1.04;color:var(--color-purple);margin:26px 0 10px">Quem é você?</h1>
       <p style="margin:0 auto 40px;font-size:18px;line-height:1.5;color:var(--color-ink);max-width:46ch">Escolha seu perfil pra gente começar essa aventura juntos. Cada um vê o Gamellito do seu jeito.</p>
 
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
-        <sc-for list="{{ roles }}" as="r" hint-placeholder-count="4">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <sc-for list="{{ roles }}" as="r" hint-placeholder-count="3">
           <button onClick="{{ r.onPick }}" style="display:flex;flex-direction:column;gap:14px;align-items:flex-start;text-align:left;padding:24px;border:3px solid var(--color-ink);border-radius:24px;box-shadow:5px 5px 0 var(--color-ink);cursor:pointer;min-height:236px;background:{{ r.bg }};color:{{ r.fg }};transition:transform .15s cubic-bezier(.22,1,.36,1),box-shadow .15s" style-hover="transform:translate(-3px,-3px);box-shadow:9px 9px 0 var(--color-ink)" style-active="transform:translate(4px,4px);box-shadow:1px 1px 0 var(--color-ink)">
             <span style="font-size:34px;width:64px;height:64px;display:flex;align-items:center;justify-content:center;background:var(--color-white);border:3px solid var(--color-ink);border-radius:18px">{{ r.emoji }}</span>
             <span style="font-family:var(--font-display);font-weight:700;font-size:23px;line-height:1.05">{{ r.name }}</span>
@@ -311,10 +311,9 @@ class Component extends DCLogic {
   };
 
   ROLES = [
-    { id:'familia',     emoji:'👨‍👩‍👧', name:'Família',      desc:'Pai, mãe ou cuidador acompanhando de perto o dia a dia.', bg:'var(--color-sun)',    fg:'var(--color-ink)'  },
-    { id:'profissional',emoji:'🩺',     name:'Profissional', desc:'Médico ou enfermeiro no cuidado clínico.',   bg:'var(--color-lilac)',  fg:'var(--color-white)'},
-    { id:'educador',    emoji:'📚',     name:'Educador',     desc:'Quem ensina sobre diabetes tipo 1.',          bg:'var(--color-orange)', fg:'var(--color-white)'},
-    { id:'instituicao', emoji:'🏥',     name:'Instituição',  desc:'Escola, clínica ou ONG parceira.',            bg:'var(--color-purple)', fg:'var(--color-white)'},
+    { id:'familia',     segment:'B2C', emoji:'👨‍👩‍👧', name:'Família',      desc:'Pai, mãe ou cuidador acompanhando de perto o dia a dia.', bg:'var(--color-sun)',    fg:'var(--color-ink)'  },
+    { id:'profissional',segment:'B2B', emoji:'🩺',     name:'Profissional', desc:'Médico, enfermeiro ou educador no cuidado e ensino sobre diabetes.', bg:'var(--color-lilac)',  fg:'var(--color-white)'},
+    { id:'instituicao', segment:'B2E', emoji:'🏥',     name:'Instituição',  desc:'Escola, clínica ou ONG parceira.',            bg:'var(--color-purple)', fg:'var(--color-white)'},
   ];
 
   PERIODS = [

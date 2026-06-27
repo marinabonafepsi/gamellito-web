@@ -1,0 +1,9 @@
+{
+  "outputDirectory": "project",
+  "buildCommand": null,
+  "installCommand": null,
+  "framework": null,
+  "rewrites": [
+    { "source": "/", "destination": "/Gamellito Auth Flow Web.dc.html" }
+  ]
+}
