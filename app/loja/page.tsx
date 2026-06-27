@@ -358,7 +358,7 @@ export default function LojaPage() {
             </div>
             <div className="flex-shrink-0 flex gap-4 items-end">
               <AssetImage
-                asset="gamellitoCorpinho"
+                asset="gamellitoContente"
                 alt="Gamellito"
                 className="w-32 h-auto drop-shadow-2xl"
                 width={128}
