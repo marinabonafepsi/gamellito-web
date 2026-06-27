@@ -16,7 +16,6 @@
  *                            pancreasPreguicoso (educação diabetes)
  * Dúvidas / FAQ           → gamellitoFurioso (quando "não entendeu nada")
  * Prêmios / Parceiros     → gamellitoEAmigos (juntos, conquistas)
- * Personagem corpo inteiro → gamellitoCorpinho (destaque, hero alternativo)
  * Nav/logo — Gamellito feliz mão na barriga → gamellitoFelizMaoNaBarriga
  */
 export const siteAssets = {
@@ -72,8 +71,6 @@ export const siteAssets = {
   diagnosticoAdaptacao: "/characters/gamellito-diagnostico-adaptacao.svg",
   /** Pâncreas ensinando na lousa */
   pancreasComLousa: "/characters/gamellito-pancreas-lousa.svg",
-  /** Personagem corpo inteiro – destaque, hero alternativo */
-  gamellitoCorpinho: "/assets/gamellito-corpinho.svg",
 } as const;
 
 export type SiteAssetKey = keyof typeof siteAssets;

@@ -3,20 +3,16 @@
 import Image from "next/image";
 import { siteAssets, type SiteAssetKey } from "@/components/SiteAssets";
 
-/** Variantes do personagem com asset próprio; use assetKey para qualquer outro do SiteAssets (ex.: gamellitoCorpinho). */
-export type GamellitoVariant = "contente" | "furioso" | "corpinho";
+export type GamellitoVariant = "contente" | "furioso";
 
 const ASSETS: Record<GamellitoVariant, string> = {
   contente: siteAssets.gamellitoContente,
   furioso: siteAssets.gamellitoFurioso,
-  corpinho: siteAssets.gamellitoCorpinho,
 };
 
-/** Chaves de SiteAssets que são formas do Gamellito (personagem) — para usar em assetKey */
 export const GAMELLITO_ASSET_KEYS: SiteAssetKey[] = [
   "gamellitoContente",
   "gamellitoFurioso",
-  "gamellitoCorpinho",
 ];
 
 interface GamellitoCharacterProps {
@@ -35,7 +31,6 @@ interface GamellitoCharacterProps {
 const defaultAlt: Record<GamellitoVariant, string> = {
   contente: "Gamellito contente - mascote",
   furioso: "Gamellito furioso - mascote",
-  corpinho: "Gamellito - personagem corpo inteiro",
 };
 
 export default function GamellitoCharacter({

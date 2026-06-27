@@ -31,7 +31,7 @@ export default function ConsentimentoPage() {
       <div className="ds-card w-full max-w-md p-8 md:p-10 flex flex-col gap-6">
 
         <div className="text-center">
-          <AssetImage asset="gamellitoCorpinho" alt="Gamellito" className="w-16 h-auto mx-auto" width={64} height={64} />
+          <AssetImage asset="gamellitoContente" alt="Gamellito" className="w-16 h-auto mx-auto" width={64} height={64} />
           <h1 className="text-2xl font-display font-bold mt-3" style={{ color: "#2B2233" }}>
             Antes de começar
           </h1>

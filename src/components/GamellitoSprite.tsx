@@ -10,7 +10,7 @@ export function GamellitoSprite({ className = "" }: { className?: string }) {
       className="flex justify-center items-center"
     >
       <img
-        src={siteAssets.gamellitoCorpinho}
+        src={siteAssets.gamellitoContente}
         alt="Gamellito"
         className={className}
         style={{ width: 200, height: "auto" }}

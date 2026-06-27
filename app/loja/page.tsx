@@ -78,7 +78,7 @@ const produtosEmBreve: Produto[] = [
       "A pelúcia oficial do Gamellito. Material macio e seguro — o companheiro perfeito para crianças que vivem com DM1 se sentirem acompanhadas.",
     tag: "Muito pedido",
     tagColor: "bg-gamellito-orange",
-    asset: "gamellitoCorpinho",
+    asset: "gamellitoContente",
     disponibilidade: "em-breve",
   },
   {
