@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { track } from "@/lib/analytics";
+import { TrendingUp, User, Activity, Plus, LogOut } from "lucide-react";
 
 export const GAMELLITO_AVATARS = [
   { key: "feliz",   label: "Feliz",      src: "/assets/gamellito-feliz-mao-na-barriga.svg" },
@@ -21,34 +22,10 @@ export function getAvatarSrc(key: string | null | undefined): string {
 }
 
 const MENU_ITEMS = [
-  {
-    id: "ganhos",
-    label: "Meus ganhos",
-    desc: "Histórico de emoções",
-    icon: "/assets/app-ui/progress_bar_tex.png",
-    href: "/diario/moedas",
-  },
-  {
-    id: "perfil",
-    label: "Meu perfil",
-    desc: "Avatar e configurações",
-    icon: "/assets/gamellito-corpinho.svg",
-    href: "/diario/conta",
-  },
-  {
-    id: "registros",
-    label: "Meus registros",
-    desc: "Glicemia e gráficos",
-    icon: "/assets/app-ui/Glicosimetro.png",
-    href: "/diario",
-  },
-  {
-    id: "novo",
-    label: "Novo registro",
-    desc: "Registrar glicemia",
-    icon: "/assets/app-ui/Seringa.png",
-    href: "/diario/lancar",
-  },
+  { id: "ganhos",    label: "Meus ganhos",      icon: TrendingUp, href: "/diario/moedas" },
+  { id: "perfil",    label: "Meu perfil",       icon: User,       href: "/diario/conta" },
+  { id: "registros", label: "Meus registros",   icon: Activity,   href: "/diario" },
+  { id: "novo",      label: "Novo registro",    icon: Plus,       href: "/diario/lancar" },
 ];
 
 export default function UserMenu() {
@@ -116,38 +93,53 @@ export default function UserMenu() {
         />
       )}
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu — Design System Card */}
       {open && (
-        <div className="fixed right-6 top-20 w-56 bg-white rounded-lg shadow-xl border border-[#2B2233]/20 z-[99999] overflow-hidden">
+        <div className="fixed right-6 top-20 w-64 ds-card z-[99999] overflow-hidden">
           {/* Header */}
-          <div className="bg-gamellito-cream px-4 py-3 border-b border-[#2B2233]/10">
-            <p className="text-sm font-body font-semibold text-[#2B2233]">{name}</p>
+          <div className="px-4 py-3 border-b-2 border-[#2B2233]/10" style={{ background: "#FFF3C9" }}>
+            <p className="text-sm font-body font-bold text-[#2B2233]">{name}</p>
             {coins !== null && (
-              <p className="text-xs text-[#2B2233]/60 mt-1">🪙 {coins} moedas</p>
+              <p className="text-xs text-[#2B2233]/70 mt-1 font-semibold">Moedas: {coins}</p>
             )}
           </div>
 
           {/* Menu Items */}
           <div className="py-1">
-            {MENU_ITEMS.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  setOpen(false);
-                  router.push(item.href);
-                }}
-                className="w-full px-4 py-2 text-left text-sm font-body text-[#2B2233] hover:bg-[#FFF3C9]/50 transition-colors flex items-center gap-2"
-              >
-                <img src={item.icon} alt={item.label} className="w-4 h-4 object-contain" />
-                {item.label}
-              </button>
-            ))}
+            {MENU_ITEMS.map((item) => {
+              const IconComponent = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setOpen(false);
+                    router.push(item.href);
+                  }}
+                  className="w-full px-4 py-2 text-left text-sm font-body text-[#2B2233] hover:bg-[#FFC400]/20 transition-colors flex items-center gap-3"
+                >
+                  <IconComponent size={18} className="text-orange flex-shrink-0" />
+                  {item.label}
+                </button>
+              );
+            })}
 
             {/* Divider */}
-            <div className="border-t border-[#2B2233]/10 my-1" />
+            <div className="border-t-2 border-[#2B2233]/10 my-1" />
 
             {/* Logout */}
             <button
+              onClick={sair}
+              className="w-full px-4 py-2 text-left text-sm font-body text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3"
+            >
+              <LogOut size={18} className="flex-shrink-0" />
+              Sair
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
               onClick={sair}
               className="w-full px-4 py-2 text-left text-sm font-body text-red-600 hover:bg-red-50 transition-colors"
             >
