@@ -1,0 +1,27 @@
+/* ============================================================
+   GAMELLITO — SPACING & SIZING TOKENS
+   8-based rhythm. Generous padding = the brand's "respiro".
+   ============================================================ */
+
+:root {
+  --space-0:   0;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   24px;
+  --space-6:   32px;
+  --space-7:   48px;
+  --space-8:   64px;
+  --space-9:   96px;
+
+  /* Container widths */
+  --container-narrow: 640px;
+  --container-text:   720px;
+  --container-wide:   1080px;
+
+  /* Control heights (min 44px touch targets) */
+  --control-sm: 40px;
+  --control-md: 48px;
+  --control-lg: 56px;
+}

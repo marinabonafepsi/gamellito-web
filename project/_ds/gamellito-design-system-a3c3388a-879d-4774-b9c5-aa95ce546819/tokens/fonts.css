@@ -1,0 +1,8 @@
+/* Gamellito webfonts.
+   Title/display: Baloo 2 (heavy, rounded — matches the chunky cartoon lettering).
+   Body: Nunito (clean, friendly, round terminals).
+   Loaded from the Google Fonts CDN. See readme.md → "Fonts" for the substitution
+   note: the original book lettering is hand-drawn by Roger; Baloo 2 is the closest
+   typeset stand-in for headlines. */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,600;1,800&display=swap');
