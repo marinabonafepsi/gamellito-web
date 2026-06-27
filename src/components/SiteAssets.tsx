@@ -72,6 +72,8 @@ export const siteAssets = {
   diagnosticoAdaptacao: "/characters/gamellito-diagnostico-adaptacao.svg",
   /** Pâncreas ensinando na lousa */
   pancreasComLousa: "/characters/gamellito-pancreas-lousa.svg",
+  /** Personagem corpo inteiro – destaque, hero alternativo */
+  gamellitoCorpinho: "/assets/gamellito-corpinho.svg",
 } as const;
 
 export type SiteAssetKey = keyof typeof siteAssets;
