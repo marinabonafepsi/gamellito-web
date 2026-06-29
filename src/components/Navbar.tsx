@@ -45,10 +45,11 @@ const Navbar = () => {
       <div className="relative container mx-auto px-6 py-3 flex items-center justify-between">
         <a href="/" className="flex items-center gap-2 min-w-0" onClick={() => handleNavClick("Logo", "/")} title="Voltar para home">
           <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="h-20 w-20 object-contain flex-shrink-0" />
-          <div className="flex flex-col gap-0 min-w-0">
-            <span className="font-display text-2xl font-bold text-gamellito-orange leading-tight">Gamellito</span>
-            <span className="font-body text-xs font-bold text-white leading-tight">Ltda.</span>
-          </div>
+          <img
+            src="/assets/gamellito-wordmark.svg"
+            alt="Gamellito"
+            style={{ height: 38, width: "auto", flexShrink: 0 }}
+          />
         </a>
 
         {/* Desktop */}
