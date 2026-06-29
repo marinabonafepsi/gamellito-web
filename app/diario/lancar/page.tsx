@@ -6,28 +6,20 @@ import { RecompensaSalvar } from "@/components/diario/RecompensaSalvar";
 
 type Rotulo = "jejum" | "antes" | "depois" | "dormir" | "outro";
 
-const ROTULOS: { id: Rotulo; label: string }[] = [
-  { id: "jejum",  label: "Jejum" },
-  { id: "antes",  label: "Antes de comer" },
-  { id: "depois", label: "Depois de comer" },
-  { id: "dormir", label: "Antes de dormir" },
-  { id: "outro",  label: "Outro" },
+const ROTULOS: { id: Rotulo; emoji: string; label: string }[] = [
+  { id: "jejum",  emoji: "🌅", label: "Jejum"          },
+  { id: "antes",  emoji: "🍽️", label: "Antes de comer" },
+  { id: "depois", emoji: "🍽️", label: "Depois de comer" },
+  { id: "dormir", emoji: "🌙", label: "Antes de dormir" },
+  { id: "outro",  emoji: "🩸", label: "Outro"           },
 ];
-
-function hojeLocal(): string {
-  const d = new Date();
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 export default function LancarPage() {
   const router = useRouter();
 
   const [valor,      setValor]      = useState("");
-  const [dataHora,   setDataHora]   = useState(hojeLocal());
   const [rotulo,     setRotulo]     = useState<Rotulo | null>(null);
   const [observacao, setObservacao] = useState("");
-  const [lancadoPor, setLancadoPor] = useState("");
   const [salvando,   setSalvando]   = useState(false);
   const [erro,       setErro]       = useState<string | null>(null);
   const [recompensa, setRecompensa] = useState(false);
@@ -39,34 +31,21 @@ export default function LancarPage() {
 
   async function salvar() {
     setErro(null);
-
-    if (!valor || Number(valor) <= 0) {
-      setErro("Digite o valor da glicemia.");
-      return;
-    }
-    if (!rotulo) {
-      setErro("Escolha um rótulo para este registro.");
-      return;
-    }
-    if (!lancadoPor.trim()) {
-      setErro("Informe quem está registrando (ex.: mãe, pai, criança).");
-      return;
-    }
+    if (!valor || Number(valor) <= 0) { setErro("Digite o valor da glicemia."); return; }
+    if (!rotulo) { setErro("Escolha o momento da medição."); return; }
 
     setSalvando(true);
-
     const res = await fetch("/api/registros", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         valor: Number(valor),
-        data_hora: new Date(dataHora).toISOString(),
+        data_hora: new Date().toISOString(),
         rotulo,
         observacao: observacao.trim() || null,
-        lancado_por: lancadoPor.trim(),
+        lancado_por: "eu",
       }),
     });
-
     setSalvando(false);
 
     if (!res.ok) {
@@ -75,7 +54,6 @@ export default function LancarPage() {
       return;
     }
 
-    // Microcomemoração — celebra o ato de registrar, nunca o valor
     setRecompensa(true);
   }
 
@@ -83,120 +61,103 @@ export default function LancarPage() {
     <>
       <RecompensaSalvar visivel={recompensa} onFim={esconderRecompensa} />
 
-      <div className="max-w-lg mx-auto">
-        <header className="mb-8">
-          <h1 className="text-3xl font-display font-bold" style={{ color: "#2B2233" }}>
+      <div className="max-w-2xl mx-auto flex flex-col gap-6">
+
+        {/* Header */}
+        <div className="flex items-center justify-between flex-wrap gap-3">
+          <h1 className="font-display font-bold text-3xl" style={{ color: "#6E59C9" }}>
             Registrar glicemia
           </h1>
-          <p className="text-sm font-body mt-1" style={{ color: "#F26A00" }}>
-            Preencha os campos e toque em Salvar.
-          </p>
-        </header>
-
-        <div className="ds-card p-6 flex flex-col gap-6">
-          {/* Valor */}
-          <div className="flex flex-col gap-2">
-            <label htmlFor="valor" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
-              Valor da glicemia (mg/dL)
-            </label>
-            <input
-              id="valor"
-              type="number"
-              inputMode="numeric"
-              pattern="[0-9]*"
-              placeholder="Ex.: 120"
-              value={valor}
-              onChange={(e) => setValor(e.target.value)}
-              className="ds-input-number"
-            />
-          </div>
-
-          {/* Data e hora */}
-          <div className="flex flex-col gap-2">
-            <label htmlFor="data_hora" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
-              Data e hora
-            </label>
-            <input
-              id="data_hora"
-              type="datetime-local"
-              value={dataHora}
-              onChange={(e) => setDataHora(e.target.value)}
-              className="ds-input"
-            />
-          </div>
-
-          {/* Rótulos */}
-          <div className="flex flex-col gap-2">
-            <span className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
-              Momento
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {ROTULOS.map(({ id, label }) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setRotulo(id)}
-                  className={`ds-label${rotulo === id ? " ds-label--active" : ""}`}
-                >
-                  {label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Quem registra */}
-          <div className="flex flex-col gap-2">
-            <label htmlFor="lancado_por" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
-              Registrado por
-            </label>
-            <input
-              id="lancado_por"
-              type="text"
-              placeholder="Ex.: mãe, pai, criança"
-              value={lancadoPor}
-              onChange={(e) => setLancadoPor(e.target.value)}
-              className="ds-input"
-            />
-          </div>
-
-          {/* Observação opcional */}
-          <div className="flex flex-col gap-2">
-            <label htmlFor="observacao" className="text-sm font-body font-semibold" style={{ color: "#2B2233" }}>
-              Observação{" "}
-              <span className="font-normal" style={{ color: "#6B7280" }}>(opcional)</span>
-            </label>
-            <textarea
-              id="observacao"
-              rows={3}
-              placeholder="Ex.: após atividade física, mal-estar…"
-              value={observacao}
-              onChange={(e) => setObservacao(e.target.value)}
-              className="ds-textarea"
-            />
-          </div>
-
-          {erro && (
-            <p className="text-sm font-body border-2 rounded-2xl px-4 py-3" style={{ borderColor: "#DC2626", background: "#FEF2F2", color: "#DC2626" }}>
-              {erro}
-            </p>
-          )}
-
-          <button
-            onClick={salvar}
-            disabled={salvando}
-            className="ds-btn ds-btn--lg w-full mt-2"
-          >
-            {salvando ? "Salvando…" : "Salvar registro"}
-          </button>
-
-          <button
-            onClick={() => router.back()}
-            className="text-sm font-body text-center hover:underline"
-            style={{ color: "#6B7280" }}
-          >
-            ← Cancelar
+          <button onClick={() => router.back()} className="ds-btn ds-btn--ghost ds-btn--sm">
+            ← Voltar
           </button>
         </div>
+
+        {/* Giant value input */}
+        <div className="ds-card p-8 flex flex-col items-center gap-2" style={{ textAlign: "center" }}>
+          <input
+            type="number"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            placeholder="0"
+            value={valor}
+            onChange={(e) => setValor(e.target.value)}
+            className="ds-input-value"
+          />
+          <span className="font-display font-bold text-lg" style={{ color: "#6B7280" }}>
+            mg/dL
+          </span>
+        </div>
+
+        {/* Período */}
+        <div>
+          <p className="font-display font-semibold text-base mb-3" style={{ color: "#6E59C9" }}>
+            Quando foi a medição?
+          </p>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+            {ROTULOS.map(({ id, emoji, label }) => {
+              const ativo = rotulo === id;
+              return (
+                <button
+                  key={id}
+                  onClick={() => setRotulo(id)}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "16px 8px",
+                    border: "3px solid #2B2233",
+                    borderRadius: 18,
+                    boxShadow: ativo ? "2px 2px 0 #2B2233" : "3px 3px 0 #2B2233",
+                    cursor: "pointer",
+                    background: ativo ? "#F26A00" : "#FFFFFF",
+                    color: ativo ? "#FFFFFF" : "#2B2233",
+                    transform: ativo ? "translate(1px,1px)" : "none",
+                    transition: "all 120ms cubic-bezier(0.22,1,0.36,1)",
+                  }}
+                >
+                  <span style={{ fontSize: 26 }}>{emoji}</span>
+                  <span style={{ fontSize: 11, fontWeight: 800, textAlign: "center", lineHeight: 1.2 }}>
+                    {label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Observação */}
+        <div>
+          <p className="font-display font-semibold text-base mb-3" style={{ color: "#6E59C9" }}>
+            Observação{" "}
+            <span className="font-normal text-sm" style={{ color: "#6B7280" }}>(opcional)</span>
+          </p>
+          <textarea
+            rows={2}
+            placeholder="Ex.: depois do lanche, antes de brincar…"
+            value={observacao}
+            onChange={(e) => setObservacao(e.target.value)}
+            className="ds-textarea"
+          />
+        </div>
+
+        {erro && (
+          <p className="text-sm font-body rounded-2xl border-2 px-4 py-3"
+             style={{ borderColor: "#DC2626", background: "#FEF2F2", color: "#DC2626" }}>
+            {erro}
+          </p>
+        )}
+
+        {/* Save */}
+        <button
+          onClick={salvar}
+          disabled={salvando}
+          className="ds-btn ds-btn--lg w-full"
+          style={{ background: "#8DC63F", color: "#2B2233" }}
+        >
+          {salvando ? "Salvando…" : "Salvar · Ganhe 10 🪙"}
+        </button>
       </div>
     </>
   );

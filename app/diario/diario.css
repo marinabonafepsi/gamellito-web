@@ -146,6 +146,23 @@
 }
 .ds-textarea:focus { box-shadow: 4px 4px 0 #2B2233; }
 
+/* Giant glucose value input (register screen) */
+.ds-input-value {
+  width: 100%;
+  text-align: center;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-weight: 900;
+  font-size: clamp(64px, 18vw, 108px);
+  line-height: 1;
+  color: #F26A00;
+  -webkit-text-stroke: 3px #2B2233;
+  paint-order: stroke fill;
+}
+.ds-input-value::placeholder { color: #F26A00; opacity: 0.35; -webkit-text-stroke: 2px #2B223360; }
+
 /* Banner disclaimer (layout do diário) */
 .ds-disclaimer {
   background: #FFF3C9;
