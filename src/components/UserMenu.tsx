@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { track } from "@/lib/analytics";
-import { TrendingUp, User, Activity, Plus, LogOut } from "lucide-react";
+import { User, Activity, Plus, LogOut } from "lucide-react";
 
 export const GAMELLITO_AVATARS = [
   { key: "feliz",   label: "Feliz",      src: "/assets/gamellito-feliz-mao-na-barriga.svg" },
@@ -22,10 +22,9 @@ export function getAvatarSrc(key: string | null | undefined): string {
 }
 
 const MENU_ITEMS = [
-  { id: "ganhos",    label: "Meus ganhos",      icon: TrendingUp, href: "/diario/moedas" },
-  { id: "perfil",    label: "Meu perfil",       icon: User,       href: "/diario/conta" },
-  { id: "registros", label: "Meus registros",   icon: Activity,   href: "/diario" },
-  { id: "novo",      label: "Novo registro",    icon: Plus,       href: "/diario/lancar" },
+  { id: "perfil",    label: "Meu perfil",       icon: User,     href: "/diario/conta" },
+  { id: "registros", label: "Meus registros",   icon: Activity, href: "/diario" },
+  { id: "novo",      label: "Novo registro",    icon: Plus,     href: "/diario/lancar" },
 ];
 
 export default function UserMenu() {
@@ -73,13 +72,31 @@ export default function UserMenu() {
       {/* Trigger: Avatar + Name */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-1 rounded-full border-2 border-gamellito-yellow bg-gamellito-yellow/20 hover:bg-gamellito-yellow/40 transition-colors"
         aria-label="Menu do usuário"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          padding: "4px 14px 4px 6px",
+          borderRadius: 999,
+          border: "3px solid #2B2233",
+          background: open ? "rgba(242,106,0,0.45)" : "#F26A00",
+          boxShadow: open ? "none" : "3px 3px 0 #2B2233",
+          cursor: "pointer",
+          transition: "background 150ms, box-shadow 150ms, transform 150ms",
+          transform: open ? "translate(2px,2px)" : "none",
+        }}
       >
-        <div className="w-8 h-8 rounded-full border border-gamellito-yellow overflow-hidden flex items-center justify-center bg-white">
-          <img src={getAvatarSrc(avatarKey)} alt="Avatar" className="w-7 h-7 object-contain" />
+        <div style={{
+          width: 32, height: 32, borderRadius: "50%",
+          border: "2px solid #2B2233",
+          overflow: "hidden", background: "#fff",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          flexShrink: 0,
+        }}>
+          <img src={getAvatarSrc(avatarKey)} alt="Avatar" style={{ width: 28, height: 28, objectFit: "contain" }} />
         </div>
-        <span className="text-sm font-body font-semibold text-primary-foreground hidden sm:inline truncate max-w-[120px]">
+        <span className="text-sm font-body font-semibold hidden sm:inline truncate" style={{ maxWidth: 120, color: "#fff" }}>
           {name}
         </span>
       </button>
