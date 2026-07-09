@@ -202,28 +202,9 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
       if (authError) throw authError;
       if (!authData.user) throw new Error('Falha ao criar usuário');
 
-      const { error: profileError } = await supabase.from('user_profiles').insert({
-        user_id: authData.user.id,
-        role,
-        name: formData.nome,
-        coins: 0,
-        avatar: 'feliz',
-      });
-      if (profileError) throw profileError;
-
-      const consentimentos = [
-        { usuario_id: authData.user.id, tipo: 'compartilhar_com_profissional', aceito: formData.permitirCompartilhamento, versao: '1.0' },
-        { usuario_id: authData.user.id, tipo: 'email_atualizacoes', aceito: formData.permitirEmails, versao: '1.0' },
-        { usuario_id: authData.user.id, tipo: 'analytics_anonimo', aceito: formData.permitirAnalytics, versao: '1.0' },
-      ];
-      const { error: consentimentoError } = await supabase.from('consentimentos_granular').insert(consentimentos);
-      if (consentimentoError) throw consentimentoError;
-
-      await supabase.from('product_events').insert({
-        user_id: authData.user.id,
-        event: 'novo_usuario',
-        properties: { role },
-      });
+      // Perfil, consentimentos e evento de novo usuário são criados por um
+      // trigger no banco (on_auth_user_created), não aqui — o client não tem
+      // sessão ativa neste momento quando a confirmação de email é exigida.
 
       onClose();
       router.push(DASHBOARD_BY_ROLE[role]);

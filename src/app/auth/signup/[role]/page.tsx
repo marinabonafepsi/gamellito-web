@@ -59,6 +59,15 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const handleGoogleSignup = async () => {
+    setError(null);
+    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: `${window.location.origin}/auth/callback?role=${role}` },
+    });
+    if (oauthError) setError(oauthError.message);
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -124,55 +133,11 @@ export default function SignupPage() {
       if (authError) throw authError;
       if (!authData.user) throw new Error('Falha ao criar usuário');
 
-      // 2. Criar entrada em user_profiles
-      const { error: profileError } = await supabase
-        .from('user_profiles')
-        .insert({
-          user_id: authData.user.id,
-          role,
-          name: formData.nome,
-          coins: 0,
-          avatar: 'feliz',
-        });
+      // Perfil, consentimentos e evento de novo usuário são criados por um
+      // trigger no banco (on_auth_user_created), não aqui — o client não tem
+      // sessão ativa neste momento quando a confirmação de email é exigida.
 
-      if (profileError) throw profileError;
-
-      // 3. Registrar consentimentos
-      const consentimentos = [
-        {
-          usuario_id: authData.user.id,
-          tipo: 'compartilhar_com_profissional',
-          aceito: formData.permitirCompartilhamento,
-          versao: '1.0',
-        },
-        {
-          usuario_id: authData.user.id,
-          tipo: 'email_atualizacoes',
-          aceito: formData.permitirEmails,
-          versao: '1.0',
-        },
-        {
-          usuario_id: authData.user.id,
-          tipo: 'analytics_anonimo',
-          aceito: formData.permitirAnalytics,
-          versao: '1.0',
-        },
-      ];
-
-      const { error: consentimentoError } = await supabase
-        .from('consentimentos_granular')
-        .insert(consentimentos);
-
-      if (consentimentoError) throw consentimentoError;
-
-      // 4. Registrar evento de novo usuário
-      await supabase.from('product_events').insert({
-        user_id: authData.user.id,
-        event: 'novo_usuario',
-        properties: { role },
-      });
-
-      // 5. Redirect baseado no role
+      // Redirect baseado no role
       const redirects: Record<Role, string> = {
         familia: '/familia/dashboard',
         dm1: '/familia/dashboard',
@@ -370,6 +335,26 @@ export default function SignupPage() {
             {error}
           </div>
         )}
+
+        <button
+          type="button"
+          onClick={handleGoogleSignup}
+          className="w-full flex items-center justify-center gap-3 bg-white border-[3px] border-ink rounded-full shadow-pop py-2.5 px-5 mb-5 font-display font-bold text-ink transition-all duration-100 hover:-translate-x-px hover:-translate-y-px hover:shadow-pop-lg active:translate-x-[3px] active:translate-y-[3px] active:shadow-pop-press"
+        >
+          <svg width="20" height="20" viewBox="0 0 20 20">
+            <path fill="#4285F4" d="M19.6 10.23c0-.68-.06-1.36-.18-2.02H10v3.82h5.4a4.6 4.6 0 0 1-2 3.02v2.5h3.23c1.9-1.75 2.97-4.32 2.97-7.32z" />
+            <path fill="#34A853" d="M10 20c2.7 0 4.96-.9 6.62-2.44l-3.23-2.5c-.9.6-2.05.96-3.4.96-2.6 0-4.8-1.76-5.6-4.12H1.06v2.58A10 10 0 0 0 10 20z" />
+            <path fill="#FBBC05" d="M4.4 11.9a6 6 0 0 1 0-3.8V5.52H1.06a10 10 0 0 0 0 8.96l3.35-2.58z" />
+            <path fill="#EA4335" d="M10 3.98c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.6 9.6 0 0 0 10 0 10 10 0 0 0 1.06 5.52L4.4 8.1C5.2 5.74 7.4 3.98 10 3.98z" />
+          </svg>
+          Cadastrar com Google
+        </button>
+
+        <div className="flex items-center gap-3 mb-5">
+          <div className="flex-1 h-px bg-ink/12" />
+          <span className="text-ink/60 text-xs font-body">ou com email</span>
+          <div className="flex-1 h-px bg-ink/12" />
+        </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email */}
