@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 
@@ -13,82 +13,44 @@ const CATEGORIA_COR: Record<Categoria, string> = {
   Psicologia: 'var(--game-magenta)',
 };
 
+const CATEGORIAS: Categoria[] = ['Enfermagem', 'Endocrinologia', 'Educação', 'Psicologia'];
+
 interface Artigo {
+  id: string;
   categoria: Categoria;
   titulo: string;
   autores: string;
   resumo: string;
   ano: number;
+  pdf_url?: string | null;
 }
 
-const ARTIGOS: Artigo[] = [
-  {
-    categoria: 'Enfermagem',
-    titulo: 'Educação lúdica e adesão ao tratamento em crianças com DM1',
-    autores: 'Nunes, M.; Ferreira, L.',
-    resumo: 'Ensaio com 84 crianças mostrando ganho de autonomia e adesão após intervenção com o método Gamellito.',
-    ano: 2025,
-  },
-  {
-    categoria: 'Educação',
-    titulo: 'Protocolo escolar de emergências hipoglicêmicas',
-    autores: 'Silva, R.; equipe USP',
-    resumo: 'Redução de 77% em emergências na escola após formação de educadores e protocolo estruturado.',
-    ano: 2024,
-  },
-  {
-    categoria: 'Endocrinologia',
-    titulo: 'Contagem de carboidratos gamificada: resultados em HbA1c',
-    autores: 'Almeida, P.; Costa, T.',
-    resumo: 'Estudo observacional relacionando engajamento no jogo à melhora do controle glicêmico.',
-    ano: 2023,
-  },
-  {
-    categoria: 'Psicologia',
-    titulo: 'Luto e adaptação familiar após o diagnóstico de DM1',
-    autores: 'Rocha, J.; Lima, A.',
-    resumo: 'Análise qualitativa das fases emocionais e do papel do suporte lúdico na adaptação.',
-    ano: 2025,
-  },
-  {
-    categoria: 'Enfermagem',
-    titulo: 'Rodas de conversa no manejo familiar do DM1',
-    autores: 'Nunes, M.',
-    resumo: 'Impacto das rodas estruturadas na confiança de cuidadores e na rotina de monitoramento.',
-    ano: 2026,
-  },
-  {
-    categoria: 'Educação',
-    titulo: 'Inclusão de alunos com DM1: o que a legislação garante',
-    autores: 'Barros, C.; UEL',
-    resumo: 'Revisão das leis 13.230/2015 e 11.347/2006 e sua aplicação prática nas escolas.',
-    ano: 2022,
-  },
-  {
-    categoria: 'Endocrinologia',
-    titulo: 'Bombas de insulina e sensores em pediatria: revisão',
-    autores: 'Tavares, D.',
-    resumo: 'Panorama de eficácia e qualidade de vida com CGM e infusão contínua em crianças.',
-    ano: 2024,
-  },
-  {
-    categoria: 'Psicologia',
-    titulo: 'Ansiedade e doença crônica na infância: sinais e manejo',
-    autores: 'Moreira, F.; Pires, S.',
-    resumo: 'Fatores de risco e estratégias de acolhimento para crianças e adolescentes com DM1.',
-    ano: 2023,
-  },
-];
-
-const CATEGORIAS: Categoria[] = ['Enfermagem', 'Endocrinologia', 'Educação', 'Psicologia'];
+const ARTIGO_EXEMPLO: Artigo = {
+  id: 'exemplo',
+  categoria: 'Enfermagem',
+  titulo: 'Título do seu artigo aqui',
+  autores: 'Sobrenome, Nome; equipe/instituição',
+  resumo: 'Um resumo curto explicando o objetivo do estudo, a metodologia e o principal resultado encontrado.',
+  ano: new Date().getFullYear(),
+};
 
 export default function BibliotecaPage() {
   const [busca, setBusca] = useState('');
   const [categoria, setCategoria] = useState<Categoria | 'Todos'>('Todos');
+  const [artigos, setArtigos] = useState<Artigo[]>([]);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/biblioteca')
+      .then((res) => res.json())
+      .then((data) => setArtigos(data.artigos || []))
+      .catch((err) => console.error('Erro ao carregar biblioteca:', err))
+      .finally(() => setCarregando(false));
+  }, []);
 
   const artigosFiltrados = useMemo(() => {
     const termo = busca.trim().toLowerCase();
-    return ARTIGOS.filter((a) => {
+    return artigos.filter((a) => {
       const bateCategoria = categoria === 'Todos' || a.categoria === categoria;
       const bateBusca =
         !termo ||
@@ -97,7 +59,7 @@ export default function BibliotecaPage() {
         a.categoria.toLowerCase().includes(termo);
       return bateCategoria && bateBusca;
     });
-  }, [busca, categoria]);
+  }, [busca, categoria, artigos]);
 
   return (
     <>
@@ -156,33 +118,72 @@ export default function BibliotecaPage() {
               ))}
             </div>
 
-            <p className="rcount">{artigosFiltrados.length} artigos publicados</p>
+            <p className="rcount">
+              {carregando ? 'Carregando…' : `${artigosFiltrados.length} artigos publicados`}
+            </p>
           </div>
         </section>
 
         <section className="wrap">
-          <div className="agrid">
-            {artigosFiltrados.map((artigo) => (
-              <article key={artigo.titulo} className="acard">
-                <span className="atag">
-                  <span className="ad" style={{ background: CATEGORIA_COR[artigo.categoria] }} />
-                  {artigo.categoria}
-                </span>
-                <h3>{artigo.titulo}</h3>
-                <p className="authors">{artigo.autores}</p>
-                <p className="abs">{artigo.resumo}</p>
-                <div className="cfoot">
-                  <button type="button" className="btn btn-orange btn-sm">
-                    Ler PDF
-                  </button>
-                  <button type="button" className="btn btn-ghost btn-sm">
-                    Citar
-                  </button>
-                  <span className="yr">{artigo.ano}</span>
-                </div>
-              </article>
-            ))}
+          <p className="tag" style={{ marginBottom: 10 }}>
+            Veja como seu artigo vai aparecer
+          </p>
+          <div className="agrid" style={{ paddingBottom: 8 }}>
+            <article className="acard exemplo">
+              <span className="atag">
+                <span className="ad" style={{ background: CATEGORIA_COR[ARTIGO_EXEMPLO.categoria] }} />
+                {ARTIGO_EXEMPLO.categoria}
+              </span>
+              <h3>{ARTIGO_EXEMPLO.titulo}</h3>
+              <p className="authors">{ARTIGO_EXEMPLO.autores}</p>
+              <p className="abs">{ARTIGO_EXEMPLO.resumo}</p>
+              <div className="cfoot">
+                <span className="btn btn-orange btn-sm inert">Ler PDF</span>
+                <span className="btn btn-ghost btn-sm inert">Citar</span>
+                <span className="yr">{ARTIGO_EXEMPLO.ano}</span>
+              </div>
+            </article>
           </div>
+        </section>
+
+        <section className="wrap">
+          {!carregando && artigosFiltrados.length === 0 ? (
+            <div className="card card-cream text-center" style={{ padding: '40px 24px' }}>
+              <p className="font-display font-bold text-ink text-lg mb-2">
+                Ainda não há artigos publicados{categoria !== 'Todos' ? ` em ${categoria}` : ''}.
+              </p>
+              <p className="text-ink/70 font-body">
+                Seja um dos primeiros profissionais a contribuir com o repositório.
+              </p>
+            </div>
+          ) : (
+            <div className="agrid">
+              {artigosFiltrados.map((artigo) => (
+                <article key={artigo.id} className="acard">
+                  <span className="atag">
+                    <span className="ad" style={{ background: CATEGORIA_COR[artigo.categoria] }} />
+                    {artigo.categoria}
+                  </span>
+                  <h3>{artigo.titulo}</h3>
+                  <p className="authors">{artigo.autores}</p>
+                  <p className="abs">{artigo.resumo}</p>
+                  <div className="cfoot">
+                    {artigo.pdf_url ? (
+                      <a className="btn btn-orange btn-sm" href={artigo.pdf_url} target="_blank" rel="noreferrer">
+                        Ler PDF
+                      </a>
+                    ) : (
+                      <span className="btn btn-orange btn-sm inert">Ler PDF</span>
+                    )}
+                    <button type="button" className="btn btn-ghost btn-sm">
+                      Citar
+                    </button>
+                    <span className="yr">{artigo.ano}</span>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
 
         <section id="submeter" className="lib-cta">
