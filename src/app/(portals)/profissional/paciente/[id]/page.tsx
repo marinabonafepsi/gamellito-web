@@ -1,0 +1,276 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { GamButton } from '@/components/ds/GamButton';
+import { GamCard } from '@/components/ds/GamCard';
+
+interface Registro {
+  id: string;
+  valor: number;
+  data_hora: string;
+  rotulo: string;
+  observacao?: string;
+}
+
+interface NotaClinica {
+  id: string;
+  texto: string;
+  criado_em: string;
+  criado_por: string;
+}
+
+export default function PacienteFichaPage() {
+  const params = useParams();
+  const pacienteId = params.id as string;
+  const [registros, setRegistros] = useState<Registro[]>([]);
+  const [notas, setNotas] = useState<NotaClinica[]>([]);
+  const [nomePaciente, setNomePaciente] = useState('Paciente');
+  const [loading, setLoading] = useState(true);
+  const [notaText, setNotaText] = useState('');
+  const [salvandoNota, setSalvandoNota] = useState(false);
+  const supabase = createClientComponentClient();
+
+  useEffect(() => {
+    loadPaciente();
+  }, [pacienteId]);
+
+  const loadPaciente = async () => {
+    try {
+      // Get nome paciente
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('name')
+        .eq('user_id', pacienteId)
+        .single();
+
+      if (profile) {
+        setNomePaciente(profile.name);
+      }
+
+      // Get últimos 20 registros
+      const { data: regs } = await supabase
+        .from('registros')
+        .select('*')
+        .eq('familia_id', pacienteId)
+        .order('data_hora', { ascending: false })
+        .limit(20);
+
+      setRegistros(regs || []);
+
+      // Get notas clínicas (para este paciente)
+      // TODO: Implementar clinical_notes table
+      setNotas([]);
+    } catch (error) {
+      console.error('Error loading paciente:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleAddNota = async () => {
+    if (!notaText.trim()) return;
+
+    setSalvandoNota(true);
+    try {
+      // TODO: Implementar POST /api/notas-clinicas
+      alert('Nota salva: ' + notaText);
+      setNotaText('');
+      loadPaciente();
+    } catch (error) {
+      console.error('Error saving nota:', error);
+      alert('Erro ao salvar nota');
+    } finally {
+      setSalvandoNota(false);
+    }
+  };
+
+  const handleExportarRelatorio = async () => {
+    try {
+      // TODO: Implementar POST /api/relatorios/gerar
+      alert('📄 Relatório gerado (em desenvolvimento)');
+    } catch (error) {
+      console.error('Error exporting:', error);
+      alert('Erro ao gerar relatório');
+    }
+  };
+
+  const getRolotuloEmoji = (rotulo: string) => {
+    const emojis: Record<string, string> = {
+      jejum: '🌅',
+      antes: '🍽️',
+      depois: '🍴',
+      dormir: '😴',
+      outro: '📝',
+    };
+    return emojis[rotulo] || '📊';
+  };
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-4xl font-display font-bold text-purple-main mb-2">
+            👦 Ficha de {nomePaciente}
+          </h1>
+          <p className="text-dark-gray">Últimos 20 registros de glicemia</p>
+        </div>
+        <GamButton variant="primary" onClick={handleExportarRelatorio}>
+          📄 Exportar Relatório
+        </GamButton>
+      </div>
+
+      {/* Resumo */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <GamCard surface="sun">
+          <div className="text-center">
+            <p className="text-sm text-ink opacity-70">Total</p>
+            <p className="text-3xl font-bold text-ink mt-2">{registros.length}</p>
+          </div>
+        </GamCard>
+        <GamCard surface="orange">
+          <div className="text-center">
+            <p className="text-sm text-ink opacity-70">Mínimo</p>
+            <p className="text-3xl font-bold text-ink mt-2">
+              {registros.length > 0 ? Math.min(...registros.map((r) => r.valor)) : '-'}
+            </p>
+          </div>
+        </GamCard>
+        <GamCard surface="lilac">
+          <div className="text-center">
+            <p className="text-sm text-ink opacity-70">Máximo</p>
+            <p className="text-3xl font-bold text-ink mt-2">
+              {registros.length > 0 ? Math.max(...registros.map((r) => r.valor)) : '-'}
+            </p>
+          </div>
+        </GamCard>
+        <GamCard surface="cream">
+          <div className="text-center">
+            <p className="text-sm text-ink opacity-70">Média</p>
+            <p className="text-3xl font-bold text-ink mt-2">
+              {registros.length > 0
+                ? Math.round(
+                    registros.reduce((a, b) => a + b.valor, 0) / registros.length
+                  )
+                : '-'}
+            </p>
+          </div>
+        </GamCard>
+      </div>
+
+      {/* Notas Clínicas */}
+      <GamCard surface="cream">
+        <h3 className="text-xl font-bold text-ink mb-4">📝 Notas Clínicas</h3>
+        <div className="space-y-3">
+          <textarea
+            value={notaText}
+            onChange={(e) => setNotaText(e.target.value)}
+            placeholder="Adicione uma observação clínica..."
+            className="w-full px-4 py-2 bg-white border-[3px] border-ink rounded-lg text-ink placeholder-gray-400 focus:outline-none focus:shadow-pop-sm resize-none"
+            rows={3}
+          />
+          <GamButton
+            onClick={handleAddNota}
+            disabled={salvandoNota || !notaText.trim()}
+            variant="primary"
+          >
+            {salvandoNota ? 'Salvando...' : '✅ Salvar Nota'}
+          </GamButton>
+        </div>
+
+        {notas.length > 0 && (
+          <div className="mt-6 space-y-3 pt-6 border-t border-gray-300">
+            {notas.map((nota) => (
+              <div key={nota.id} className="bg-white p-3 rounded-lg border border-gray-300">
+                <p className="text-sm text-ink">{nota.texto}</p>
+                <p className="text-xs text-ink opacity-50 mt-2">
+                  {new Date(nota.criado_em).toLocaleDateString('pt-BR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </GamCard>
+
+      {/* Timeline de Registros */}
+      <div>
+        <h2 className="text-2xl font-display font-bold text-purple-main mb-4">
+          📋 Histórico de Registros
+        </h2>
+
+        {loading ? (
+          <GamCard surface="white">
+            <div className="text-center py-8">
+              <p className="text-gray-400">Carregando registros...</p>
+            </div>
+          </GamCard>
+        ) : registros.length > 0 ? (
+          <div className="space-y-3">
+            {registros.map((registro) => (
+              <GamCard key={registro.id} surface="white">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="flex items-baseline gap-3">
+                      <span className="text-3xl">
+                        {getRolotuloEmoji(registro.rotulo)}
+                      </span>
+                      <div>
+                        <p className="text-2xl font-bold text-ink">
+                          {registro.valor} mg/dL
+                        </p>
+                        <p className="text-sm text-ink opacity-70">
+                          {registro.rotulo.charAt(0).toUpperCase() +
+                            registro.rotulo.slice(1)}
+                        </p>
+                      </div>
+                    </div>
+                    {registro.observacao && (
+                      <p className="text-sm text-ink opacity-60 mt-2">
+                        💬 {registro.observacao}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="text-right text-sm text-ink opacity-70">
+                    {new Date(registro.data_hora).toLocaleDateString('pt-BR', {
+                      day: '2-digit',
+                      month: '2-digit',
+                      year: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </div>
+                </div>
+              </GamCard>
+            ))}
+          </div>
+        ) : (
+          <GamCard surface="cream">
+            <div className="text-center py-12">
+              <p className="text-ink opacity-70">Sem registros ainda</p>
+            </div>
+          </GamCard>
+        )}
+      </div>
+
+      {/* Info */}
+      <GamCard surface="lilac">
+        <div className="p-4">
+          <p className="text-sm font-medium text-ink mb-2">ℹ️ Sobre os dados</p>
+          <p className="text-xs text-ink opacity-80">
+            Estes são os dados que o paciente compartilhou com você.
+            Você é responsável pela interpretação clínica e acompanhamento.
+            Gamellito não fornece interpretação médica.
+          </p>
+        </div>
+      </GamCard>
+    </div>
+  );
+}

@@ -1,0 +1,416 @@
+================================================================================
+                    ARQUITETURA MULTI-PORTAL GAMELLITO
+                              Visão Geral Visual
+================================================================================
+
+Data: 2026-06-24
+Status: Rascunho Técnico v1.0
+
+================================================================================
+                           ESTRUTURA DE USUÁRIOS
+================================================================================
+
+                                  ┌─────────────┐
+                                  │   Admin     │
+                                  │   Global    │
+                                  └─────────────┘
+                                        │
+                    ┌───────────────┬───┼───┬───────────────┐
+                    │               │       │               │
+            ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
+            │   Familia    │  │ Profissional │  │  Educador    │
+            │              │  │              │  │              │
+            │ • Responsável│  │ • Médico     │  │ • Professor  │
+            │ • Pais       │  │ • Nutricionista  │ • Instrutor  │
+            │ • Tutor      │  │ • Terapeuta  │  │              │
+            └──────────────┘  └──────────────┘  └──────────────┘
+                    │               ▲                   │
+                    │               │                   │
+            compartilhar     solicitação de      participa de
+            dados            acesso              grupos
+                    │               │                   │
+                    │               │                   │
+            ┌──────────────────────────────────────────────────┐
+            │         INSTITUIÇÃO (Multi-Tenant)              │
+            │  • Escolas • Clínicas • Hospitais • ONGs         │
+            └──────────────────────────────────────────────────┘
+                    │
+        ┌───────────┼───────────┐
+        │           │           │
+    GRUPO 1     GRUPO 2     GRUPO 3
+    Turma 5A    Turma 6B    Clínica
+
+
+================================================================================
+                        FLUXO DE COMPARTILHAMENTO
+================================================================================
+
+FAMILIA
+  │
+  ├─ Cria criança (Marina)
+  │
+  ├─ Faz registros (glicemia, alimentação)
+  │
+  └─ Compartilha com Profissional
+      │
+      ├─ POST /familia/crianca/{id}/compartilhar
+      │  └─ Tipo de acesso: readonly | comment | full
+      │
+      ├─ Sistema cria:
+      │  ├─ permissao (usuario_dono → usuario_acesso)
+      │  ├─ convite (envia email com token)
+      │  └─ consentimento_granular (rastreia consentimento)
+      │
+      └─ Envia convite por email
+         │
+         PROFISSIONAL recebe email
+         │
+         ├─ Se já tem conta:
+         │  └─ POST /convites/{id}/aceitar
+         │
+         ├─ Se é novo usuário:
+         │  └─ POST /convites/{token}/aceitar-anonimo
+         │     (cria conta + aceita convite)
+         │
+         └─ Agora pode acessar:
+            ├─ GET /profissional/dashboard (vê Marina)
+            ├─ GET /profissional/paciente/{id} (detalhes)
+            ├─ GET /profissional/paciente/{id}/registros
+            └─ POST /profissional/paciente/{id}/notas (comentários)
+
+
+================================================================================
+                        ESTRUTURA DE BANCO DE DADOS
+================================================================================
+
+                              auth.users
+                               (PK: id)
+                             │          │
+                    ┌────────┴──────────┴──────────┐
+                    │                              │
+              profissionais                 instituicoes
+              (FK: usuario_id)              (FK: admin_id)
+                    │                              │
+                    │                    ┌─────────┴────────┐
+                    │                    │                  │
+                    │                  grupos            (N:1)
+                    │              (FK: instituicao_id)     │
+                    │                    │                  │
+                    │            grupos_membros             │
+                    │            (FK: grupo_id)             │
+                    │                    │                  │
+                    │                    └──────────────────┘
+                    │
+              permissoes ◄────── consentimento_granular
+         (usuario_dono → usuario_acesso)
+                    │                      │
+                    └──────────┬───────────┘
+                               │
+                            convites
+                        (usuarios_remetente_id)
+                               │
+                               │
+                         ┌──────┴──────┐
+                         │             │
+                    loja_items   inventario_usuario
+                         │     (FK: usuario_id)
+                         │
+                         └──► (N:1)
+
+
+================================================================================
+                    MATRIZ DE PERMISSÕES POR ROLE
+================================================================================
+
+TABELA: registros (glicemia, alimentacao, etc)
+
+┌────────────┬──────────┬────────┬─────────┬────────┐
+│ Operação   │ Familia  │ Prof.  │ Educador│ Admin  │
+├────────────┼──────────┼────────┼─────────┼────────┤
+│ SELECT     │ Own only │ Shared │ Grupo   │ ALL    │
+│ INSERT     │ Own only │ Full   │ Grupo   │ ALL    │
+│ UPDATE     │ Own only │ Full   │ -       │ ALL    │
+│ DELETE     │ Own only │ -      │ -       │ ALL    │
+└────────────┴──────────┴────────┴─────────┴────────┘
+
+TABELA: permissoes
+
+┌────────────┬──────────┬────────┬─────────┬────────┐
+│ Operação   │ Familia  │ Prof.  │ Educador│ Admin  │
+├────────────┼──────────┼────────┼─────────┼────────┤
+│ SELECT     │ Own      │ Rcvd   │ -       │ ALL    │
+│ INSERT     │ Own      │ -      │ -       │ ALL    │
+│ UPDATE     │ Own      │ -      │ -       │ ALL    │
+│ DELETE     │ Own      │ -      │ -       │ ALL    │
+└────────────┴──────────┴────────┴─────────┴────────┘
+
+
+================================================================================
+                        FLUXO DE GAMIFICAÇÃO
+================================================================================
+
+USUARIO (Familia com crianca)
+     │
+     ├─ Faz registro de glicemia → +10 moedas
+     ├─ Faz registro de alimentacao → +5 moedas
+     ├─ Cria humor diario → +2 moedas
+     └─ Completa objetivo → +50 moedas
+        │
+        ▼
+    Moedas acumuladas
+    (usuario.moedas = 150)
+        │
+        ├─ GET /loja/items (ver catalogo)
+        │  ├─ Avatar Dinossauro (50 moedas)
+        │  ├─ Skin Roxo (75 moedas)
+        │  └─ Emote Feliz (30 moedas)
+        │
+        └─ POST /loja/comprar
+           ├─ Verifica saldo
+           ├─ Cria inventario_usuario
+           ├─ Decrementa moedas
+           └─ Ativa item (opcional)
+
+
+================================================================================
+                      SEQUÊNCIA DE MULTI-TENANT
+================================================================================
+
+Institução (Escola)
+    │
+    ├─ Cria Admin → usuario com role='instituicao'
+    │
+    ├─ Admin cria Grupos:
+    │  ├─ Turma 5A (educador_id)
+    │  ├─ Turma 6B (educador_id)
+    │  └─ Turma 7C (educador_id)
+    │
+    ├─ Educador adiciona alunos ao grupo:
+    │  └─ grupos_membros (usuario_id, grupo_id)
+    │
+    └─ Alunos (Familia com crianca):
+       ├─ Fazem registros
+       └─ Educador pode ver:
+          ├─ GET /educador/grupo/{id}
+          ├─ GET /educador/grupo/{id}/relatorios
+          └─ POST /instituicao/relatorios/exportar
+
+
+================================================================================
+                        TABELAS PRINCIPAIS (10)
+================================================================================
+
+1. profissionais
+   id, usuario_id (FK unique), crm, especialidade, instituicao_id, verificado
+
+2. instituicoes
+   id, nome, tipo, cnpj (unique), email, admin_id (FK), ativa
+
+3. permissoes
+   id, usuario_dono_id (FK), usuario_acesso_id (FK), tipo_acesso,
+   expira_em, revogada_em, UNIQUE(usuario_dono_id, usuario_acesso_id)
+
+4. grupos
+   id, instituicao_id (FK), nome, descricao, educador_id (FK),
+   UNIQUE(instituicao_id, nome)
+
+5. grupos_membros
+   id, grupo_id (FK), usuario_id (FK), rol, removido_em,
+   UNIQUE(grupo_id, usuario_id)
+
+6. consentimento_granular
+   id, usuario_crianca_id (FK), usuario_profissional_id (FK),
+   tipo_consentimento, consentimento_dado, ip_origem, user_agent
+
+7. convites
+   id, usuario_remetente_id (FK), email_destinatario,
+   tipo_convite, token_convite (unique), aceito, expira_em
+
+8. loja_items
+   id, nome, tipo, custo_moedas (>0), imagem_url, ativo
+
+9. inventario_usuario
+   id, usuario_id (FK), item_loja_id (FK), quantidade,
+   ativo, UNIQUE(usuario_id, item_loja_id)
+
+10. (auth.users alterada)
+    id, email (unique), role, tenant_id (FK), email_confirmed, deleted_at
+
+
+================================================================================
+                        ENDPOINTS POR ROLE
+================================================================================
+
+FAMILIA
+  GET  /familia/dashboard
+  POST /familia/crianca
+  GET  /familia/crianca/{id}/registros
+  POST /familia/crianca/{id}/compartilhar
+  GET  /familia/compartilhamentos
+  DELETE /familia/compartilhamentos/{id}
+
+PROFISSIONAL
+  GET  /profissional/dashboard
+  GET  /profissional/paciente/{id}
+  GET  /profissional/paciente/{id}/registros
+  POST /profissional/paciente/{id}/notas
+  POST /profissional/paciente/{id}/registros/{id}/comentario
+
+EDUCADOR
+  GET  /educador/dashboard
+  GET  /educador/grupo/{id}
+  GET  /educador/grupo/{id}/relatorios
+
+INSTITUIÇÃO
+  GET  /instituicao/dashboard
+  POST /instituicao/grupos
+  GET  /instituicao/relatorios/grupo/{id}
+  POST /instituicao/relatorios/exportar
+
+PERMISSÕES (todos)
+  GET  /permissoes
+  DELETE /permissoes/{id}
+  POST /permissoes/{id}/estender
+
+CONVITES (todos)
+  GET  /convites/pendentes
+  POST /convites/{id}/aceitar
+  POST /convites/{token}/aceitar-anonimo
+
+LOJA (todos)
+  GET  /loja/items
+  GET  /loja/inventario
+  POST /loja/comprar
+  POST /loja/inventario/{id}/ativar
+
+AUTH (público)
+  POST /auth/signup
+  POST /auth/login
+  POST /auth/refresh
+  POST /auth/logout
+  GET  /auth/select-role
+
+
+================================================================================
+                         FLUXO GERAL DE DADOS
+================================================================================
+
+                    ┌──────────────────────┐
+                    │   FRONTEND (React)   │
+                    │                      │
+                    │  • Dashboards        │
+                    │  • Formulários       │
+                    │  • Gráficos          │
+                    └──────────┬───────────┘
+                               │
+                    ┌──────────┴────────────┐
+                    │  REST API (Express)  │
+                    │                      │
+                    │  • Validação         │
+                    │  • Autenticação      │
+                    │  • Permissões        │
+                    │  • Cache             │
+                    └──────────┬───────────┘
+                               │
+                    ┌──────────┴────────────┐
+                    │  PostgreSQL (RLS)    │
+                    │                      │
+                    │  • Row Level Security│
+                    │  • Constraints       │
+                    │  • Índices           │
+                    │  • Audit Log         │
+                    └──────────────────────┘
+                               │
+                               │
+        ┌──────────────────────┼──────────────────────┐
+        │                      │                      │
+    Gravação data         Leitura data          Relatórios
+    (INSERT/UPDATE)       (SELECT)              (Agregações)
+        │                      │                      │
+        ▼                      ▼                      ▼
+    Redis Cache           Redis Cache          Materialized
+    (TTL 5min)            (Permissões)         Views
+
+
+================================================================================
+                        CHECKLIST DE SEGURANÇA
+================================================================================
+
+✓ RLS habilitado em todas tabelas
+✓ Soft delete para dados sensíveis (deleted_at, revogada_em)
+✓ Consentimento granular com ip_origem e user_agent
+✓ Audit log para ações críticas
+✓ JWT tokens com expiração
+✓ Rate limiting por usuário
+✓ Validação de permissões em cada endpoint
+✓ Hash de senhas (bcrypt)
+✓ HTTPS obrigatório em produção
+✓ CORS configurado corretamente
+✓ Prepared statements (ORM)
+✓ Input sanitization
+
+
+================================================================================
+                            PERFORMANCE
+================================================================================
+
+Índices Críticos:
+  • auth.users(role, tenant_id)
+  • permissoes(usuario_dono_id, usuario_acesso_id, revogada_em)
+  • grupos_membros(grupo_id, usuario_id, removido_em)
+  • consentimento_granular(usuario_crianca_id, usuario_profissional_id)
+  • loja_items(tipo, ativo)
+
+Cache Layer (Redis):
+  • Permissões de usuário (TTL: 5 min)
+  • Dados de instituição (TTL: 30 min)
+  • Itens da loja (TTL: 60 min)
+
+Queries Otimizadas:
+  • Usar índices compostos
+  • Lazy load de relationships
+  • Pagination (limit + offset)
+  • Materialized views para agregações
+
+
+================================================================================
+                        PRÓXIMAS FASES
+================================================================================
+
+Fase 1-2 (Semanas 1-2): Infraestrutura + RLS
+  □ Criar migrations
+  □ Implementar RLS policies
+  □ Setup cache Redis
+
+Fase 3-5 (Semanas 3-5): APIs Autenticação + Familia + Profissional
+  □ Auth endpoints
+  □ Dashboard família
+  □ Dashboard profissional
+  □ Compartilhamento
+
+Fase 6-7 (Semanas 6-7): APIs Educador + Instituição
+  □ Dashboard educador
+  □ Dashboard instituição
+  □ Relatórios
+
+Fase 8-9 (Semanas 8-9): APIs Permissões + Loja
+  □ Gerenciamento de permissões
+  □ Convites
+  □ Loja gamificação
+
+Fase 10 (Semana 10): Testing + QA
+  □ Testes automatizados
+  □ Load testing
+  □ UAT
+
+================================================================================
+                            CONTATO
+================================================================================
+
+Para dúvidas, consulte:
+  1. ESPECIFICACAO-TECNICA-ERD.md (estrutura de dados)
+  2. ESPECIFICACAO-RLS-POLICIES.sql (segurança)
+  3. ESPECIFICACAO-APIS.md (endpoints)
+  4. README.md (guia de navegação)
+
+================================================================================

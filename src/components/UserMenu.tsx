@@ -1,158 +1,120 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { createClient } from "@/lib/supabase/client";
-import { track } from "@/lib/analytics";
-import { User, Activity, Plus, LogOut } from "lucide-react";
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
-export const GAMELLITO_AVATARS = [
-  { key: "feliz",   label: "Feliz",      src: "/assets/gamellito-feliz-mao-na-barriga.svg" },
-  { key: "animado", label: "Animado",    src: "/assets/gamellito-contente.svg" },
-  { key: "raiva",   label: "Com raiva",  src: "/assets/gamellito-furioso.svg" },
-  { key: "medo",    label: "Com medo",   src: "/assets/olho-desconfiado.svg" },
-] as const;
-
-export type AvatarKey = typeof GAMELLITO_AVATARS[number]["key"];
-
-export function getAvatarSrc(key: string | null | undefined): string {
-  const found = GAMELLITO_AVATARS.find((a) => a.key === key);
-  return found?.src ?? "/assets/gamellito-feliz-mao-na-barriga.svg";
+interface UserMenuProps {
+  user: any;
+  portalType?: string;
 }
 
-const MENU_ITEMS = [
-  { id: "perfil",    label: "Meu perfil",       icon: User,     href: "/diario/conta" },
-  { id: "registros", label: "Meus registros",   icon: Activity, href: "/diario" },
-  { id: "novo",      label: "Novo registro",    icon: Plus,     href: "/diario/lancar" },
-];
-
-export default function UserMenu() {
+export function UserMenu({ user, portalType }: UserMenuProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
   const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const [avatarKey, setAvatarKey] = useState<string | null>(null);
-  const [name, setName] = useState<string | null>(null);
-  const [coins, setCoins] = useState<number | null>(null);
-  const ref = useRef<HTMLDivElement>(null);
+  const supabase = createClientComponentClient();
 
   useEffect(() => {
-    const client = createClient();
-    client.auth.getUser().then(({ data }) => {
-      if (!data.user) return;
-      const key = data.user?.user_metadata?.avatar as string | undefined;
-      const userName = data.user?.user_metadata?.name as string | undefined;
-      setAvatarKey(key ?? "feliz");
-      setName(userName ?? "Usuário");
-    });
+    const getProfile = async () => {
+      const { data } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+      setProfile(data);
+    };
+    getProfile();
+  }, [user, supabase]);
 
-    fetch("/api/perfil")
-      .then((r) => r.json())
-      .then((d) => { if (typeof d.coins === "number") setCoins(d.coins); })
-      .catch(() => {});
-  }, []);
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+  };
 
-  useEffect(() => {
-    function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    }
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
+  const dashboardLinks: Record<string, string> = {
+    familia: '/familia/dashboard',
+    profissional: '/profissional/dashboard',
+    educador: '/educador/dashboard',
+    instituicao: '/instituicao/dashboard',
+    admin: '/admin/dashboard',
+  };
 
-  async function sair() {
-    track("user_signout", window.location.pathname, {});
-    await createClient().auth.signOut();
-    router.push("/diario/login");
-  }
+  const profileLink = portalType
+    ? `${dashboardLinks[portalType]?.replace('dashboard', 'perfil') || '/perfil'}`
+    : '/perfil';
 
-  if (!avatarKey) return null;
+  const coins = profile?.coins ?? 0;
+  const displayName = profile?.display_name || user.email?.split('@')[0] || 'Gamellito';
 
   return (
-    <div ref={ref} className="relative">
-      {/* Trigger: Avatar + Name */}
+    <div className="relative">
+      {/* Avatar pill trigger */}
       <button
-        onClick={() => setOpen(!open)}
-        aria-label="Menu do usuário"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          padding: "4px 14px 4px 6px",
-          borderRadius: 999,
-          border: "3px solid #2B2233",
-          background: open ? "rgba(242,106,0,0.45)" : "#F26A00",
-          boxShadow: open ? "none" : "3px 3px 0 #2B2233",
-          cursor: "pointer",
-          transition: "background 150ms, box-shadow 150ms, transform 150ms",
-          transform: open ? "translate(2px,2px)" : "none",
-        }}
+        onClick={() => setIsOpen((v) => !v)}
+        data-test="btn-user-menu"
+        className="flex items-center gap-2 h-[52px] pl-[5px] pr-4 bg-cream border-[3px] border-ink rounded-full shadow-pop cursor-pointer transition-all duration-150 ease-out hover:-translate-x-px hover:-translate-y-px hover:shadow-pop-lg active:translate-x-[3px] active:translate-y-[3px] active:shadow-pop-press"
       >
-        <div style={{
-          width: 32, height: 32, borderRadius: "50%",
-          border: "2px solid #2B2233",
-          overflow: "hidden", background: "#fff",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          flexShrink: 0,
-        }}>
-          <img src={getAvatarSrc(avatarKey)} alt="Avatar" style={{ width: 28, height: 28, objectFit: "contain" }} />
-        </div>
-        <span className="text-sm font-body font-semibold hidden sm:inline truncate" style={{ maxWidth: 120, color: "#fff" }}>
-          {name}
+        <span className="w-[42px] h-[42px] rounded-full bg-sun border-2 border-ink overflow-hidden flex items-end justify-center flex-none">
+          <Image src="/assets/gamellito-logo.svg" alt="Gamellito" width={40} height={40} className="w-10 h-auto -mb-0.5" />
         </span>
+        <span className="hidden md:inline font-display font-bold text-base leading-none text-ink">{displayName}</span>
       </button>
 
-      {/* Backdrop */}
-      {open && (
-        <div
-          className="fixed inset-0 z-[99998]"
-          onClick={() => setOpen(false)}
-          aria-hidden
-        />
-      )}
+      {isOpen && (
+        <>
+          <div className="fixed inset-0 z-50" onClick={() => setIsOpen(false)} />
+          <div className="absolute top-[60px] right-0 w-[250px] bg-white border-[3px] border-ink rounded-[20px] shadow-pop-lg overflow-hidden z-[60] animate-dd-in">
+            <div className="flex items-center gap-[11px] px-[15px] py-3.5 bg-cream border-b-2 border-ink">
+              <span className="coin-ico big" />
+              <div className="flex flex-col gap-0.5 leading-none">
+                <span className="font-display font-extrabold text-xl text-ink">{coins.toLocaleString('pt-BR')}</span>
+                <span className="font-body font-bold text-[11px] text-ink/60">moedas Gamellito</span>
+              </div>
+              <Link
+                href="/loja"
+                onClick={() => setIsOpen(false)}
+                className="ml-auto flex items-center gap-[5px] px-[13px] py-2 bg-orange border-2 border-ink rounded-full shadow-pop-sm text-white no-underline font-display font-bold text-[13px] cursor-pointer transition-all duration-100 hover:bg-orange-deep hover:-translate-x-px hover:-translate-y-px hover:shadow-pop active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+              >
+                Trocar<span>→</span>
+              </Link>
+            </div>
 
-      {/* Dropdown Menu — Design System Card */}
-      {open && (
-        <div className="fixed right-6 top-20 w-64 ds-card z-[99999] overflow-hidden">
-          {/* Header */}
-          <div className="px-4 py-3 border-b-2 border-[#2B2233]/10" style={{ background: "#FFF3C9" }}>
-            <p className="text-sm font-body font-bold text-[#2B2233]">{name}</p>
-            {coins !== null && (
-              <p className="text-xs text-[#2B2233]/70 mt-1 font-semibold">Moedas: {coins}</p>
-            )}
-          </div>
-
-          {/* Menu Items */}
-          <div className="py-1">
-            {MENU_ITEMS.map((item) => {
-              const IconComponent = item.icon;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => {
-                    setOpen(false);
-                    router.push(item.href);
-                  }}
-                  className="w-full px-4 py-2 text-left text-sm font-body text-[#2B2233] hover:bg-[#FFC400]/20 transition-colors flex items-center gap-3"
-                >
-                  <IconComponent size={18} className="text-orange flex-shrink-0" />
-                  {item.label}
-                </button>
-              );
-            })}
-
-            {/* Divider */}
-            <div className="border-t-2 border-[#2B2233]/10 my-1" />
-
-            {/* Logout */}
-            <button
-              onClick={sair}
-              className="w-full px-4 py-2 text-left text-sm font-body text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3"
+            <Link
+              href={profileLink}
+              onClick={() => setIsOpen(false)}
+              className="flex items-center gap-[11px] px-4 py-[13px] font-body font-bold text-sm text-ink no-underline cursor-pointer transition-colors duration-100 hover:bg-cream"
             >
-              <LogOut size={18} className="flex-shrink-0" />
+              <span className="w-2.5 h-2.5 rounded-full border-2 border-ink flex-none bg-game-blue" />
+              Minha conta
+            </Link>
+            {portalType === 'familia' && (
+              <Link
+                href="/familia/dashboard"
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-[11px] px-4 py-[13px] font-body font-bold text-sm text-ink no-underline cursor-pointer transition-colors duration-100 hover:bg-cream"
+              >
+                <span className="w-2.5 h-2.5 rounded-full border-2 border-ink flex-none bg-game-green" />
+                Meu diário
+              </Link>
+            )}
+
+            <div className="h-0.5 bg-ink/10 mx-3.5" />
+
+            <button
+              onClick={() => {
+                setIsOpen(false);
+                handleLogout();
+              }}
+              className="w-full text-left flex items-center gap-[11px] px-4 py-[13px] font-body font-bold text-sm text-game-red cursor-pointer transition-colors duration-100 hover:bg-game-red/10"
+            >
+              <span className="w-2.5 h-2.5 rounded-full border-2 border-ink flex-none bg-game-red" />
               Sair
             </button>
           </div>
-        </div>
+        </>
       )}
     </div>
   );

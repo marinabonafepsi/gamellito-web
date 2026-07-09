@@ -1,131 +1,186 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "@/components/icons";
-import { track } from "@/lib/analytics";
-import { createClient } from "@/lib/supabase/client";
-import UserMenu from "@/components/UserMenu";
+import Link from 'next/link';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { UserMenu } from './UserMenu';
+import { AuthModal } from './AuthModal';
 
-const navLinks = [
-  { label: "Início",        href: "/#inicio" },
-  { label: "Sobre",         href: "/#sobre" },
-  { label: "Ecossistema",   href: "/para-familias" },
-  { label: "Contato",       href: "/#contato" },
-  { label: "Loja",          href: "/loja" },
-];
+interface NavItem {
+  label: string;
+  href: string;
+}
 
-const Navbar = () => {
-  const [isOpen,    setIsOpen]    = useState(false);
-  const [loggedIn,  setLoggedIn]  = useState(false);
+interface NavbarProps {
+  portalType?: 'familia' | 'profissional' | 'educador' | 'instituicao' | 'admin';
+  navItems?: NavItem[];
+}
+
+export function Navbar({ portalType, navItems = [] }: NavbarProps) {
+  const pathname = usePathname();
+  const supabase = createClientComponentClient();
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const client = createClient();
-    client.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
-    const { data: { subscription } } = client.auth.onAuthStateChange((_, session) => {
-      setLoggedIn(!!session?.user);
-    });
-    return () => subscription.unsubscribe();
-  }, []);
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+      setLoading(false);
+    };
+    getUser();
+  }, [supabase]);
 
-  function handleNavClick(label: string, href: string) {
-    track("nav_click", window.location.pathname, { label, href });
-    setIsOpen(false);
-  }
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [pathname]);
+
+  // Default nav items based on portal type
+  const getDefaultNavItems = (): NavItem[] => {
+    if (!portalType) {
+      return [
+        { label: 'Início', href: '/' },
+        { label: 'Sobre', href: '/sobre' },
+        { label: 'Para famílias', href: '/jogos' },
+        { label: 'Biblioteca', href: '/biblioteca' },
+        { label: 'Loja', href: '/loja' },
+      ];
+    }
+
+    const navs: Record<string, NavItem[]> = {
+      familia: [
+        { label: 'Dashboard', href: '/familia/dashboard' },
+        { label: 'Meu Diário', href: '/familia/diario' },
+        { label: 'Jogos', href: '/jogos' },
+        { label: 'Loja', href: '/loja' },
+      ],
+      profissional: [
+        { label: 'Meus Pacientes', href: '/profissional/dashboard' },
+        { label: 'Relatórios', href: '/profissional/relatorios' },
+        { label: 'Recursos', href: '/profissional/recursos' },
+        { label: 'Biblioteca', href: '/biblioteca' },
+      ],
+      educador: [
+        { label: 'Meus Grupos', href: '/educador/dashboard' },
+        { label: 'Recursos', href: '/educador/recursos' },
+        { label: 'Forum', href: '/educador/forum' },
+      ],
+      instituicao: [
+        { label: 'Dashboard', href: '/instituicao/dashboard' },
+        { label: 'Grupos', href: '/instituicao/grupos' },
+        { label: 'Equipe', href: '/instituicao/equipe' },
+        { label: 'Relatórios', href: '/instituicao/relatorios' },
+      ],
+      admin: [
+        { label: 'Dashboard', href: '/admin/dashboard' },
+        { label: 'Usuários', href: '/admin/usuarios' },
+        { label: 'Instituições', href: '/admin/instituicoes' },
+        { label: 'Analytics', href: '/admin/analytics' },
+      ],
+    };
+
+    return navs[portalType] || navItems;
+  };
+
+  const displayNavItems = navItems.length > 0 ? navItems : getDefaultNavItems();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 overflow-hidden">
-      {/* Navbar background SVG */}
-      <img
-        src="/characters/gamellito-navbar-bg.svg"
-        alt=""
-        aria-hidden
-        className="absolute inset-0 w-full h-full object-cover object-left"
-      />
-      <div className="relative container mx-auto px-6 py-3 flex items-center justify-between">
-        <a href="/" className="flex items-center gap-2 min-w-0" onClick={() => handleNavClick("Logo", "/")} title="Voltar para home">
-          <img src="/characters/gamellito-logo.svg" alt="Gamellito" className="h-20 w-20 object-contain flex-shrink-0" />
-          <img
-            src="/assets/gamellito-wordmark.svg"
-            alt="Gamellito"
-            style={{ height: 38, width: "auto", flexShrink: 0 }}
-          />
-        </a>
-
-        {/* Desktop */}
-        <div className="hidden md:flex items-center gap-3">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              onClick={() => handleNavClick(link.label, link.href)}
-              className="px-3 py-2 font-body text-sm font-semibold text-white/90 hover:bg-white/15 hover:rounded-full transition-all duration-150"
-            >
-              {link.label}
-            </a>
-          ))}
-          {loggedIn ? (
-            <UserMenu />
-          ) : (
-            <a
-              href="/diario/login"
-              onClick={() => handleNavClick("Login", "/diario/login")}
-              className="gm-btn gm-btn--primary gm-btn--md"
-            >
-              Login
-            </a>
-          )}
-        </div>
-
-        {/* Mobile toggle */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-primary-foreground"
+    <div className="sticky top-0 z-40 px-4 sm:px-10 pt-4 pb-2 bg-transparent">
+      <div className="max-w-[1180px] mx-auto">
+        <nav
+          className="relative flex items-center justify-between h-[74px] bg-purple-soft border-[3px] border-ink rounded-[18px] shadow-pop-lg font-display"
         >
-          {isOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            className="md:hidden overflow-hidden" style={{ background: "#6F567E" }}
+          <Link
+            href="/"
+            className="flex items-center gap-2 sm:gap-3 h-full pl-3 pr-4 sm:pl-5 sm:pr-6 no-underline bg-purple-deep rounded-[15px_46px_46px_15px]"
           >
-            <div className="px-4 py-4 flex flex-col gap-3">
-              {loggedIn ? (
-                <div className="flex items-center gap-3 mb-1">
-                  <UserMenu />
-                  <span className="font-body text-sm font-semibold text-primary-foreground/80">Minha conta</span>
-                </div>
-              ) : (
-                <a
-                  href="/diario/login"
-                  onClick={() => handleNavClick("Login", "/diario/login")}
-                  className="ds-btn w-full justify-center"
-                >
-                  Login
-                </a>
-              )}
-              {navLinks.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => handleNavClick(link.label, link.href)}
-                  className="font-body text-base font-semibold text-primary-foreground/95 hover:text-primary transition-colors py-2"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </nav>
-  );
-};
+            <Image className="h-[38px] sm:h-[50px] w-auto block flex-none" src="/assets/gamellito-logo.svg" alt="" width={50} height={50} />
+            <Image className="h-[24px] sm:h-[33px] w-auto block" src="/assets/wordmark-clean.svg" alt="Gamellito" width={140} height={33} />
+            <span className="font-display font-bold text-[15px] text-cream self-end -mb-0 -ml-1 hidden sm:inline">Ltda.</span>
+          </Link>
 
-export default Navbar;
+          <div className="hidden md:flex items-center gap-[3px]">
+            {displayNavItems.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`font-display font-semibold text-[15px] no-underline px-[13px] py-[9px] rounded-full border-2 whitespace-nowrap transition-all duration-150 ease-bounce ${
+                    active
+                      ? 'bg-sun text-ink border-ink shadow-pop-sm'
+                      : 'text-white border-transparent hover:bg-cream hover:text-ink hover:border-ink hover:shadow-pop-sm hover:-translate-x-px hover:-translate-y-px'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+
+          <div className="relative flex items-center gap-2 pr-2 sm:pr-3.5">
+            {!loading && (
+              <>
+                {user ? (
+                  <UserMenu user={user} portalType={portalType} />
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => setAuthOpen(true)}
+                    className="btn btn-sun !text-[13px] sm:!text-[15px] !py-2 !px-3.5 sm:!py-2.5 sm:!px-5"
+                  >
+                    Entrar
+                  </button>
+                )}
+              </>
+            )}
+
+            <button
+              type="button"
+              aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
+              onClick={() => setMobileOpen((v) => !v)}
+              className="md:hidden flex items-center justify-center w-10 h-10 rounded-full border-2 border-transparent hover:bg-cream hover:border-ink text-white hover:text-ink transition-colors flex-none"
+            >
+              {mobileOpen ? (
+                <span className="text-xl leading-none font-display font-bold">✕</span>
+              ) : (
+                <span className="flex flex-col gap-[5px]">
+                  <span className="block w-5 h-[3px] bg-current rounded-full" />
+                  <span className="block w-5 h-[3px] bg-current rounded-full" />
+                  <span className="block w-5 h-[3px] bg-current rounded-full" />
+                </span>
+              )}
+            </button>
+          </div>
+        </nav>
+
+        {/* Mobile dropdown panel */}
+        {mobileOpen && (
+          <div className="md:hidden mt-2 bg-purple-soft border-[3px] border-ink rounded-[18px] shadow-pop-lg overflow-hidden animate-dd-in">
+            {displayNavItems.map((item, i) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`block font-display font-semibold text-[15px] no-underline px-5 py-3 transition-colors ${
+                    i < displayNavItems.length - 1 ? 'border-b-2 border-white/10' : ''
+                  } ${active ? 'bg-sun text-ink' : 'text-white hover:bg-cream hover:text-ink'}`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
+      {authOpen && <AuthModal onClose={() => setAuthOpen(false)} />}
+    </div>
+  );
+}

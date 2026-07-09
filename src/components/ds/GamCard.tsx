@@ -1,60 +1,34 @@
-"use client";
-
-import { useEffect } from "react";
+import { ReactNode } from 'react';
 
 interface GamCardProps {
-  children: React.ReactNode;
-  surface?: "white" | "cream" | "sun" | "lilac";
-  halo?: boolean;
-  flat?: boolean;
-  dots?: boolean;
+  children: ReactNode;
+  surface?: 'white' | 'orange' | 'cream' | 'purple' | 'sun' | 'lilac';
   className?: string;
 }
 
-/**
- * Card usando o Gamellito Design System.
- * Renderiza um card com outline cartoon, pop shadow, e animações.
- */
-export default function GamCard({
+export function GamCard({
   children,
-  surface = "white",
-  halo = false,
-  flat = false,
-  dots = false,
-  className = "",
+  surface = 'white',
+  className = '',
 }: GamCardProps) {
-  useEffect(() => {
-    // Garante que o bundle do design system foi carregado
-    const script = document.querySelector('script[src*="_ds_bundle"]');
-    if (!script) {
-      const s = document.createElement("script");
-      s.src = "/design-system/_ds_bundle.js";
-      s.async = true;
-      document.body.appendChild(s);
-    }
-  }, []);
-
-  const classes = [
-    "gm-card",
-    `gm-card--${surface}`,
-    halo && "gm-card--halo",
-    flat && "gm-card--flat",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  // Cartoon card: ink outline + hard pop shadow + round corners,
+  // matching the Gamellito Claude Design reference.
+  const surfaceStyles = {
+    white: 'bg-white text-ink',
+    orange: 'bg-orange text-white',
+    cream: 'bg-cream text-ink',
+    purple: 'bg-purple-soft text-white',
+    sun: 'bg-sun text-ink',
+    lilac: 'bg-lilac-soft text-ink',
+  };
 
   return (
-    <div className={classes}>
-      {dots && (
-        <div className="gm-card__dots" aria-hidden="true">
-          {["var(--game-red)", "var(--game-blue)", "var(--game-green)", "var(--game-pink)"].map(
-            (color, i) => (
-              <span key={i} style={{ background: color }} />
-            )
-          )}
-        </div>
-      )}
+    <div
+      className={`
+        card ${surfaceStyles[surface]}
+        ${className}
+      `}
+    >
       {children}
     </div>
   );

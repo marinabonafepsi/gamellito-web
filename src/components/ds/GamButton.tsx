@@ -1,60 +1,54 @@
-"use client";
-
-import { useEffect } from "react";
+import { ReactNode } from 'react';
 
 interface GamButtonProps {
-  children: React.ReactNode;
-  variant?: "primary" | "sun" | "lilac" | "ghost" | "ink";
-  size?: "sm" | "md" | "lg";
-  href?: string;
+  children: ReactNode;
+  variant?: 'primary' | 'secondary' | 'sun' | 'cream' | 'purple';
+  size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
-  type?: "button" | "submit" | "reset";
+  type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
   className?: string;
 }
 
-/**
- * Button usando o Gamellito Design System.
- * Renderiza um <a> se href for fornecido, caso contrário um <button>.
- */
-export default function GamButton({
+export function GamButton({
   children,
-  variant = "primary",
-  size = "md",
-  href,
+  variant = 'primary',
+  size = 'md',
   onClick,
-  type = "button",
+  type = 'button',
   disabled = false,
-  className = "",
+  className = '',
 }: GamButtonProps) {
-  useEffect(() => {
-    // Garante que o bundle do design system foi carregado
-    // e os componentes estão disponíveis em window
-    const script = document.querySelector('script[src*="_ds_bundle"]');
-    if (!script) {
-      const s = document.createElement("script");
-      s.src = "/design-system/_ds_bundle.js";
-      s.async = true;
-      document.body.appendChild(s);
-    }
-  }, []);
+  // Pop-shadow cartoon buttons: thick ink outline, hard offset shadow,
+  // pill radius. Ported from the Gamellito Claude Design reference.
+  const baseStyles =
+    'btn font-display disabled:pointer-events-none';
 
-  const baseClass = `gm-btn gm-btn--${variant} gm-btn--${size} ${className}`;
+  const variantStyles = {
+    primary: 'btn-orange',
+    secondary: 'btn-cream',
+    sun: 'btn-sun',
+    cream: 'btn-cream',
+    purple: 'btn-purple',
+  };
 
-  if (href) {
-    return (
-      <a href={href} className={baseClass}>
-        {children}
-      </a>
-    );
-  }
+  const sizeStyles = {
+    sm: 'text-sm !py-2 !px-4',
+    md: '',
+    lg: 'text-lg !py-4 !px-8',
+  };
 
   return (
     <button
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={baseClass}
+      className={`
+        ${baseStyles}
+        ${variantStyles[variant]}
+        ${sizeStyles[size]}
+        ${className}
+      `}
     >
       {children}
     </button>
