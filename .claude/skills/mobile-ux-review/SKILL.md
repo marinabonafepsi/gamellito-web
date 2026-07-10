@@ -54,3 +54,5 @@ For each finding, give a concrete fix — a specific component/pattern to add or
 When building new UI, apply the same questions from the start rather than writing a desktop layout and patching it afterward — mobile-first mockups (even ASCII/described ones) before implementation catch IA problems far cheaper than a CSS retrofit.
 
 See `references/navigation-patterns.md` for the bottom-tab-bar vs. hamburger decision guide, thumb-zone specifics, and a concrete bottom-nav pattern sketch that matches the existing `DashboardShell` and `Navbar` visual language.
+
+See `docs/MOBILE-UX-GUIDELINES.md` (repo root) for the standing site-wide audit — what's already fixed, what's audited and fine, and what's intentionally out of scope. Update that doc, not just this skill, whenever a mobile nav decision is made — it's the durable record future sessions should read first.

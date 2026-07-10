@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import s from './DashboardShell.module.css';
 
 export type DashboardVariant = 'dm1' | 'prof' | 'saude';
@@ -117,6 +118,19 @@ const ROLE_TAG: Record<DashboardVariant, string> = {
   saude: 'Saúde',
 };
 
+// Bottom tab bar (mobile only, <680px) — reuses NAV_BY_VARIANT but drops any
+// entry that just points back to the dashboard home (prof/saude both have one),
+// so the mobile nav doesn't repeat a tab. Capped at 5 by construction.
+function getMobileTabs(variant: DashboardVariant, accountHref: string) {
+  const home = accountHref.replace('/perfil', '/dashboard');
+  return [
+    { href: home, label: 'Início', color: 'var(--game-pink)' },
+    ...NAV_BY_VARIANT[variant].filter((item) => item.href !== home),
+    { href: '/loja', label: 'Loja', color: 'var(--color-sun)' },
+    { href: accountHref, label: 'Conta', color: 'var(--color-lilac)' },
+  ];
+}
+
 export function DashboardShell({
   variant,
   userName,
@@ -136,6 +150,8 @@ export function DashboardShell({
   artigos = [],
   onSubmitArtigo,
 }: DashboardShellProps) {
+  const pathname = usePathname();
+  const mobileTabs = getMobileTabs(variant, accountHref);
   const [regOpen, setRegOpen] = useState(false);
   const [artOpen, setArtOpen] = useState(false);
   const [artTitulo, setArtTitulo] = useState('');
@@ -211,10 +227,6 @@ export function DashboardShell({
           </Link>
         ))}
         <Link href="/loja" className={s.navI}>
-          <span className={s.nd} style={{ background: 'var(--color-sun)' }} />
-          Conquistas
-        </Link>
-        <Link href="/loja" className={s.navI}>
           <span className={s.nd} style={{ background: 'var(--game-green)' }} />
           Loja
         </Link>
@@ -238,6 +250,30 @@ export function DashboardShell({
           </button>
         </div>
       </aside>
+
+      {/* ================= MOBILE BOTTOM NAV (replaces sidebar below 680px) ================= */}
+      <nav className={s.bottomNav}>
+        {mobileTabs.map((tab) => (
+          <Link
+            key={tab.href}
+            href={tab.href}
+            className={`${s.bnItem} ${pathname === tab.href ? s.active : ''}`}
+          >
+            <span className={s.nd} style={{ background: tab.color }} />
+            {tab.label}
+          </Link>
+        ))}
+      </nav>
+      {variant === 'dm1' && (
+        <button
+          type="button"
+          aria-label="Registrar glicemia"
+          className={s.fab}
+          onClick={onOpenRegistro || (() => setRegOpen(true))}
+        >
+          +
+        </button>
+      )}
 
       {/* ================= MAIN ================= */}
       <main className={s.main}>

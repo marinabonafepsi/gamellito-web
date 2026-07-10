@@ -130,13 +130,24 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
                 {user ? (
                   <UserMenu user={user} portalType={portalType} />
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => setAuthOpen(true)}
-                    className="btn btn-sun !text-[13px] sm:!text-[15px] !py-2 !px-3.5 sm:!py-2.5 sm:!px-5"
-                  >
-                    Entrar
-                  </button>
+                  <>
+                    {/* Mobile: full-page auth flow (native-feeling, no modal fighting for space) */}
+                    <span className="md:hidden">
+                      <Link href="/auth/login" className="btn btn-sun !text-[13px] !py-2 !px-3.5">
+                        Entrar
+                      </Link>
+                    </span>
+                    {/* Desktop: quick modal */}
+                    <span className="hidden md:inline-block">
+                      <button
+                        type="button"
+                        onClick={() => setAuthOpen(true)}
+                        className="btn btn-sun !text-[15px] !py-2.5 !px-5"
+                      >
+                        Entrar
+                      </button>
+                    </span>
+                  </>
                 )}
               </>
             )}

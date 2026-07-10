@@ -208,6 +208,17 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   flex: none;
 }
+.role-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 3px solid #2b2233;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+}
+.role-badge img { width: 40px; height: 40px; object-fit: contain; }
 .tag {
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
