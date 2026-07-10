@@ -38,11 +38,26 @@ export async function requireAuth() {
 
 /**
  * Get user's role
+ *
+ * Source of truth is `user_profiles.role`, not the Supabase Auth
+ * `user_metadata.role` — accounts created before the role-metadata
+ * convention existed (or via some OAuth paths) can have a `user_profiles`
+ * row with the correct role but no `role` in `user_metadata`. Falling back
+ * to metadata (then 'familia') only covers the brief window right after
+ * signup before the `on_auth_user_created` trigger has run.
  */
 export async function getUserRole(): Promise<string | null> {
   const user = await getUser();
   if (!user) return null;
-  return user.user_metadata?.role || 'familia';
+
+  const supabase = createServerComponentClient({ cookies });
+  const { data } = await supabase
+    .from('user_profiles')
+    .select('role')
+    .eq('user_id', user.id)
+    .single();
+
+  return data?.role || user.user_metadata?.role || 'familia';
 }
 
 /**
@@ -58,7 +73,7 @@ export async function hasRole(role: string): Promise<boolean> {
  */
 export async function requireRole(requiredRole: string | string[]) {
   const user = await requireAuth();
-  const userRole = user.user_metadata?.role;
+  const userRole = await getUserRole();
 
   const rolesArray = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
 
@@ -72,7 +87,7 @@ export async function requireRole(requiredRole: string | string[]) {
       instituicao: '/instituicao/dashboard',
       admin: '/admin/dashboard',
     };
-    redirect(redirects[userRole] || '/');
+    redirect((userRole && redirects[userRole]) || '/');
   }
 
   return user;

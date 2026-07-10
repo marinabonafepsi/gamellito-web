@@ -122,11 +122,8 @@ export function PerfilPage({ voltarHref }: PerfilPageProps) {
 
       <div className="text-center mb-6">
         {ROLE_ART[role] && (
-          <span
-            className="inline-flex items-center justify-center w-16 h-16 rounded-full border-[3px] border-ink mb-3"
-            style={{ background: ROLE_ART[role].bg }}
-          >
-            <Image src={ROLE_ART[role].art} alt="" width={40} height={40} className="w-10 h-10 object-contain" />
+          <span className="role-badge mb-3" style={{ background: ROLE_ART[role].bg }}>
+            <Image src={ROLE_ART[role].art} alt="" width={40} height={40} />
           </span>
         )}
         <h1 className="h-md text-purple mb-1">Meu perfil</h1>
