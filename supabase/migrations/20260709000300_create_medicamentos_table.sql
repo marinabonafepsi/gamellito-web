@@ -27,20 +27,25 @@ COMMENT ON COLUMN medicamentos.ativo IS 'false = descontinuado (mantém históri
 ALTER TABLE medicamentos ENABLE ROW LEVEL SECURITY;
 
 -- FAMILIA: CRUD completo dos próprios medicamentos
+DROP POLICY IF EXISTS "medicamentos_familia_select" ON medicamentos;
 CREATE POLICY "medicamentos_familia_select" ON medicamentos
   FOR SELECT USING (familia_id = auth.uid());
 
+DROP POLICY IF EXISTS "medicamentos_familia_insert" ON medicamentos;
 CREATE POLICY "medicamentos_familia_insert" ON medicamentos
   FOR INSERT WITH CHECK (familia_id = auth.uid());
 
+DROP POLICY IF EXISTS "medicamentos_familia_update" ON medicamentos;
 CREATE POLICY "medicamentos_familia_update" ON medicamentos
   FOR UPDATE USING (familia_id = auth.uid());
 
+DROP POLICY IF EXISTS "medicamentos_familia_delete" ON medicamentos;
 CREATE POLICY "medicamentos_familia_delete" ON medicamentos
   FOR DELETE USING (familia_id = auth.uid());
 
 -- PROFISSIONAL: vê medicamentos apenas de pacientes que compartilharam
 -- (mesma checagem que registros_profissional_select em 009)
+DROP POLICY IF EXISTS "medicamentos_profissional_select" ON medicamentos;
 CREATE POLICY "medicamentos_profissional_select" ON medicamentos
   FOR SELECT USING (
     EXISTS (
@@ -54,6 +59,7 @@ CREATE POLICY "medicamentos_profissional_select" ON medicamentos
   );
 
 -- ADMIN: vê tudo
+DROP POLICY IF EXISTS "medicamentos_admin_all" ON medicamentos;
 CREATE POLICY "medicamentos_admin_all" ON medicamentos
   FOR ALL USING (
     (SELECT role FROM user_profiles WHERE user_id = auth.uid()) = 'admin'

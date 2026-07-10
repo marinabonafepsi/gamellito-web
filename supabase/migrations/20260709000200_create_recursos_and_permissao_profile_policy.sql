@@ -35,10 +35,12 @@ COMMENT ON TABLE recursos IS 'Catálogo curado de atividades/materiais mostrado 
 ALTER TABLE recursos ENABLE ROW LEVEL SECURITY;
 
 -- Qualquer usuário autenticado pode ver recursos ativos (conteúdo não sensível)
+DROP POLICY IF EXISTS "recursos_select_ativo" ON recursos;
 CREATE POLICY "recursos_select_ativo" ON recursos
   FOR SELECT USING (ativo = true);
 
 -- Admin gerencia o catálogo
+DROP POLICY IF EXISTS "recursos_admin_all" ON recursos;
 CREATE POLICY "recursos_admin_all" ON recursos
   FOR ALL USING (
     (SELECT role FROM user_profiles WHERE user_id = auth.uid()) = 'admin'
@@ -57,6 +59,7 @@ ON CONFLICT DO NOTHING;
 -- USER_PROFILES — permitir que quem recebeu permissão (educador/profissional)
 -- veja o nome do usuário que compartilhou os dados
 -- ============================================================================
+DROP POLICY IF EXISTS "profiles_select_via_permissao" ON user_profiles;
 CREATE POLICY "profiles_select_via_permissao" ON user_profiles
   FOR SELECT USING (
     EXISTS (
