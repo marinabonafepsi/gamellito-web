@@ -16,6 +16,7 @@ export default async function FamiliaLayout({
   const navItems = [
     { label: 'Dashboard', href: '/familia/dashboard' },
     { label: 'Meu Diário', href: '/familia/diario' },
+    { label: 'Medicamentos', href: '/familia/medicamentos' },
     { label: 'Jogos', href: '/jogos' },
     { label: 'Loja', href: '/loja' },
   ];
