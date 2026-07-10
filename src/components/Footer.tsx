@@ -20,8 +20,8 @@ export function Footer() {
             <div className="links">
               <Link href="/">Início</Link>
               <Link href="/sobre">Sobre</Link>
-              <Link href="/jogos">Para famílias</Link>
-              <Link href="/biblioteca">Biblioteca</Link>
+              <Link href="/ecossistema">Ecossistema</Link>
+              <Link href="/biblioteca">Biblioteca de artigos</Link>
               <Link href="/sobre">Prêmios</Link>
               <Link href="/contato">Parceiros</Link>
               <Link href="/contato">Contato</Link>

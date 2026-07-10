@@ -30,27 +30,13 @@ export default function SobrePage() {
               <h2 className="h-md text-purple mb-4">
                 Como Funciona
               </h2>
-              <div className="space-y-4">
-                <div className="card">
-                  <div className="flex items-center gap-2 mb-2"><span className="bd w-2.5 h-2.5 rounded-full border-2 border-ink bg-game-blue" /><h3 className="font-display font-bold text-purple">Para Famílias</h3></div>
-                  <p>
-                    Registre alimentação, glicemia e atividades em um diário interativo. Ganhe moedas e desbloqueie prêmios conforme avança no controle da saúde.
-                  </p>
-                </div>
-
-                <div className="card card-cream">
-                  <div className="flex items-center gap-2 mb-2"><span className="bd w-2.5 h-2.5 rounded-full border-2 border-ink bg-orange" /><h3 className="font-display font-bold text-purple">Para Profissionais</h3></div>
-                  <p>
-                    Acompanhe seus pacientes em tempo real, receba alertas importantes e gere relatórios detalhados. Integre-se ao diário para orientações personalizadas.
-                  </p>
-                </div>
-
-                <div className="card">
-                  <div className="flex items-center gap-2 mb-2"><span className="bd w-2.5 h-2.5 rounded-full border-2 border-ink bg-game-green" /><h3 className="font-display font-bold text-purple">Para Educadores</h3></div>
-                  <p>
-                    Eduque grupos de crianças sobre DM1 através de recursos interativos e gamificados. Acompanhe progresso coletivo e individual.
-                  </p>
-                </div>
+              <div className="card flex items-center justify-between gap-6 flex-wrap">
+                <p className="max-w-[520px]">
+                  Família, profissional de saúde, educador e instituição — cada papel tem sua própria porta de entrada e suas próprias ferramentas dentro do Gamellito.
+                </p>
+                <Link href="/ecossistema">
+                  <GamButton variant="primary">Ver o ecossistema completo</GamButton>
+                </Link>
               </div>
             </section>
 

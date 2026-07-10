@@ -29,3 +29,9 @@ next-env.d.ts
 
 # supabase CLI local cache
 supabase/.temp/
+
+# scratch/preview pages
+src/app/preview-meds-tmp/
+
+# claude code local state
+.claude/scheduled_tasks.lock

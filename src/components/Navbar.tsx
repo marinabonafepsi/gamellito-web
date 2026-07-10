@@ -47,8 +47,8 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
       return [
         { label: 'Início', href: '/' },
         { label: 'Sobre', href: '/sobre' },
-        { label: 'Para famílias', href: '/jogos' },
-        { label: 'Biblioteca', href: '/biblioteca' },
+        { label: 'Ecossistema', href: '/ecossistema' },
+        { label: 'Biblioteca de artigos', href: '/biblioteca' },
         { label: 'Loja', href: '/loja' },
       ];
     }

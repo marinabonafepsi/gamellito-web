@@ -27,6 +27,44 @@ export interface RegistroGlicemia {
   dot: string;
 }
 
+export interface Recurso {
+  id: string;
+  titulo: string;
+  descricao?: string | null;
+  icone?: string | null;
+  acao_label: 'Abrir' | 'Baixar';
+  url?: string | null;
+}
+
+export interface PacienteResumo {
+  id: string;
+  nome: string;
+  status: 'ok' | 'rever';
+}
+
+export type ArtigoStatus = 'pendente' | 'publicado' | 'rejeitado';
+
+export interface Artigo {
+  id: string;
+  titulo: string;
+  autores: string;
+  ano: number;
+  categoria: string;
+  status: ArtigoStatus;
+}
+
+export const CATEGORIAS_ARTIGO = ['Enfermagem', 'Endocrinologia', 'Educação', 'Psicologia'] as const;
+export type CategoriaArtigo = (typeof CATEGORIAS_ARTIGO)[number];
+
+export interface NovoArtigo {
+  titulo: string;
+  autores: string;
+  resumo: string;
+  categoria: CategoriaArtigo;
+  ano: number;
+  pdf_url?: string;
+}
+
 interface DashboardShellProps {
   variant: DashboardVariant;
   userName: string;
@@ -49,10 +87,23 @@ interface DashboardShellProps {
   // DM1-only
   registros?: RegistroGlicemia[];
   onOpenRegistro?: () => void;
+  // PROF-only
+  atividades?: Recurso[];
+  alunos?: PacienteResumo[];
+  alunoHref?: (id: string) => string;
+  // SAUDE-only
+  materiais?: Recurso[];
+  pacientes?: PacienteResumo[];
+  pacienteHref?: (id: string) => string;
+  artigos?: Artigo[];
+  onSubmitArtigo?: (data: NovoArtigo) => Promise<void> | void;
 }
 
 const NAV_BY_VARIANT: Record<DashboardVariant, { color: string; label: string; href: string }[]> = {
-  dm1: [{ color: 'var(--game-red)', label: 'Diário de glicemia', href: '/familia/diario' }],
+  dm1: [
+    { color: 'var(--game-red)', label: 'Diário de glicemia', href: '/familia/diario' },
+    { color: 'var(--game-blue)', label: 'Medicamentos', href: '/familia/medicamentos' },
+  ],
   prof: [{ color: 'var(--game-blue)', label: 'Minhas turmas', href: '/educador/dashboard' }],
   saude: [
     { color: 'var(--game-blue)', label: 'Grupos e pacientes', href: '/profissional/dashboard' },
@@ -66,35 +117,6 @@ const ROLE_TAG: Record<DashboardVariant, string> = {
   saude: 'Saúde',
 };
 
-// ---- Static demo content for role-specific panels (no backing tables yet) ----
-const ATIVIDADES_PROF = [
-  { icon: '/assets/balao-pensamento.svg', title: 'Roda de conversa sobre DM1', desc: 'Roteiro de 20 min para toda a turma', action: 'Abrir' },
-  { icon: '/assets/gamellito-board-game.svg', title: 'Jogo do Gamellito em sala', desc: 'Dinâmica com o tabuleiro impresso', action: 'Abrir' },
-  { icon: '/assets/olho-desconfiado.svg', title: 'Cartaz de sinais de alerta', desc: 'Hipo e hiper para fixar na parede', action: 'Baixar' },
-];
-
-const ALUNOS_DM1 = [
-  { nome: 'Théo · 2º ano', nota: 'Plano de manejo em dia', ok: true },
-  { nome: 'Lívia · 4º ano', nota: 'Kit de emergência a revisar', ok: false },
-  { nome: 'Cecília · 3º ano', nota: 'Plano de manejo em dia', ok: true },
-];
-
-const GRUPOS_SAUDE = [
-  { icon: '/assets/mae-gamellito-glicemia.svg', title: 'Grupo de educação em DM1', desc: '8 famílias · próxima roda 12/07' },
-  { icon: '/assets/medico-mae-gamellito.svg', title: 'Ambulatório pediátrico', desc: '14 pacientes acompanhados' },
-];
-
-const MATERIAIS_SAUDE = [
-  { icon: '/assets/gamellito-seringa.svg', title: 'Instrumentos de avaliação', desc: 'Antes e depois da intervenção' },
-  { icon: '/assets/balao-pensamento.svg', title: 'Roteiro de rodas de conversa', desc: 'Estruturado por faixa etária' },
-];
-
-const ARTIGOS_SAUDE = [
-  { icon: '/assets/gamellito-seringa.svg', title: 'Educação lúdica e adesão ao tratamento em crianças com DM1', meta: 'Marta Nunes · enfermagem · 2025', published: true },
-  { icon: '/assets/mae-gamellito-glicemia.svg', title: 'Impacto de rodas de conversa no manejo familiar', meta: 'Marta Nunes · enfermagem · 2026', published: false },
-  { icon: '/assets/medico-mae-gamellito.svg', title: 'Protocolo escolar de emergências hipoglicêmicas', meta: 'co-autoria com USP · 2024', published: true },
-];
-
 export function DashboardShell({
   variant,
   userName,
@@ -105,9 +127,66 @@ export function DashboardShell({
   content,
   registros = [],
   onOpenRegistro,
+  atividades = [],
+  alunos = [],
+  alunoHref,
+  materiais = [],
+  pacientes = [],
+  pacienteHref,
+  artigos = [],
+  onSubmitArtigo,
 }: DashboardShellProps) {
   const [regOpen, setRegOpen] = useState(false);
   const [artOpen, setArtOpen] = useState(false);
+  const [artTitulo, setArtTitulo] = useState('');
+  const [artAutores, setArtAutores] = useState('');
+  const [artResumo, setArtResumo] = useState('');
+  const [artCategoria, setArtCategoria] = useState<CategoriaArtigo>('Enfermagem');
+  const [artAno, setArtAno] = useState(new Date().getFullYear());
+  const [artPdfUrl, setArtPdfUrl] = useState('');
+  const [artSubmitting, setArtSubmitting] = useState(false);
+  const [artError, setArtError] = useState('');
+
+  const resetArtForm = () => {
+    setArtTitulo('');
+    setArtAutores('');
+    setArtResumo('');
+    setArtCategoria('Enfermagem');
+    setArtAno(new Date().getFullYear());
+    setArtPdfUrl('');
+    setArtError('');
+  };
+
+  const handleSubmitArtigo = async () => {
+    if (!artTitulo.trim() || !artAutores.trim() || !artResumo.trim()) {
+      setArtError('Preencha título, autores e resumo.');
+      return;
+    }
+    setArtSubmitting(true);
+    setArtError('');
+    try {
+      await onSubmitArtigo?.({
+        titulo: artTitulo.trim(),
+        autores: artAutores.trim(),
+        resumo: artResumo.trim(),
+        categoria: artCategoria,
+        ano: artAno,
+        pdf_url: artPdfUrl.trim() || undefined,
+      });
+      resetArtForm();
+      setArtOpen(false);
+    } catch (err) {
+      setArtError(err instanceof Error ? err.message : 'Erro ao enviar artigo.');
+    } finally {
+      setArtSubmitting(false);
+    }
+  };
+
+  const ARTIGO_STATUS_LABEL: Record<ArtigoStatus, string> = {
+    pendente: 'Em revisão',
+    publicado: 'Publicado',
+    rejeitado: 'Rejeitado',
+  };
 
   return (
     <div className={s.app}>
@@ -343,82 +422,125 @@ export function DashboardShell({
               <div className={s.panel}>
                 <h3>Atividades para a turma</h3>
                 <p className={s.psub}>Pronto para aplicar em sala — sem improvisar</p>
-                <div className={s.acts}>
-                  {ATIVIDADES_PROF.map((a) => (
-                    <div className={s.act} key={a.title}>
-                      <span className={s.ai}>
-                        <Image src={a.icon} alt="" width={34} height={34} />
-                      </span>
-                      <div style={{ flex: 1 }}>
-                        <div className={s.at}>{a.title}</div>
-                        <div className={s.ad}>{a.desc}</div>
+                {atividades.length > 0 ? (
+                  <div className={s.acts}>
+                    {atividades.map((a) => (
+                      <div className={s.act} key={a.id}>
+                        <span className={s.ai}>
+                          <Image src={a.icone || '/assets/gamellito-logo.svg'} alt="" width={34} height={34} />
+                        </span>
+                        <div style={{ flex: 1 }}>
+                          <div className={s.at}>{a.titulo}</div>
+                          <div className={s.ad}>{a.descricao}</div>
+                        </div>
+                        <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href={a.url || '#'}>{a.acao_label}</a>
                       </div>
-                      <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href="#">{a.action}</a>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className={s.psub}>Nenhuma atividade disponível no momento</p>
+                )}
               </div>
               <div className={s.panel}>
                 <h3>Alunos com DM1</h3>
                 <p className={s.psub}>Acompanhe quem precisa de atenção</p>
-                {ALUNOS_DM1.map((al) => (
-                  <div className={s.reg} key={al.nome}>
-                    <span className={s.avatar} style={{ width: 38, height: 38 }}>
-                      <Image src="/assets/gamellito-logo.svg" alt="" width={32} height={32} />
-                    </span>
-                    <div style={{ flex: 1 }}>
-                      <div className={s.at} style={{ fontSize: 14 }}>{al.nome}</div>
-                      <div className={s.ad}>{al.nota}</div>
-                    </div>
-                    <span className={s.rtag}>
-                      <span className={s.rdot} style={{ background: al.ok ? 'var(--game-green)' : 'var(--color-orange)' }} />
-                      {al.ok ? 'ok' : 'rever'}
-                    </span>
-                  </div>
-                ))}
+                {alunos.length > 0 ? (
+                  alunos.map((al) => {
+                    const row = (
+                      <>
+                        <span className={s.avatar} style={{ width: 38, height: 38 }}>
+                          <Image src="/assets/gamellito-logo.svg" alt="" width={32} height={32} />
+                        </span>
+                        <div style={{ flex: 1 }}>
+                          <div className={s.at} style={{ fontSize: 14 }}>{al.nome}</div>
+                        </div>
+                        <span className={s.rtag}>
+                          <span className={s.rdot} style={{ background: al.status === 'ok' ? 'var(--game-green)' : 'var(--color-orange)' }} />
+                          {al.status}
+                        </span>
+                      </>
+                    );
+                    return alunoHref ? (
+                      <Link href={alunoHref(al.id)} className={s.reg} key={al.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        {row}
+                      </Link>
+                    ) : (
+                      <div className={s.reg} key={al.id}>
+                        {row}
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p className={s.psub}>
+                    Nenhum aluno compartilhou os dados com você ainda. Peça para a família ativar o
+                    compartilhamento no diário dela.
+                  </p>
+                )}
               </div>
             </div>
           )}
 
-          {/* role-specific bottom: SAÚDE => grupos + materiais + artigos */}
+          {/* role-specific bottom: SAÚDE => pacientes + materiais + artigos */}
           {variant === 'saude' && (
             <>
               <div className={s.cols}>
                 <div className={s.panel}>
                   <h3>Grupos e pacientes</h3>
-                  <p className={s.psub}>Educação em diabetes que você conduz</p>
-                  <div className={s.acts}>
-                    {GRUPOS_SAUDE.map((g) => (
-                      <div className={s.act} key={g.title}>
-                        <span className={s.ai}>
-                          <Image src={g.icon} alt="" width={34} height={34} />
-                        </span>
-                        <div style={{ flex: 1 }}>
-                          <div className={s.at}>{g.title}</div>
-                          <div className={s.ad}>{g.desc}</div>
+                  <p className={s.psub}>Famílias que compartilharam dados com você</p>
+                  {pacientes.length > 0 ? (
+                    pacientes.map((p) => {
+                      const row = (
+                        <>
+                          <span className={s.avatar} style={{ width: 38, height: 38 }}>
+                            <Image src="/assets/gamellito-logo.svg" alt="" width={32} height={32} />
+                          </span>
+                          <div style={{ flex: 1 }}>
+                            <div className={s.at} style={{ fontSize: 14 }}>{p.nome}</div>
+                          </div>
+                          <span className={s.rtag}>
+                            <span className={s.rdot} style={{ background: p.status === 'ok' ? 'var(--game-green)' : 'var(--color-orange)' }} />
+                            {p.status}
+                          </span>
+                        </>
+                      );
+                      return pacienteHref ? (
+                        <Link href={pacienteHref(p.id)} className={s.reg} key={p.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                          {row}
+                        </Link>
+                      ) : (
+                        <div className={s.reg} key={p.id}>
+                          {row}
                         </div>
-                        <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href="#">Abrir</a>
-                      </div>
-                    ))}
-                  </div>
+                      );
+                    })
+                  ) : (
+                    <p className={s.psub}>
+                      Nenhum paciente compartilhou os dados com você ainda. Peça para a família ativar o
+                      compartilhamento no diário dela.
+                    </p>
+                  )}
                 </div>
                 <div className={s.panel}>
                   <h3>Materiais do método</h3>
                   <p className={s.psub}>Baseado em evidência (USP + UEL)</p>
-                  <div className={s.acts}>
-                    {MATERIAIS_SAUDE.map((m) => (
-                      <div className={s.act} key={m.title}>
-                        <span className={s.ai}>
-                          <Image src={m.icon} alt="" width={34} height={34} />
-                        </span>
-                        <div style={{ flex: 1 }}>
-                          <div className={s.at}>{m.title}</div>
-                          <div className={s.ad}>{m.desc}</div>
+                  {materiais.length > 0 ? (
+                    <div className={s.acts}>
+                      {materiais.map((m) => (
+                        <div className={s.act} key={m.id}>
+                          <span className={s.ai}>
+                            <Image src={m.icone || '/assets/gamellito-logo.svg'} alt="" width={34} height={34} />
+                          </span>
+                          <div style={{ flex: 1 }}>
+                            <div className={s.at}>{m.titulo}</div>
+                            <div className={s.ad}>{m.descricao}</div>
+                          </div>
+                          <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href={m.url || '#'}>{m.acao_label}</a>
                         </div>
-                        <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href="#">Baixar</a>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className={s.psub}>Nenhum material disponível no momento</p>
+                  )}
                 </div>
               </div>
 
@@ -432,28 +554,42 @@ export function DashboardShell({
                   <strong style={{ color: 'var(--color-purple)' }}>repositório público</strong> do site — aberto a
                   toda a comunidade.
                 </p>
-                <div className={s.acts}>
-                  {ARTIGOS_SAUDE.map((art) => (
-                    <div className={s.art} key={art.title}>
-                      <span className={s.ai}>
-                        <Image src={art.icon} alt="" width={34} height={34} />
-                      </span>
-                      <div style={{ flex: 1 }}>
-                        <div className={s.at}>{art.title}</div>
-                        <div className={s.ad}>{art.meta}</div>
+                {artigos.length > 0 ? (
+                  <div className={s.acts}>
+                    {artigos.map((art) => (
+                      <div className={s.art} key={art.id}>
+                        <span className={s.ai}>
+                          <Image src="/assets/gamellito-seringa.svg" alt="" width={34} height={34} />
+                        </span>
+                        <div style={{ flex: 1 }}>
+                          <div className={s.at}>{art.titulo}</div>
+                          <div className={s.ad}>{art.autores} · {art.categoria} · {art.ano}</div>
+                        </div>
+                        <span className={`${s.stpill} ${art.status === 'publicado' ? s.pub : art.status === 'rejeitado' ? '' : s.rev}`}>
+                          <span
+                            className={s.rdot}
+                            style={{
+                              background:
+                                art.status === 'publicado'
+                                  ? 'var(--game-green)'
+                                  : art.status === 'rejeitado'
+                                    ? 'var(--game-red)'
+                                    : 'var(--color-orange)',
+                            }}
+                          />
+                          {ARTIGO_STATUS_LABEL[art.status]}
+                        </span>
                       </div>
-                      <span className={`${s.stpill} ${art.published ? s.pub : s.rev}`}>
-                        <span className={s.rdot} style={{ background: art.published ? 'var(--game-green)' : 'var(--color-orange)' }} />
-                        {art.published ? 'Publicado' : 'Em revisão'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className={s.psub}>Você ainda não submeteu nenhum artigo</p>
+                )}
                 <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
                   <button className={`${s.btn} ${s.btnOrange} ${s.btnSm}`} onClick={() => setArtOpen(true)}>
                     + Submeter artigo
                   </button>
-                  <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href="#">Ver repositório público</a>
+                  <Link href="/biblioteca" className={`${s.btn} ${s.btnCream} ${s.btnSm}`}>Ver repositório público</Link>
                 </div>
               </div>
             </>
@@ -465,36 +601,79 @@ export function DashboardShell({
       {artOpen && (
         <div className={s.ov} onClick={() => setArtOpen(false)}>
           <div className={s.modal} onClick={(e) => e.stopPropagation()}>
-            <button className={s.mx} onClick={() => setArtOpen(false)}>✕</button>
+            <button className={s.mx} onClick={() => { setArtOpen(false); resetArtForm(); }}>✕</button>
             <h3>Submeter artigo</h3>
             <p className={s.msub}>Após a revisão da equipe, ele é publicado no repositório público do site.</p>
             <div className={s.field}>
               <label>Título</label>
-              <input type="text" placeholder="Ex.: Educação lúdica e adesão ao tratamento…" />
+              <input
+                type="text"
+                placeholder="Ex.: Educação lúdica e adesão ao tratamento…"
+                value={artTitulo}
+                onChange={(e) => setArtTitulo(e.target.value)}
+              />
             </div>
             <div className={s.field}>
               <label>Autores</label>
-              <input type="text" placeholder="Nomes separados por vírgula" />
+              <input
+                type="text"
+                placeholder="Nomes separados por vírgula"
+                value={artAutores}
+                onChange={(e) => setArtAutores(e.target.value)}
+              />
+            </div>
+            <div className={s.field}>
+              <label>Resumo</label>
+              <textarea
+                placeholder="Objetivo, metodologia e principal resultado"
+                value={artResumo}
+                onChange={(e) => setArtResumo(e.target.value)}
+                rows={3}
+                style={{ fontFamily: 'Nunito', fontWeight: 700, fontSize: 15, padding: '11px 14px', borderRadius: 14, border: '2px solid var(--color-ink)', resize: 'vertical' }}
+              />
             </div>
             <div className={s.field}>
               <label>Área</label>
               <div className={s.chips}>
-                <button className={`${s.lchip} ${s.lchipOn}`} type="button">Enfermagem</button>
-                <button className={s.lchip} type="button">Endocrinologia</button>
-                <button className={s.lchip} type="button">Educação</button>
-                <button className={s.lchip} type="button">Psicologia</button>
+                {CATEGORIAS_ARTIGO.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    className={`${s.lchip} ${artCategoria === cat ? s.lchipOn : ''}`}
+                    onClick={() => setArtCategoria(cat)}
+                  >
+                    {cat}
+                  </button>
+                ))}
               </div>
             </div>
             <div className={s.field}>
-              <label>Arquivo (PDF)</label>
-              <input type="text" placeholder="Anexar arquivo…" readOnly style={{ cursor: 'pointer' }} />
+              <label>Ano</label>
+              <input
+                type="number"
+                value={artAno}
+                onChange={(e) => setArtAno(parseInt(e.target.value, 10) || new Date().getFullYear())}
+              />
             </div>
+            <div className={s.field}>
+              <label>Link do PDF (opcional)</label>
+              <input
+                type="text"
+                placeholder="https://…"
+                value={artPdfUrl}
+                onChange={(e) => setArtPdfUrl(e.target.value)}
+              />
+            </div>
+            {artError && (
+              <p className={s.msub} style={{ color: 'var(--game-red)' }}>{artError}</p>
+            )}
             <button
               className={`${s.btn} ${s.btnOrange}`}
               style={{ width: '100%', marginTop: 6 }}
-              onClick={() => setArtOpen(false)}
+              onClick={handleSubmitArtigo}
+              disabled={artSubmitting}
             >
-              Enviar para revisão
+              {artSubmitting ? 'Enviando…' : 'Enviar para revisão'}
             </button>
           </div>
         </div>

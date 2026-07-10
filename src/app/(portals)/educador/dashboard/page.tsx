@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { DashboardShell } from '@/components/dashboard/DashboardShell';
+import { DashboardShell, type Recurso, type PacienteResumo } from '@/components/dashboard/DashboardShell';
 
 const TRILHAS_PROF = [
   { n: '1', color: 'var(--game-blue)', title: 'Identificar sinais do DM1', format: 'vídeo', lessons: '3 aulas', pct: '100%', barClass: 'g', status: 'concluída', statusClass: 'done' },
@@ -15,6 +15,8 @@ const TRILHAS_PROF = [
 export default function EducadorDashboardPage() {
   const [userName, setUserName] = useState('');
   const [coins, setCoins] = useState(0);
+  const [atividades, setAtividades] = useState<Recurso[]>([]);
+  const [alunos, setAlunos] = useState<PacienteResumo[]>([]);
   const [loading, setLoading] = useState(true);
   const supabase = createClientComponentClient();
   const router = useRouter();
@@ -32,6 +34,15 @@ export default function EducadorDashboardPage() {
 
       setUserName(profile?.name || user.email?.split('@')[0] || 'Gamellito');
       setCoins(profile?.coins || 0);
+
+      const [recursosRes, pacientesRes] = await Promise.all([
+        fetch('/api/recursos?papel=educador').then((r) => (r.ok ? r.json() : { atividades: [] })),
+        fetch('/api/pacientes').then((r) => (r.ok ? r.json() : { pacientes: [] })),
+      ]);
+
+      setAtividades(recursosRes.atividades || []);
+      setAlunos(pacientesRes.pacientes || []);
+
       setLoading(false);
     };
     load();
@@ -52,6 +63,8 @@ export default function EducadorDashboardPage() {
       streak={8}
       onLogout={handleLogout}
       accountHref="/educador/perfil"
+      atividades={atividades}
+      alunos={alunos}
       content={{
         greetEb: 'Sua turma agradece',
         greetName: `Oi, ${userName}!`,

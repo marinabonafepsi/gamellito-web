@@ -21,11 +21,34 @@ interface NotaClinica {
   criado_por: string;
 }
 
+interface Medicamento {
+  id: string;
+  nome: string;
+  tipo: 'basal' | 'bolus' | 'outro';
+  dose: string;
+  horarios: string;
+  desde?: string;
+  observacao?: string;
+}
+
+const TIPO_LABEL: Record<Medicamento['tipo'], string> = {
+  basal: 'Basal',
+  bolus: 'Bolus',
+  outro: 'Outro',
+};
+
+function formatDesde(desde?: string) {
+  if (!desde) return '—';
+  const d = new Date(`${desde}T00:00:00`);
+  return d.toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }).replace('.', '');
+}
+
 export default function PacienteFichaPage() {
   const params = useParams();
   const pacienteId = params.id as string;
   const [registros, setRegistros] = useState<Registro[]>([]);
   const [notas, setNotas] = useState<NotaClinica[]>([]);
+  const [medicamentos, setMedicamentos] = useState<Medicamento[]>([]);
   const [nomePaciente, setNomePaciente] = useState('Paciente');
   const [loading, setLoading] = useState(true);
   const [notaText, setNotaText] = useState('');
@@ -62,6 +85,13 @@ export default function PacienteFichaPage() {
       // Get notas clínicas (para este paciente)
       // TODO: Implementar clinical_notes table
       setNotas([]);
+
+      // Get posologia atual
+      const medsRes = await fetch(`/api/medicamentos?paciente_id=${pacienteId}`);
+      if (medsRes.ok) {
+        const medsData = await medsRes.json();
+        setMedicamentos(medsData.medicamentos || []);
+      }
     } catch (error) {
       console.error('Error loading paciente:', error);
     } finally {
@@ -158,6 +188,65 @@ export default function PacienteFichaPage() {
             </p>
           </div>
         </GamCard>
+      </div>
+
+      {/* Posologia atual */}
+      <div>
+        <div className="flex justify-between items-baseline mb-3">
+          <h2 className="text-2xl font-display font-bold text-purple-main">Posologia atual</h2>
+          <p className="text-xs text-ink/50 font-body">informado pelo responsável no app</p>
+        </div>
+        <GamCard surface="lilac" className="mb-4">
+          <div className="p-2 flex flex-col md:flex-row md:items-center gap-2 text-sm">
+            <span className="tag" style={{ color: '#2B2233', background: 'rgba(255,255,255,.5)', padding: '2px 10px', borderRadius: 999 }}>
+              Gestão completa de medicamentos
+            </span>
+            <span className="font-bold text-ink">chega em breve</span>
+            <span className="text-ink/80">
+              ao painel Gamellito — por ora, os dados abaixo são preenchidos manualmente pela família.
+            </span>
+          </div>
+        </GamCard>
+        {medicamentos.length > 0 ? (
+          <GamCard surface="white">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs text-ink/50 uppercase border-b-2 border-ink/10">
+                    <th className="pb-2 pr-3">Medicamento</th>
+                    <th className="pb-2 pr-3">Tipo</th>
+                    <th className="pb-2 pr-3">Dose</th>
+                    <th className="pb-2 pr-3">Horários</th>
+                    <th className="pb-2 pr-3">Desde</th>
+                    <th className="pb-2">Observação</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {medicamentos.map((m) => (
+                    <tr key={m.id} className="border-b border-ink/10 last:border-0">
+                      <td className="py-3 pr-3 font-bold text-ink">{m.nome}</td>
+                      <td className="py-3 pr-3">
+                        <span className="tag" style={{ background: '#EDE9FE', color: '#6E59C9', padding: '3px 10px', borderRadius: 999, fontWeight: 700 }}>
+                          {TIPO_LABEL[m.tipo]}
+                        </span>
+                      </td>
+                      <td className="py-3 pr-3 text-ink">{m.dose}</td>
+                      <td className="py-3 pr-3 text-ink">{m.horarios}</td>
+                      <td className="py-3 pr-3 text-ink/70">{formatDesde(m.desde)}</td>
+                      <td className="py-3 text-ink/70">{m.observacao || '—'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </GamCard>
+        ) : (
+          <GamCard surface="cream">
+            <div className="text-center py-8">
+              <p className="text-ink opacity-70">Nenhum medicamento cadastrado por esta família ainda</p>
+            </div>
+          </GamCard>
+        )}
       </div>
 
       {/* Notas Clínicas */}
