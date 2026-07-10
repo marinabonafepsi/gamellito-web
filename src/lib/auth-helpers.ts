@@ -77,7 +77,7 @@ export async function requireRole(requiredRole: string | string[]) {
 
   const rolesArray = Array.isArray(requiredRole) ? requiredRole : [requiredRole];
 
-  if (!rolesArray.includes(userRole)) {
+  if (!userRole || !rolesArray.includes(userRole)) {
     // Redirect to home or appropriate dashboard
     const redirects: Record<string, string> = {
       familia: '/familia/dashboard',
@@ -98,7 +98,9 @@ export async function requireRole(requiredRole: string | string[]) {
  */
 export async function getFamiliaId(): Promise<string | null> {
   const user = await getUser();
-  if (!user || !['familia', 'dm1'].includes(user.user_metadata?.role)) {
+  if (!user) return null;
+  const role = await getUserRole();
+  if (!role || !['familia', 'dm1'].includes(role)) {
     return null;
   }
   return user.id;
@@ -180,7 +182,7 @@ export async function hasPermissionFor(targetUserId: string): Promise<boolean> {
   const supabase = createServerComponentClient({ cookies });
 
   // Admin can access everything
-  if (user.user_metadata?.role === 'admin') {
+  if ((await getUserRole()) === 'admin') {
     return true;
   }
 
