@@ -17,6 +17,22 @@ export async function middleware(request: NextRequest) {
 
   const user = session?.user;
 
+  // Source of truth for role is user_profiles.role, not the auth
+  // user_metadata (which can be stale/unset for accounts created before the
+  // role-metadata convention existed, or via some OAuth paths). Only fall
+  // back to user_metadata for the brief window right after signup before
+  // the on_auth_user_created trigger has run. Same rule as getUserRole() in
+  // src/lib/auth-helpers.ts.
+  let userRole: string | undefined;
+  if (user) {
+    const { data: profile } = await supabase
+      .from('user_profiles')
+      .select('role')
+      .eq('user_id', user.id)
+      .single();
+    userRole = profile?.role || user.user_metadata?.role || 'familia';
+  }
+
   // ============================================================================
   // RULE 1: Routes under /auth/* are always public
   // ============================================================================
@@ -26,7 +42,6 @@ export async function middleware(request: NextRequest) {
       user &&
       (pathname === '/auth/login' || pathname === '/auth/signup')
     ) {
-      const userRole = user.user_metadata?.role || 'familia';
       const redirects: Record<string, string> = {
         familia: '/familia/dashboard',
         profissional: '/profissional/dashboard',
@@ -34,7 +49,7 @@ export async function middleware(request: NextRequest) {
         instituicao: '/instituicao/dashboard',
         admin: '/admin/dashboard',
       };
-      const redirect = redirects[userRole] || '/familia/dashboard';
+      const redirect = redirects[userRole || ''] || '/familia/dashboard';
       return NextResponse.redirect(new URL(redirect, request.url));
     }
     return response;
@@ -47,8 +62,7 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
-    const userRole = user.user_metadata?.role;
-    if (userRole !== 'familia') {
+    if (userRole !== 'familia' && userRole !== 'dm1') {
       // Redirect to correct portal based on role
       const redirects: Record<string, string> = {
         profissional: '/profissional/dashboard',
@@ -69,7 +83,6 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
-    const userRole = user.user_metadata?.role;
     if (userRole !== 'profissional') {
       const redirects: Record<string, string> = {
         familia: '/familia/dashboard',
@@ -90,7 +103,6 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
-    const userRole = user.user_metadata?.role;
     if (userRole !== 'educador') {
       const redirects: Record<string, string> = {
         familia: '/familia/dashboard',
@@ -111,7 +123,6 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
-    const userRole = user.user_metadata?.role;
     if (userRole !== 'instituicao') {
       const redirects: Record<string, string> = {
         familia: '/familia/dashboard',
@@ -132,7 +143,6 @@ export async function middleware(request: NextRequest) {
     if (!user) {
       return NextResponse.redirect(new URL('/auth/login', request.url));
     }
-    const userRole = user.user_metadata?.role;
     if (userRole !== 'admin') {
       // Non-admin users try to access admin → redirect to their portal
       const redirects: Record<string, string> = {
