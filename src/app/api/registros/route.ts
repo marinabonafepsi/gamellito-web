@@ -1,6 +1,7 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import { trackEvent } from '@/lib/auth-helpers';
 
 export const runtime = 'nodejs';
 
@@ -136,11 +137,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Track event
-    await supabase.from('product_events').insert({
-      user_id: user.id,
-      event: 'registro_salvo',
-      properties: { valor, rotulo },
-    });
+    await trackEvent('registro_salvo', { valor, rotulo });
 
     // Get updated coins
     const { data: profile } = await supabase

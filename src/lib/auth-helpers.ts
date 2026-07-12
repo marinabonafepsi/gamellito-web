@@ -1,6 +1,7 @@
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { parseDeviceInfo } from './device';
 
 /**
  * Get current user session (server-side)
@@ -235,12 +236,15 @@ export async function getFamiliaChildren() {
  */
 export async function trackEvent(event: string, properties?: Record<string, any>) {
   const user = await getUser();
+  const { platform, device_type } = parseDeviceInfo(headers().get('user-agent'));
 
   const supabase = createServerComponentClient({ cookies });
   const { error } = await supabase.from('product_events').insert({
     user_id: user?.id || null,
     event,
     properties: properties || {},
+    platform,
+    device_type,
   });
 
   if (error) {

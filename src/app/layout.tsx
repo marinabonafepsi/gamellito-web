@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
+import { VisitTracker } from '@/components/VisitTracker';
 
 export const metadata: Metadata = {
   title: 'Gamellito — A gente transforma o difícil em aventura',
@@ -20,7 +21,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>{children}</body>
+      <body>
+        <VisitTracker />
+        {children}
+      </body>
     </html>
   );
 }
