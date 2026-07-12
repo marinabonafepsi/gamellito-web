@@ -79,9 +79,9 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
       ],
       admin: [
         { label: 'Dashboard', href: '/admin/dashboard' },
-        { label: 'Usuários', href: '/admin/usuarios' },
-        { label: 'Instituições', href: '/admin/instituicoes' },
-        { label: 'Analytics', href: '/admin/analytics' },
+        { label: 'Loja', href: '/admin/loja' },
+        { label: 'Jogos', href: '/admin/jogos' },
+        { label: 'Feature Flags', href: '/admin/feature-flags' },
       ],
     };
 
@@ -100,9 +100,9 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
             href="/"
             className="flex items-center gap-2 sm:gap-3 h-full pl-3 pr-4 sm:pl-5 sm:pr-6 no-underline bg-purple-deep rounded-[15px_46px_46px_15px]"
           >
-            <Image className="h-[38px] sm:h-[50px] w-auto block flex-none" src="/assets/gamellito-logo.svg" alt="" width={50} height={50} />
-            <Image className="h-[24px] sm:h-[33px] w-auto block" src="/assets/wordmark-clean.svg" alt="Gamellito" width={140} height={33} />
-            <span className="font-display font-bold text-[15px] text-cream self-end -mb-0 -ml-1 hidden sm:inline">Ltda.</span>
+            <Image className="h-16 sm:h-24 w-auto block flex-none" src="/assets/gamellito-logo.svg" alt="" width={50} height={50} />
+            <Image className="h-9 sm:h-[54px] w-auto block" src="/assets/wordmark-clean.svg" alt="Gamellito" width={140} height={33} />
+            <span className="font-display font-bold text-[15px] text-cream self-end mb-[13px] -ml-1 hidden sm:inline">Ltda.</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-[3px]">

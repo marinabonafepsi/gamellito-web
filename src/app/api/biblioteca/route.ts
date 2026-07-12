@@ -1,6 +1,7 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
+import { trackEvent } from '@/lib/auth-helpers';
 
 export const runtime = 'nodejs';
 
@@ -92,11 +93,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to submit artigo' }, { status: 500 });
     }
 
-    await supabase.from('product_events').insert({
-      user_id: user.id,
-      event: 'artigo_submetido',
-      properties: { artigo_id: artigo.id, categoria },
-    });
+    await trackEvent('artigo_submetido', { artigo_id: artigo.id, categoria });
 
     return NextResponse.json({ sucesso: true, artigo });
   } catch (error) {

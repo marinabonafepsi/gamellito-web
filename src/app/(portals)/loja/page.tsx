@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { GamButton } from '@/components/ds/GamButton';
 import { GamCard } from '@/components/ds/GamCard';
+import { ProdutosFisicosTab } from '@/components/loja/ProdutosFisicosTab';
 
 interface Item {
   id: string;
@@ -27,6 +28,7 @@ export default function LojaPage() {
   );
   const [loading, setLoading] = useState(true);
   const [comprando, setComprando] = useState<string | null>(null);
+  const [tab, setTab] = useState<'recompensas' | 'produtos'>('recompensas');
   const supabase = createClientComponentClient();
 
   useEffect(() => {
@@ -157,6 +159,34 @@ export default function LojaPage() {
         </div>
       </div>
 
+      {/* Tabs */}
+      <div className="flex gap-2">
+        <button
+          onClick={() => setTab('recompensas')}
+          className={`px-5 py-2 rounded-full border-2 font-display font-bold text-sm transition-all ${
+            tab === 'recompensas'
+              ? 'bg-ink text-white border-ink shadow-pop-sm'
+              : 'bg-white text-ink border-ink/20 hover:border-ink'
+          }`}
+        >
+          Recompensas · moedas
+        </button>
+        <button
+          onClick={() => setTab('produtos')}
+          className={`px-5 py-2 rounded-full border-2 font-display font-bold text-sm transition-all ${
+            tab === 'produtos'
+              ? 'bg-ink text-white border-ink shadow-pop-sm'
+              : 'bg-white text-ink border-ink/20 hover:border-ink'
+          }`}
+        >
+          Produtos · loja física
+        </button>
+      </div>
+
+      {tab === 'produtos' && <ProdutosFisicosTab />}
+
+      {tab === 'recompensas' && (
+      <>
       {/* Items Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {items.map((item) => {
@@ -239,6 +269,8 @@ export default function LojaPage() {
           </ul>
         </div>
       </GamCard>
+      </>
+      )}
     </div>
   );
 }
