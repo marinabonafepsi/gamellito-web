@@ -1,11 +1,12 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
-import { trackEvent } from '@/lib/auth-helpers';
+import { trackEvent, hasPermissionFor } from '@/lib/auth-helpers';
 
 export const runtime = 'nodejs';
 
-// GET /api/registros - List registros for current familia
+// GET /api/registros - List registros for current familia, or (via
+// ?dm1_id=) for a DM1 account linked to the current família account
 export async function GET(request: NextRequest) {
   try {
     const supabase = createRouteHandlerClient({ cookies });
@@ -25,12 +26,21 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(url.searchParams.get('offset') || '0');
     const dataInicio = url.searchParams.get('data_inicio');
     const dataFim = url.searchParams.get('data_fim');
+    const dm1Id = url.searchParams.get('dm1_id');
+
+    let targetId = user.id;
+    if (dm1Id && dm1Id !== user.id) {
+      if (!(await hasPermissionFor(dm1Id))) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
+      targetId = dm1Id;
+    }
 
     // Build query
     let query = supabase
       .from('registros')
       .select('*', { count: 'exact' })
-      .eq('familia_id', user.id)
+      .eq('familia_id', targetId)
       .order('data_hora', { ascending: false });
 
     if (dataInicio) {

@@ -16,6 +16,7 @@ interface SignupFormData {
   // Familia specific
   nomeCrianca?: string;
   dataNascimentoCrianca?: string;
+  codigoFamilia?: string;
   // Profissional specific
   crmCoren?: string;
   estado?: string;
@@ -44,6 +45,7 @@ export default function SignupPage() {
     nome: '',
     nomeCrianca: '',
     dataNascimentoCrianca: '',
+    codigoFamilia: '',
     crmCoren: '',
     estado: '',
     especialidade: '',
@@ -112,6 +114,7 @@ export default function SignupPage() {
             ...(role === 'familia' && {
               nomeCrianca: formData.nomeCrianca,
               dataNascimentoCrianca: formData.dataNascimentoCrianca,
+              codigoFamilia: formData.codigoFamilia,
             }),
             ...(role === 'dm1' && {
               dataNascimento: formData.dataNascimentoCrianca,
@@ -187,6 +190,23 @@ export default function SignupPage() {
                 required
                 className="w-full px-4 py-2 bg-white border-[3px] border-ink rounded-[16px] text-ink focus:outline-none focus:shadow-pop-sm"
               />
+            </div>
+            <div>
+              <label className="block text-sm font-bold text-ink mb-2">
+                Código da família (opcional)
+              </label>
+              <input
+                type="text"
+                name="codigoFamilia"
+                value={formData.codigoFamilia}
+                onChange={handleChange}
+                maxLength={8}
+                className="w-full px-4 py-2 bg-white border-[3px] border-ink rounded-[16px] text-ink placeholder-ink/40 uppercase focus:outline-none focus:shadow-pop-sm"
+                placeholder="Se a criança/adolescente já tem conta"
+              />
+              <p className="text-xs text-ink/50 mt-1">
+                Se quem tem DM1 já criou a própria conta, peça o código de família a ela em Minha conta.
+              </p>
             </div>
           </>
         );
