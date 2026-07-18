@@ -12,7 +12,7 @@ export function Footer() {
               <Image src="/assets/wordmark-clean.svg" alt="Gamellito" width={140} height={30} className="h-[30px] w-auto" />
             </div>
             <p className="font-body text-sm leading-relaxed text-cream/85 max-w-[280px]">
-              Tecnologia que acolhe, educa e gera resultados. A gente transforma o difícil em aventura.
+              Tecnologia que acolhe, educa e gera resultados. A gente transforma a rotina em aventura.
             </p>
           </div>
           <div>
