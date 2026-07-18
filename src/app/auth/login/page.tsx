@@ -38,7 +38,6 @@ export default function LoginPage() {
         profissional: '/profissional/dashboard',
         educador: '/educador/dashboard',
         instituicao: '/instituicao/dashboard',
-        admin: '/admin/dashboard',
       };
 
       router.push(redirects[role] || '/familia/dashboard');

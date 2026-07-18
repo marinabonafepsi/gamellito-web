@@ -86,7 +86,9 @@ export async function requireRole(requiredRole: string | string[]) {
       profissional: '/profissional/dashboard',
       educador: '/educador/dashboard',
       instituicao: '/instituicao/dashboard',
-      admin: '/admin/dashboard',
+      // 'admin' has no portal on this site anymore — admin access moved to
+      // the separate gamellito-erp app. An admin user hitting a mismatched
+      // requireRole() here falls through to '/' below.
     };
     redirect((userRole && redirects[userRole]) || '/');
   }

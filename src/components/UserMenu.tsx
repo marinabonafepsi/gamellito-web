@@ -39,7 +39,6 @@ export function UserMenu({ user, portalType }: UserMenuProps) {
     profissional: '/profissional/dashboard',
     educador: '/educador/dashboard',
     instituicao: '/instituicao/dashboard',
-    admin: '/admin/dashboard',
   };
 
   const profileLink = portalType

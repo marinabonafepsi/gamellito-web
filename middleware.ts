@@ -23,6 +23,10 @@ export async function middleware(request: NextRequest) {
   // back to user_metadata for the brief window right after signup before
   // the on_auth_user_created trigger has run. Same rule as getUserRole() in
   // src/lib/auth-helpers.ts.
+  //
+  // Note: 'admin' is not one of the portals routed here — admin access
+  // moved to a separate app (gamellito-erp), so this site has no /admin/*
+  // routes anymore.
   let userRole: string | undefined;
   if (user) {
     const { data: profile } = await supabase
@@ -47,7 +51,6 @@ export async function middleware(request: NextRequest) {
         profissional: '/profissional/dashboard',
         educador: '/educador/dashboard',
         instituicao: '/instituicao/dashboard',
-        admin: '/admin/dashboard',
       };
       const redirect = redirects[userRole || ''] || '/familia/dashboard';
       return NextResponse.redirect(new URL(redirect, request.url));
@@ -68,7 +71,6 @@ export async function middleware(request: NextRequest) {
         profissional: '/profissional/dashboard',
         educador: '/educador/dashboard',
         instituicao: '/instituicao/dashboard',
-        admin: '/admin/dashboard',
       };
       const redirect = redirects[userRole || ''] || '/auth/select-role';
       return NextResponse.redirect(new URL(redirect, request.url));
@@ -88,7 +90,6 @@ export async function middleware(request: NextRequest) {
         familia: '/familia/dashboard',
         educador: '/educador/dashboard',
         instituicao: '/instituicao/dashboard',
-        admin: '/admin/dashboard',
       };
       const redirect = redirects[userRole || ''] || '/auth/select-role';
       return NextResponse.redirect(new URL(redirect, request.url));
@@ -108,7 +109,6 @@ export async function middleware(request: NextRequest) {
         familia: '/familia/dashboard',
         profissional: '/profissional/dashboard',
         instituicao: '/instituicao/dashboard',
-        admin: '/admin/dashboard',
       };
       const redirect = redirects[userRole || ''] || '/auth/select-role';
       return NextResponse.redirect(new URL(redirect, request.url));
@@ -128,30 +128,8 @@ export async function middleware(request: NextRequest) {
         familia: '/familia/dashboard',
         profissional: '/profissional/dashboard',
         educador: '/educador/dashboard',
-        admin: '/admin/dashboard',
       };
       const redirect = redirects[userRole || ''] || '/auth/select-role';
-      return NextResponse.redirect(new URL(redirect, request.url));
-    }
-    return response;
-  }
-
-  // ============================================================================
-  // RULE 6: Routes under /admin/* require auth + role='admin'
-  // ============================================================================
-  if (pathname.startsWith('/admin/')) {
-    if (!user) {
-      return NextResponse.redirect(new URL('/auth/login', request.url));
-    }
-    if (userRole !== 'admin') {
-      // Non-admin users try to access admin → redirect to their portal
-      const redirects: Record<string, string> = {
-        familia: '/familia/dashboard',
-        profissional: '/profissional/dashboard',
-        educador: '/educador/dashboard',
-        instituicao: '/instituicao/dashboard',
-      };
-      const redirect = redirects[userRole || ''] || '/';
       return NextResponse.redirect(new URL(redirect, request.url));
     }
     return response;

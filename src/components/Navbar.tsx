@@ -14,7 +14,7 @@ interface NavItem {
 }
 
 interface NavbarProps {
-  portalType?: 'familia' | 'profissional' | 'educador' | 'instituicao' | 'admin';
+  portalType?: 'familia' | 'profissional' | 'educador' | 'instituicao';
   navItems?: NavItem[];
 }
 
@@ -76,12 +76,6 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
         { label: 'Grupos', href: '/instituicao/grupos' },
         { label: 'Equipe', href: '/instituicao/equipe' },
         { label: 'Relatórios', href: '/instituicao/relatorios' },
-      ],
-      admin: [
-        { label: 'Dashboard', href: '/admin/dashboard' },
-        { label: 'Loja', href: '/admin/loja' },
-        { label: 'Jogos', href: '/admin/jogos' },
-        { label: 'Feature Flags', href: '/admin/feature-flags' },
       ],
     };
 
