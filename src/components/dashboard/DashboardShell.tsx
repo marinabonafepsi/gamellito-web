@@ -3,14 +3,23 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import s from './DashboardShell.module.css';
+import { TrilhasGrid } from './TrilhasGrid';
+import { MedalItem } from './MedalItem';
+import { MEDALS } from '@/lib/trilhas-data';
 
 export type DashboardVariant = 'dm1' | 'prof' | 'saude';
+
+export const BASE_PATH_BY_VARIANT: Record<DashboardVariant, string> = {
+  dm1: '/familia',
+  prof: '/educador',
+  saude: '/profissional',
+};
 
 export interface Trilha {
   n: string;
   color: string;
+  nivel?: string;
   title: string;
   format: string;
   lessons: string;
@@ -68,11 +77,8 @@ export interface NovoArtigo {
 
 interface DashboardShellProps {
   variant: DashboardVariant;
-  userName: string;
   coins: number;
   streak: number;
-  onLogout: () => void;
-  accountHref: string;
   content: {
     greetEb: string;
     greetName: string;
@@ -100,44 +106,10 @@ interface DashboardShellProps {
   onSubmitArtigo?: (data: NovoArtigo) => Promise<void> | void;
 }
 
-const NAV_BY_VARIANT: Record<DashboardVariant, { color: string; label: string; href: string }[]> = {
-  dm1: [
-    { color: 'var(--game-red)', label: 'Diário de glicemia', href: '/familia/diario' },
-    { color: 'var(--game-blue)', label: 'Medicamentos', href: '/familia/medicamentos' },
-  ],
-  prof: [{ color: 'var(--game-blue)', label: 'Minhas turmas', href: '/educador/dashboard' }],
-  saude: [
-    { color: 'var(--game-blue)', label: 'Grupos e pacientes', href: '/profissional/dashboard' },
-    { color: 'var(--game-magenta)', label: 'Repositório de artigos', href: '/profissional/recursos' },
-  ],
-};
-
-const ROLE_TAG: Record<DashboardVariant, string> = {
-  dm1: 'Família',
-  prof: 'Professor',
-  saude: 'Saúde',
-};
-
-// Bottom tab bar (mobile only, <680px) — reuses NAV_BY_VARIANT but drops any
-// entry that just points back to the dashboard home (prof/saude both have one),
-// so the mobile nav doesn't repeat a tab. Capped at 5 by construction.
-function getMobileTabs(variant: DashboardVariant, accountHref: string) {
-  const home = accountHref.replace('/perfil', '/dashboard');
-  return [
-    { href: home, label: 'Início', color: 'var(--game-pink)' },
-    ...NAV_BY_VARIANT[variant].filter((item) => item.href !== home),
-    { href: '/loja', label: 'Loja', color: 'var(--color-sun)' },
-    { href: accountHref, label: 'Conta', color: 'var(--color-lilac)' },
-  ];
-}
-
 export function DashboardShell({
   variant,
-  userName,
   coins,
   streak,
-  onLogout,
-  accountHref,
   content,
   registros = [],
   onOpenRegistro,
@@ -150,9 +122,7 @@ export function DashboardShell({
   artigos = [],
   onSubmitArtigo,
 }: DashboardShellProps) {
-  const pathname = usePathname();
-  const mobileTabs = getMobileTabs(variant, accountHref);
-  const [regOpen, setRegOpen] = useState(false);
+  const basePath = BASE_PATH_BY_VARIANT[variant];
   const [artOpen, setArtOpen] = useState(false);
   const [artTitulo, setArtTitulo] = useState('');
   const [artAutores, setArtAutores] = useState('');
@@ -205,433 +175,321 @@ export function DashboardShell({
   };
 
   return (
-    <div className={s.app}>
-      {/* ================= SIDEBAR ================= */}
-      <aside className={s.side}>
-        <div className={s.sideBrand}>
-          <Image src="/assets/gamellito-logo.svg" alt="" width={42} height={42} />
-          <div className={s.wm}>
-            Gamellito
-            <small>{ROLE_TAG[variant]}</small>
+    <>
+      {/* topbar */}
+      <div className={s.topbar}>
+        <div className={s.greet}>
+          <p className={s.eb}>{content.greetEb}</p>
+          <h1>{content.greetName}</h1>
+        </div>
+        <div className={s.topright}>
+          <div className={s.chip}>
+            <span className={s.fire}>▲</span>
+            {streak}
+          </div>
+          <div className={s.chip}>
+            <span className={s.coinIco} />
+            {coins.toLocaleString('pt-BR')}
+          </div>
+          <div className={s.avatar}>
+            <Image src="/assets/gamellito-logo.svg" alt="" width={40} height={40} />
           </div>
         </div>
+      </div>
 
-        <span className={`${s.navI} ${s.active}`}>
-          <span className={s.nd} style={{ background: 'var(--game-pink)' }} />
-          Aprendizado
-        </span>
-        {NAV_BY_VARIANT[variant].map((item) => (
-          <Link key={item.href} href={item.href} className={s.navI}>
-            <span className={s.nd} style={{ background: item.color }} />
-            {item.label}
-          </Link>
-        ))}
-        <Link href="/loja" className={s.navI}>
-          <span className={s.nd} style={{ background: 'var(--game-green)' }} />
-          Loja
-        </Link>
-        <Link href={accountHref} className={s.navI}>
-          <span className={s.nd} style={{ background: 'var(--color-lilac)' }} />
-          Minha conta
-        </Link>
+      {/* stats */}
+      <div className={s.stats3}>
+        <div className={s.scard}>
+          <div className={s.sic} style={{ background: 'var(--color-orange)' }}>▲</div>
+          <div>
+            <div className={s.snum}>{streak}</div>
+            <div className={s.slbl}>dias seguidos de cuidado</div>
+          </div>
+        </div>
+        <div className={s.scard}>
+          <div className={s.sic} style={{ background: 'var(--color-sun)', color: 'var(--color-ink)' }}>G</div>
+          <div>
+            <div className={s.snum}>{coins.toLocaleString('pt-BR')}</div>
+            <div className={s.slbl}>moedas Gamellito</div>
+          </div>
+        </div>
+        <div className={s.scard}>
+          <div className={s.sic} style={{ background: 'var(--game-green)' }}>%</div>
+          <div>
+            <div className={s.snum}>{content.progPct}%</div>
+            <div className={s.slbl}>{content.progLbl}</div>
+          </div>
+        </div>
+      </div>
 
-        <div className={s.sideFoot}>
-          <div className={s.sideUser}>
-            <span className={s.avatar} style={{ width: 38, height: 38 }}>
-              <Image src="/assets/gamellito-logo.svg" alt="" width={32} height={32} />
-            </span>
-            <div>
-              <div className={s.name}>{userName}</div>
-              <div className={s.coins}>{coins.toLocaleString('pt-BR')} moedas</div>
+      {/* continue */}
+      <div className={s.cont}>
+        <div className={s.ci}>
+          <Image src={content.contImg} alt="" width={60} height={60} />
+        </div>
+        <div className={s.cbody}>
+          <p className={s.eb}>Continue de onde parou</p>
+          <h3>{content.contTitle}</h3>
+          <p className={s.meta}>{content.contMeta}</p>
+          <div className={`${s.prog} ${s.onp}`}>
+            <i style={{ width: content.contPct }} />
+          </div>
+        </div>
+        <a className={`${s.btn} ${s.btnSun}`} href="#">Continuar</a>
+      </div>
+
+      {/* trilhas (preview) */}
+      <div className={s.sh}>
+        <h2>{content.trilhasTitle}</h2>
+        <Link href={`${basePath}/aprendizado`}>Ver todas</Link>
+      </div>
+      <TrilhasGrid trilhas={content.trilhas.slice(0, 3)} />
+
+      {/* role-specific bottom */}
+      {variant === 'dm1' && (
+        <div className={s.cols}>
+          <div className={s.panel}>
+            <h3>Diário de glicemia</h3>
+            <p className={s.psub}>Últimos registros · organize para levar à consulta</p>
+            <div className={s.spark}>
+              <svg viewBox="0 0 320 90" width="100%" height="90" preserveAspectRatio="none">
+                <line x1="0" y1="30" x2="320" y2="30" stroke="rgba(43,34,51,.12)" strokeWidth="1" />
+                <line x1="0" y1="66" x2="320" y2="66" stroke="rgba(43,34,51,.12)" strokeWidth="1" />
+                <polyline
+                  points="8,52 60,40 112,58 164,34 216,48 268,30 312,44"
+                  fill="none"
+                  stroke="#F26A00"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {[[8, 52], [60, 40], [112, 58], [164, 34], [216, 48], [268, 30], [312, 44]].map(
+                  ([cx, cy]) => (
+                    <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="5" fill="#fff" stroke="#2B2233" strokeWidth="3" />
+                  )
+                )}
+              </svg>
+              <div className={s.srange}>
+                <span>faixa alvo 70–180 mg/dL</span>
+                <span>últimos registros</span>
+              </div>
+            </div>
+            {registros.length > 0 ? (
+              registros.map((r) => (
+                <div key={r.id} className={s.reg}>
+                  <span className={s.rv}>{r.valor}<small> mg/dL</small></span>
+                  <span className={s.rtag}>
+                    <span className={s.rdot} style={{ background: r.dot }} />
+                    {r.rotulo}
+                  </span>
+                  <span className={s.rwhen}>{r.when}</span>
+                </div>
+              ))
+            ) : (
+              <p className={s.psub}>Nenhum registro ainda</p>
+            )}
+            <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
+              <button
+                className={`${s.btn} ${s.btnOrange} ${s.btnSm}`}
+                onClick={onOpenRegistro}
+              >
+                + Registrar glicemia
+              </button>
+              <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href="#">Exportar PDF</a>
             </div>
           </div>
-          <button className={s.sideLogout} onClick={onLogout}>
-            Sair
-          </button>
+          <div className={s.panel}>
+            <div className={s.sh} style={{ margin: '0 0 12px' }}>
+              <h3 style={{ fontSize: 18 }}>Conquistas</h3>
+              <Link href={`${basePath}/conquistas`}>Ver todas</Link>
+            </div>
+            <div className={s.medals}>
+              {MEDALS.slice(0, 3).map((m) => (
+                <MedalItem key={m.t} medal={m} />
+              ))}
+            </div>
+          </div>
         </div>
-      </aside>
-
-      {/* ================= MOBILE BOTTOM NAV (replaces sidebar below 680px) ================= */}
-      <nav className={s.bottomNav}>
-        {mobileTabs.map((tab) => (
-          <Link
-            key={tab.href}
-            href={tab.href}
-            className={`${s.bnItem} ${pathname === tab.href ? s.active : ''}`}
-          >
-            <span className={s.nd} style={{ background: tab.color }} />
-            {tab.label}
-          </Link>
-        ))}
-      </nav>
-      {variant === 'dm1' && (
-        <button
-          type="button"
-          aria-label="Registrar glicemia"
-          className={s.fab}
-          onClick={onOpenRegistro || (() => setRegOpen(true))}
-        >
-          +
-        </button>
       )}
 
-      {/* ================= MAIN ================= */}
-      <main className={s.main}>
-        <div className={s.wrap}>
-          {/* topbar */}
-          <div className={s.topbar}>
-            <div className={s.greet}>
-              <p className={s.eb}>{content.greetEb}</p>
-              <h1>{content.greetName}</h1>
-            </div>
-            <div className={s.topright}>
-              <div className={s.chip}>
-                <span className={s.fire}>▲</span>
-                {streak}
-              </div>
-              <div className={s.chip}>
-                <span className={s.coinIco} />
-                {coins.toLocaleString('pt-BR')}
-              </div>
-              <div className={s.avatar}>
-                <Image src="/assets/gamellito-logo.svg" alt="" width={40} height={40} />
-              </div>
-            </div>
-          </div>
-
-          {/* stats */}
-          <div className={s.stats3}>
-            <div className={s.scard}>
-              <div className={s.sic} style={{ background: 'var(--color-orange)' }}>▲</div>
-              <div>
-                <div className={s.snum}>{streak}</div>
-                <div className={s.slbl}>dias seguidos de cuidado</div>
-              </div>
-            </div>
-            <div className={s.scard}>
-              <div className={s.sic} style={{ background: 'var(--color-sun)', color: 'var(--color-ink)' }}>G</div>
-              <div>
-                <div className={s.snum}>{coins.toLocaleString('pt-BR')}</div>
-                <div className={s.slbl}>moedas Gamellito</div>
-              </div>
-            </div>
-            <div className={s.scard}>
-              <div className={s.sic} style={{ background: 'var(--game-green)' }}>%</div>
-              <div>
-                <div className={s.snum}>{content.progPct}%</div>
-                <div className={s.slbl}>{content.progLbl}</div>
-              </div>
-            </div>
-          </div>
-
-          {/* continue */}
-          <div className={s.cont}>
-            <div className={s.ci}>
-              <Image src={content.contImg} alt="" width={60} height={60} />
-            </div>
-            <div className={s.cbody}>
-              <p className={s.eb}>Continue de onde parou</p>
-              <h3>{content.contTitle}</h3>
-              <p className={s.meta}>{content.contMeta}</p>
-              <div className={`${s.prog} ${s.onp}`}>
-                <i style={{ width: content.contPct }} />
-              </div>
-            </div>
-            <a className={`${s.btn} ${s.btnSun}`} href="#">Continuar</a>
-          </div>
-
-          {/* trilhas */}
-          <div className={s.sh}>
-            <h2>{content.trilhasTitle}</h2>
-            <a>Ver todas</a>
-          </div>
-          <div className={s.trilhas}>
-            {content.trilhas.map((t) => (
-              <div key={t.n} className={s.tcard}>
-                <div className={s.tnum} style={{ background: t.color }}>{t.n}</div>
-                <h4>{t.title}</h4>
-                <span className={s.tag}>{t.format}</span>
-                <div className={`${s.prog} ${t.barClass === 'g' ? s.g : ''}`}>
-                  <i style={{ width: t.pct }} />
-                </div>
-                <div className={s.tmeta}>
-                  <span>{t.lessons}</span>
-                  <span className={t.statusClass === 'done' ? s.done : ''}>{t.status}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* role-specific bottom */}
-          {variant === 'dm1' && (
-            <div className={s.cols}>
-              <div className={s.panel}>
-                <h3>Diário de glicemia</h3>
-                <p className={s.psub}>Últimos registros · organize para levar à consulta</p>
-                <div className={s.spark}>
-                  <svg viewBox="0 0 320 90" width="100%" height="90" preserveAspectRatio="none">
-                    <line x1="0" y1="30" x2="320" y2="30" stroke="rgba(43,34,51,.12)" strokeWidth="1" />
-                    <line x1="0" y1="66" x2="320" y2="66" stroke="rgba(43,34,51,.12)" strokeWidth="1" />
-                    <polyline
-                      points="8,52 60,40 112,58 164,34 216,48 268,30 312,44"
-                      fill="none"
-                      stroke="#F26A00"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                    {[[8, 52], [60, 40], [112, 58], [164, 34], [216, 48], [268, 30], [312, 44]].map(
-                      ([cx, cy]) => (
-                        <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="5" fill="#fff" stroke="#2B2233" strokeWidth="3" />
-                      )
-                    )}
-                  </svg>
-                  <div className={s.srange}>
-                    <span>faixa alvo 70–180 mg/dL</span>
-                    <span>últimos registros</span>
-                  </div>
-                </div>
-                {registros.length > 0 ? (
-                  registros.map((r) => (
-                    <div key={r.id} className={s.reg}>
-                      <span className={s.rv}>{r.valor}<small> mg/dL</small></span>
-                      <span className={s.rtag}>
-                        <span className={s.rdot} style={{ background: r.dot }} />
-                        {r.rotulo}
-                      </span>
-                      <span className={s.rwhen}>{r.when}</span>
+      {/* role-specific bottom: PROF => atividades + alunos */}
+      {variant === 'prof' && (
+        <div className={s.cols}>
+          <div className={s.panel}>
+            <h3>Atividades para a turma</h3>
+            <p className={s.psub}>Pronto para aplicar em sala — sem improvisar</p>
+            {atividades.length > 0 ? (
+              <div className={s.acts}>
+                {atividades.map((a) => (
+                  <div className={s.act} key={a.id}>
+                    <span className={s.ai}>
+                      <Image src={a.icone || '/assets/gamellito-logo.svg'} alt="" width={34} height={34} />
+                    </span>
+                    <div style={{ flex: 1 }}>
+                      <div className={s.at}>{a.titulo}</div>
+                      <div className={s.ad}>{a.descricao}</div>
                     </div>
-                  ))
+                    <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href={a.url || '#'}>{a.acao_label}</a>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className={s.psub}>Nenhuma atividade disponível no momento</p>
+            )}
+          </div>
+          <div className={s.panel}>
+            <h3>Alunos com DM1</h3>
+            <p className={s.psub}>Acompanhe quem precisa de atenção</p>
+            {alunos.length > 0 ? (
+              alunos.map((al) => {
+                const row = (
+                  <>
+                    <span className={s.avatar} style={{ width: 38, height: 38 }}>
+                      <Image src="/assets/gamellito-logo.svg" alt="" width={32} height={32} />
+                    </span>
+                    <div style={{ flex: 1 }}>
+                      <div className={s.at} style={{ fontSize: 14 }}>{al.nome}</div>
+                    </div>
+                    <span className={s.rtag}>
+                      <span className={s.rdot} style={{ background: al.status === 'ok' ? 'var(--game-green)' : 'var(--color-orange)' }} />
+                      {al.status}
+                    </span>
+                  </>
+                );
+                return alunoHref ? (
+                  <Link href={alunoHref(al.id)} className={s.reg} key={al.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    {row}
+                  </Link>
                 ) : (
-                  <p className={s.psub}>Nenhum registro ainda</p>
-                )}
-                <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
-                  <button
-                    className={`${s.btn} ${s.btnOrange} ${s.btnSm}`}
-                    onClick={onOpenRegistro || (() => setRegOpen(true))}
-                  >
-                    + Registrar glicemia
-                  </button>
-                  <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href="#">Exportar PDF</a>
-                </div>
-              </div>
-              <div className={s.panel}>
-                <h3>Conquistas</h3>
-                <p className={s.psub}>Continue registrando para desbloquear mais</p>
-                <div className={s.medals}>
-                  <div className={s.medal}>
-                    <div className={s.mic} style={{ background: 'var(--game-pink)' }}>1</div>
-                    <div>
-                      <div className={s.mt}>Primeira trilha</div>
-                      <div className={s.md}>Concluiu "Os primeiros 30 dias"</div>
-                    </div>
+                  <div className={s.reg} key={al.id}>
+                    {row}
                   </div>
-                  <div className={s.medal}>
-                    <div className={s.mic} style={{ background: 'var(--color-orange)' }}>7</div>
-                    <div>
-                      <div className={s.mt}>Semana de fogo</div>
-                      <div className={s.md}>7 dias seguidos de registro</div>
-                    </div>
-                  </div>
-                  <div className={s.medal}>
-                    <div className={s.mic} style={{ background: 'var(--game-green)' }}>10</div>
-                    <div>
-                      <div className={s.mt}>Colecionador</div>
-                      <div className={s.md}>10 registros de glicemia</div>
-                    </div>
-                  </div>
-                  <div className={`${s.medal} ${s.locked}`}>
-                    <div className={s.mic}>★</div>
-                    <div>
-                      <div className={s.mt}>Explorador</div>
-                      <div className={s.md}>Conclua 3 trilhas</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* role-specific bottom: PROF => atividades + alunos */}
-          {variant === 'prof' && (
-            <div className={s.cols}>
-              <div className={s.panel}>
-                <h3>Atividades para a turma</h3>
-                <p className={s.psub}>Pronto para aplicar em sala — sem improvisar</p>
-                {atividades.length > 0 ? (
-                  <div className={s.acts}>
-                    {atividades.map((a) => (
-                      <div className={s.act} key={a.id}>
-                        <span className={s.ai}>
-                          <Image src={a.icone || '/assets/gamellito-logo.svg'} alt="" width={34} height={34} />
-                        </span>
-                        <div style={{ flex: 1 }}>
-                          <div className={s.at}>{a.titulo}</div>
-                          <div className={s.ad}>{a.descricao}</div>
-                        </div>
-                        <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href={a.url || '#'}>{a.acao_label}</a>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className={s.psub}>Nenhuma atividade disponível no momento</p>
-                )}
-              </div>
-              <div className={s.panel}>
-                <h3>Alunos com DM1</h3>
-                <p className={s.psub}>Acompanhe quem precisa de atenção</p>
-                {alunos.length > 0 ? (
-                  alunos.map((al) => {
-                    const row = (
-                      <>
-                        <span className={s.avatar} style={{ width: 38, height: 38 }}>
-                          <Image src="/assets/gamellito-logo.svg" alt="" width={32} height={32} />
-                        </span>
-                        <div style={{ flex: 1 }}>
-                          <div className={s.at} style={{ fontSize: 14 }}>{al.nome}</div>
-                        </div>
-                        <span className={s.rtag}>
-                          <span className={s.rdot} style={{ background: al.status === 'ok' ? 'var(--game-green)' : 'var(--color-orange)' }} />
-                          {al.status}
-                        </span>
-                      </>
-                    );
-                    return alunoHref ? (
-                      <Link href={alunoHref(al.id)} className={s.reg} key={al.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                        {row}
-                      </Link>
-                    ) : (
-                      <div className={s.reg} key={al.id}>
-                        {row}
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className={s.psub}>
-                    Nenhum aluno compartilhou os dados com você ainda. Peça para a família ativar o
-                    compartilhamento no diário dela.
-                  </p>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* role-specific bottom: SAÚDE => pacientes + materiais + artigos */}
-          {variant === 'saude' && (
-            <>
-              <div className={s.cols}>
-                <div className={s.panel}>
-                  <h3>Grupos e pacientes</h3>
-                  <p className={s.psub}>Famílias que compartilharam dados com você</p>
-                  {pacientes.length > 0 ? (
-                    pacientes.map((p) => {
-                      const row = (
-                        <>
-                          <span className={s.avatar} style={{ width: 38, height: 38 }}>
-                            <Image src="/assets/gamellito-logo.svg" alt="" width={32} height={32} />
-                          </span>
-                          <div style={{ flex: 1 }}>
-                            <div className={s.at} style={{ fontSize: 14 }}>{p.nome}</div>
-                          </div>
-                          <span className={s.rtag}>
-                            <span className={s.rdot} style={{ background: p.status === 'ok' ? 'var(--game-green)' : 'var(--color-orange)' }} />
-                            {p.status}
-                          </span>
-                        </>
-                      );
-                      return pacienteHref ? (
-                        <Link href={pacienteHref(p.id)} className={s.reg} key={p.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                          {row}
-                        </Link>
-                      ) : (
-                        <div className={s.reg} key={p.id}>
-                          {row}
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <p className={s.psub}>
-                      Nenhum paciente compartilhou os dados com você ainda. Peça para a família ativar o
-                      compartilhamento no diário dela.
-                    </p>
-                  )}
-                </div>
-                <div className={s.panel}>
-                  <h3>Materiais do método</h3>
-                  <p className={s.psub}>Baseado em evidência (USP + UEL)</p>
-                  {materiais.length > 0 ? (
-                    <div className={s.acts}>
-                      {materiais.map((m) => (
-                        <div className={s.act} key={m.id}>
-                          <span className={s.ai}>
-                            <Image src={m.icone || '/assets/gamellito-logo.svg'} alt="" width={34} height={34} />
-                          </span>
-                          <div style={{ flex: 1 }}>
-                            <div className={s.at}>{m.titulo}</div>
-                            <div className={s.ad}>{m.descricao}</div>
-                          </div>
-                          <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href={m.url || '#'}>{m.acao_label}</a>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className={s.psub}>Nenhum material disponível no momento</p>
-                  )}
-                </div>
-              </div>
-
-              <div className={s.sh}>
-                <h2>Artigos científicos</h2>
-                <button onClick={() => setArtOpen(true)}>+ Submeter artigo</button>
-              </div>
-              <div className={s.panel}>
-                <p className={s.psub}>
-                  Envie sua produção. Depois da revisão, ela é publicada no{' '}
-                  <strong style={{ color: 'var(--color-purple)' }}>repositório público</strong> do site — aberto a
-                  toda a comunidade.
-                </p>
-                {artigos.length > 0 ? (
-                  <div className={s.acts}>
-                    {artigos.map((art) => (
-                      <div className={s.art} key={art.id}>
-                        <span className={s.ai}>
-                          <Image src="/assets/gamellito-seringa.svg" alt="" width={34} height={34} />
-                        </span>
-                        <div style={{ flex: 1 }}>
-                          <div className={s.at}>{art.titulo}</div>
-                          <div className={s.ad}>{art.autores} · {art.categoria} · {art.ano}</div>
-                        </div>
-                        <span className={`${s.stpill} ${art.status === 'publicado' ? s.pub : art.status === 'rejeitado' ? '' : s.rev}`}>
-                          <span
-                            className={s.rdot}
-                            style={{
-                              background:
-                                art.status === 'publicado'
-                                  ? 'var(--game-green)'
-                                  : art.status === 'rejeitado'
-                                    ? 'var(--game-red)'
-                                    : 'var(--color-orange)',
-                            }}
-                          />
-                          {ARTIGO_STATUS_LABEL[art.status]}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className={s.psub}>Você ainda não submeteu nenhum artigo</p>
-                )}
-                <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
-                  <button className={`${s.btn} ${s.btnOrange} ${s.btnSm}`} onClick={() => setArtOpen(true)}>
-                    + Submeter artigo
-                  </button>
-                  <Link href="/biblioteca" className={`${s.btn} ${s.btnCream} ${s.btnSm}`}>Ver repositório público</Link>
-                </div>
-              </div>
-            </>
-          )}
+                );
+              })
+            ) : (
+              <p className={s.psub}>
+                Nenhum aluno compartilhou os dados com você ainda. Peça para a família ativar o
+                compartilhamento no diário dela.
+              </p>
+            )}
+          </div>
         </div>
-      </main>
+      )}
+
+      {/* role-specific bottom: SAÚDE => pacientes + materiais + artigos */}
+      {variant === 'saude' && (
+        <>
+          <div className={s.cols}>
+            <div className={s.panel}>
+              <h3>Grupos e pacientes</h3>
+              <p className={s.psub}>Famílias que compartilharam dados com você</p>
+              {pacientes.length > 0 ? (
+                pacientes.map((p) => {
+                  const row = (
+                    <>
+                      <span className={s.avatar} style={{ width: 38, height: 38 }}>
+                        <Image src="/assets/gamellito-logo.svg" alt="" width={32} height={32} />
+                      </span>
+                      <div style={{ flex: 1 }}>
+                        <div className={s.at} style={{ fontSize: 14 }}>{p.nome}</div>
+                      </div>
+                      <span className={s.rtag}>
+                        <span className={s.rdot} style={{ background: p.status === 'ok' ? 'var(--game-green)' : 'var(--color-orange)' }} />
+                        {p.status}
+                      </span>
+                    </>
+                  );
+                  return pacienteHref ? (
+                    <Link href={pacienteHref(p.id)} className={s.reg} key={p.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                      {row}
+                    </Link>
+                  ) : (
+                    <div className={s.reg} key={p.id}>
+                      {row}
+                    </div>
+                  );
+                })
+              ) : (
+                <p className={s.psub}>
+                  Nenhum paciente compartilhou os dados com você ainda. Peça para a família ativar o
+                  compartilhamento no diário dela.
+                </p>
+              )}
+            </div>
+            <div className={s.panel}>
+              <h3>Materiais do método</h3>
+              <p className={s.psub}>Baseado em evidência (USP + UEL)</p>
+              {materiais.length > 0 ? (
+                <div className={s.acts}>
+                  {materiais.map((m) => (
+                    <div className={s.act} key={m.id}>
+                      <span className={s.ai}>
+                        <Image src={m.icone || '/assets/gamellito-logo.svg'} alt="" width={34} height={34} />
+                      </span>
+                      <div style={{ flex: 1 }}>
+                        <div className={s.at}>{m.titulo}</div>
+                        <div className={s.ad}>{m.descricao}</div>
+                      </div>
+                      <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href={m.url || '#'}>{m.acao_label}</a>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className={s.psub}>Nenhum material disponível no momento</p>
+              )}
+            </div>
+          </div>
+
+          <div className={s.sh}>
+            <h2>Artigos científicos</h2>
+            <button onClick={() => setArtOpen(true)}>+ Submeter artigo</button>
+          </div>
+          <div className={s.panel}>
+            <p className={s.psub}>
+              Envie sua produção. Depois da revisão, ela é publicada no{' '}
+              <strong style={{ color: 'var(--color-purple)' }}>repositório público</strong> do site — aberto a
+              toda a comunidade.
+            </p>
+            {artigos.length > 0 ? (
+              <div className={s.acts}>
+                {artigos.map((art) => (
+                  <div className={s.art} key={art.id}>
+                    <span className={s.ai}>
+                      <Image src="/assets/gamellito-seringa.svg" alt="" width={34} height={34} />
+                    </span>
+                    <div style={{ flex: 1 }}>
+                      <div className={s.at}>{art.titulo}</div>
+                      <div className={s.ad}>{art.autores} · {art.categoria} · {art.ano}</div>
+                    </div>
+                    <span className={`${s.stpill} ${art.status === 'publicado' ? s.pub : art.status === 'rejeitado' ? '' : s.rev}`}>
+                      <span
+                        className={s.rdot}
+                        style={{
+                          background:
+                            art.status === 'publicado'
+                              ? 'var(--game-green)'
+                              : art.status === 'rejeitado'
+                                ? 'var(--game-red)'
+                                : 'var(--color-orange)',
+                        }}
+                      />
+                      {ARTIGO_STATUS_LABEL[art.status]}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className={s.psub}>Você ainda não submeteu nenhum artigo</p>
+            )}
+            <div style={{ display: 'flex', gap: 12, marginTop: 18, flexWrap: 'wrap' }}>
+              <button className={`${s.btn} ${s.btnOrange} ${s.btnSm}`} onClick={() => setArtOpen(true)}>
+                + Submeter artigo
+              </button>
+              <Link href="/biblioteca" className={`${s.btn} ${s.btnCream} ${s.btnSm}`}>Ver repositório público</Link>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* ============ SUBMETER ARTIGO MODAL ============ */}
       {artOpen && (
@@ -714,6 +572,6 @@ export function DashboardShell({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

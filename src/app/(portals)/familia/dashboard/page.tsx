@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { DashboardShell, type RegistroGlicemia } from '@/components/dashboard/DashboardShell';
+import { TRILHAS_DM1 } from '@/lib/trilhas-data';
 
 const ROTULO_LABEL: Record<string, string> = {
   jejum: 'Jejum',
@@ -18,15 +19,6 @@ const ROTULO_DOT: Record<string, string> = {
   depois: 'var(--game-blue)',
   dormir: 'var(--color-purple)',
 };
-
-const TRILHAS_DM1 = [
-  { n: '1', color: 'var(--game-red)', title: 'Os primeiros 30 dias', format: 'vídeo', lessons: '4 aulas', pct: '100%', barClass: 'g', status: 'concluída', statusClass: 'done' },
-  { n: '2', color: 'var(--game-blue)', title: 'Entendendo o DM1', format: 'texto + quiz', lessons: '4 aulas', pct: '75%', status: '3/4' },
-  { n: '3', color: 'var(--game-green)', title: 'No dia a dia', format: 'vídeo', lessons: '6 aulas', pct: '40%', status: 'em andamento' },
-  { n: '4', color: 'var(--color-purple-soft)', title: 'Sentimentos após o diagnóstico', format: 'texto', lessons: '3 aulas', pct: '0%', status: 'começar' },
-  { n: '5', color: 'var(--game-magenta)', title: 'Adolescência com DM1', format: 'vídeo + quiz', lessons: '4 aulas', pct: '0%', status: 'começar' },
-  { n: '6', color: 'var(--color-orange)', title: 'DM1 na escola', format: 'texto', lessons: '3 aulas', pct: '20%', status: '1/3' },
-];
 
 function formatWhen(dataHora: string) {
   const d = new Date(dataHora);
@@ -84,21 +76,13 @@ export default function FamiliaDashboardPage() {
     load();
   }, [supabase]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-  };
-
   if (loading) return null;
 
   return (
     <DashboardShell
       variant="dm1"
-      userName={userName}
       coins={coins}
       streak={streak}
-      onLogout={handleLogout}
-      accountHref="/familia/perfil"
       registros={registros}
       onOpenRegistro={() => router.push('/familia/diario')}
       content={{
