@@ -6,7 +6,6 @@ import Image from 'next/image';
 import s from './DashboardShell.module.css';
 import type { Trilha } from './DashboardShell';
 import { MODULOS_DM1 } from '@/lib/modulos-content';
-import { MODULOS_CRIANCA } from '@/lib/modulos-content-crianca';
 
 interface ProgressoModulo {
   modulo_id: string;
@@ -120,7 +119,7 @@ export function AprendizadoMapa({
             {grp.items.map((t) => {
               const isDone = isConcluido(t);
               const estrelas = progresso[t.n.toLowerCase()];
-              const modulo = MODULOS_DM1[t.n.toLowerCase()] || MODULOS_CRIANCA[t.n.toLowerCase()];
+              const modulo = MODULOS_DM1[t.n.toLowerCase()];
               const isOpenable = !!modulo;
               const stateClass = isOpenable || isDone ? s.mapNodeCurrent : s.mapNodeLocked;
               const circleBg = isDone ? 'var(--game-green)' : isOpenable ? t.color : '#fff';
