@@ -6,6 +6,7 @@ import Image from 'next/image';
 import s from './DashboardShell.module.css';
 import type { Trilha } from './DashboardShell';
 import { MODULOS_DM1 } from '@/lib/modulos-content';
+import { MODULOS_CRIANCA } from '@/lib/modulos-content-crianca';
 
 interface ProgressoModulo {
   modulo_id: string;
@@ -28,23 +29,22 @@ function groupByNivel(trilhas: Trilha[], isConcluido: (t: Trilha) => boolean) {
 }
 
 export function AprendizadoMapa({
-  familia,
-  crianca,
+  titulo,
+  trilhas,
   contImg,
   contTitle,
   contMeta,
   contPct,
   contHref,
 }: {
-  familia: Trilha[];
-  crianca: Trilha[];
+  titulo: string;
+  trilhas: Trilha[];
   contImg: string;
   contTitle: string;
   contMeta: string;
   contPct: string;
   contHref: string;
 }) {
-  const [tab, setTab] = useState<'familia' | 'crianca'>('familia');
   const [progresso, setProgresso] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -67,26 +67,21 @@ export function AprendizadoMapa({
 
   const isConcluido = (t: Trilha) => t.statusClass === 'done' || t.n.toLowerCase() in progresso;
 
-  const ativo = tab === 'familia' ? familia : crianca;
-  const doneCount = ativo.filter(isConcluido).length;
-  const progPct = Math.round((doneCount / ativo.length) * 100);
-  const grupos = groupByNivel(ativo, isConcluido);
+  const doneCount = trilhas.filter(isConcluido).length;
+  const progPct = Math.round((doneCount / trilhas.length) * 100);
+  const grupos = groupByNivel(trilhas, isConcluido);
 
   return (
     <>
       <div className={s.sh}>
-        <h2>Trilha Família</h2>
-      </div>
-      <div className={s.trilhaTabs}>
-        <button className={`${s.tTab} ${tab === 'familia' ? s.tTabOn : ''}`} onClick={() => setTab('familia')}>Trilha Família</button>
-        <button className={`${s.tTab} ${tab === 'crianca' ? s.tTabOn : ''}`} onClick={() => setTab('crianca')}>Trilha Criança/Adolescente</button>
+        <h2>{titulo}</h2>
       </div>
 
       <div className={s.stats3} style={{ gridTemplateColumns: 'repeat(2,1fr)', marginBottom: 20 }}>
         <div className={s.scard}>
           <div className={s.sic} style={{ background: 'var(--game-green)' }}>✓</div>
           <div>
-            <div className={s.snum}>{doneCount}/{ativo.length}</div>
+            <div className={s.snum}>{doneCount}/{trilhas.length}</div>
             <div className={s.slbl}>trilhas concluídas</div>
           </div>
         </div>
@@ -125,7 +120,7 @@ export function AprendizadoMapa({
             {grp.items.map((t) => {
               const isDone = isConcluido(t);
               const estrelas = progresso[t.n.toLowerCase()];
-              const modulo = MODULOS_DM1[t.n.toLowerCase()];
+              const modulo = MODULOS_DM1[t.n.toLowerCase()] || MODULOS_CRIANCA[t.n.toLowerCase()];
               const isOpenable = !!modulo;
               const stateClass = isOpenable || isDone ? s.mapNodeCurrent : s.mapNodeLocked;
               const circleBg = isDone ? 'var(--game-green)' : isOpenable ? t.color : '#fff';
