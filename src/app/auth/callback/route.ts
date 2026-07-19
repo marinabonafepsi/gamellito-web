@@ -8,7 +8,6 @@ const DASHBOARD_BY_ROLE: Record<string, string> = {
   profissional: '/profissional/dashboard',
   educador: '/educador/dashboard',
   instituicao: '/instituicao/dashboard',
-  admin: '/admin/dashboard',
 };
 
 const VALID_ROLES = Object.keys(DASHBOARD_BY_ROLE);

@@ -23,10 +23,9 @@ export default function Home() {
 
         <div className="wrap relative z-[2] flex items-center gap-12 flex-wrap py-10">
           <div className="flex-1 min-w-[440px]">
-            <p className="eyebrow" style={{ color: '#F26A00' }}>Educação em saúde lúdica</p>
-            <h1 className="h-xl text-white">A gente transforma o difícil em <span className="hl-sun">aventura</span>.</h1>
+            <h1 className="h-xl text-white">A gente transforma a rotina em <span className="hl-sun">aventura</span>.</h1>
             <div className="relative bg-purple-deep border-[3px] border-ink rounded-[22px] shadow-pop text-white font-body text-lg leading-relaxed max-w-[560px] my-5 px-5 py-4">
-              Educação em saúde lúdica que transforma o cuidado de crianças, adolescentes e famílias que convivem com o diabetes tipo 1.
+              A gente transforma o cuidado de crianças, adolescentes e famílias que convivem com o diabetes tipo 1.
             </div>
             <div className="flex gap-3.5 flex-wrap">
               <Link className="btn btn-orange" href="/sobre">Conheça os programas</Link>

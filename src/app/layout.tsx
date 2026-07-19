@@ -3,9 +3,9 @@ import './globals.css';
 import { VisitTracker } from '@/components/VisitTracker';
 
 export const metadata: Metadata = {
-  title: 'Gamellito — A gente transforma o difícil em aventura',
+  title: 'Gamellito — A gente transforma a rotina em aventura',
   description:
-    'Educação em saúde lúdica que transforma o cuidado de crianças, adolescentes e famílias que convivem com o diabetes tipo 1.',
+    'A gente transforma o cuidado de crianças, adolescentes e famílias que convivem com o diabetes tipo 1.',
 };
 
 export const viewport: Viewport = {
