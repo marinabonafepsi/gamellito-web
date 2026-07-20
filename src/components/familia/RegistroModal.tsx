@@ -18,6 +18,7 @@ interface RegistroModalProps {
     observacao?: string;
     lancado_por?: string;
     medicamentos_tomados?: string[];
+    contexto?: string;
   }) => void;
   onClose: () => void;
 }
@@ -28,6 +29,23 @@ const MOMENTS = [
   { key: 'depois', label: 'Depois de comer', glyph: 'D', color: 'var(--color-orange)' },
   { key: 'dormir', label: 'Antes de dormir', glyph: 'Z', color: 'var(--color-purple)' },
 ];
+
+const CONTEXTOS = [
+  { key: 'exercicio', label: 'Fez exercício', glyph: '🏃' },
+  { key: 'doente', label: 'Não tá bem / doente', glyph: '🤒' },
+  { key: 'estresse', label: 'Dia estressante', glyph: '⚡' },
+  { key: 'comida', label: 'Comida diferente', glyph: '🍽️' },
+];
+
+// Faixas-alvo padrão por momento — o próprio médico da família pode
+// ajustar essas metas fora do diário; aqui só comparamos o valor digitado
+// com a meta já definida, não é o app "diagnosticando" o valor.
+const TARGET_DEFAULTS: Record<string, { min: number; max: number }> = {
+  jejum: { min: 70, max: 130 },
+  antes: { min: 70, max: 130 },
+  depois: { min: 70, max: 180 },
+  dormir: { min: 90, max: 150 },
+};
 
 const WHOS = [
   { key: 'Eu mesmo', label: 'Eu mesmo', glyph: 'E', color: 'var(--game-pink)' },
@@ -42,8 +60,6 @@ const TIPO_COLOR: Record<Medicamento['tipo'], string> = {
   outro: 'var(--color-purple)',
 };
 const TIPO_GLYPH: Record<Medicamento['tipo'], string> = { basal: 'B', bolus: 'R', outro: 'M' };
-
-const QUICK_VALUES = [70, 100, 140, 180, 250];
 
 const VMIN = 40;
 const VMAX = 400;
@@ -71,6 +87,7 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
   const [rotulo, setRotulo] = useState('depois');
   const [medicamentos, setMedicamentos] = useState<Medicamento[]>([]);
   const [medsTomados, setMedsTomados] = useState<Record<string, boolean>>({});
+  const [contexto, setContexto] = useState<string | null>(null);
   const [quem, setQuem] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const dialRef = useRef<HTMLDivElement>(null);
@@ -122,7 +139,14 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
   const medsCount = Object.values(medsTomados).filter(Boolean).length;
   const coinsPreview = 15 + medsCount * 5;
   const momentLabel = MOMENTS.find((m) => m.key === rotulo)?.label || '';
+  const contextoLabel = CONTEXTOS.find((c) => c.key === contexto)?.label || 'Rotina normal';
   const dial = classifyGlucose(valor);
+  const target = TARGET_DEFAULTS[rotulo];
+  const dialTargetNote = target
+    ? valor >= target.min && valor <= target.max
+      ? `dentro da meta (${target.min}–${target.max})`
+      : `fora da meta desse período (meta: ${target.min}–${target.max})`
+    : '';
 
   const handleSave = () => {
     setLoading(true);
@@ -131,6 +155,7 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
       rotulo,
       lancado_por: quem || undefined,
       medicamentos_tomados: Object.keys(medsTomados).filter((id) => medsTomados[id]),
+      contexto: contexto || undefined,
     });
   };
 
@@ -171,14 +196,10 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
                 </div>
               </div>
               <p className={s.dialhint}>Arraste a bolinha na borda para girar</p>
+              {dialTargetNote && <p className={s.dialtarget}>{dialTargetNote}</p>}
               <div className={s.dialbtns}>
                 <button type="button" className={s.roundbtn} onClick={() => setValor((v) => clampValue(v - 1))}>−</button>
                 <button type="button" className={s.roundbtn} onClick={() => setValor((v) => clampValue(v + 1))}>+</button>
-              </div>
-              <div className={s.quickchips}>
-                {QUICK_VALUES.map((qv) => (
-                  <button key={qv} type="button" className={s.qchip} onClick={() => setValor(qv)}>{qv}</button>
-                ))}
               </div>
             </div>
             <div className={s.momtiles}>
@@ -191,6 +212,21 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
                 >
                   <span className={s.mi} style={{ background: m.color }}>{m.glyph}</span>
                   {m.label}
+                </button>
+              ))}
+            </div>
+            <p className={s.qsub} style={{ marginTop: 14 }}>
+              Rolou algo diferente hoje? <small>(opcional)</small>
+            </p>
+            <div className={s.chips}>
+              {CONTEXTOS.map((c) => (
+                <button
+                  key={c.key}
+                  type="button"
+                  className={`${s.lchip} ${contexto === c.key ? s.lchipOn : ''}`}
+                  onClick={() => setContexto((cur) => (cur === c.key ? null : c.key))}
+                >
+                  {c.glyph} {c.label}
                 </button>
               ))}
             </div>
@@ -254,6 +290,7 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
             </div>
             <div className={s.recap}>
               <div className={s.rrow}>Glicemia: <b>{valor} mg/dL</b> · {momentLabel}</div>
+              <div className={s.rrow}>Contexto: <b>{contextoLabel}</b></div>
               <div className={s.rrow}>Remédios tomados: <b>{medsCount}</b></div>
               <div className={s.rrow}>Você vai ganhar: <b>★ {coinsPreview} moedas</b></div>
             </div>

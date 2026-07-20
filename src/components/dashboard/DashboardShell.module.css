@@ -340,6 +340,7 @@
 .dialknob{position:absolute;inset:0;pointer-events:none}
 .dialknobDot{position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--color-ink);box-shadow:2px 2px 0 var(--color-ink)}
 .dialhint{font-family:'Nunito';font-weight:700;font-size:11px;color:var(--color-ink-60);margin:0}
+.dialtarget{text-align:center;font-family:'Nunito';font-weight:700;font-size:11.5px;color:var(--color-ink-60);margin-top:4px}
 .dialInner{width:132px;height:132px;border-radius:50%;background:#fff;border:3px solid var(--color-ink);display:flex;flex-direction:column;align-items:center;justify-content:center}
 .dv{font-family:'Baloo 2';font-weight:800;font-size:38px;color:var(--color-ink);line-height:1}
 .du{font-family:'Nunito';font-weight:800;font-size:11px;color:var(--color-ink-60);margin-top:1px}
@@ -350,8 +351,6 @@
   transition:transform 120ms var(--ease-out),box-shadow 120ms}
 .roundbtn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--color-ink)}
 .roundbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--color-ink)}
-.quickchips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
-.qchip{font-family:'Baloo 2';font-weight:700;font-size:12.5px;padding:6px 13px;border-radius:999px;border:2px solid var(--color-ink);background:var(--color-cream);color:var(--color-ink);cursor:pointer}
 .momtiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}
 .momtile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:11px 4px;border-radius:16px;border:2.5px solid var(--color-ink);
   background:#fff;cursor:pointer;font-family:'Baloo 2';font-weight:700;font-size:11px;color:var(--color-ink);transition:transform 120ms var(--ease-bounce),box-shadow 120ms}
