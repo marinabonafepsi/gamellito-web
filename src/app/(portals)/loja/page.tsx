@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { GamButton } from '@/components/ds/GamButton';
 import { GamCard } from '@/components/ds/GamCard';
+import { Navbar } from '@/components/Navbar';
+import { Footer } from '@/components/Footer';
 import { ProdutosFisicosTab } from '@/components/loja/ProdutosFisicosTab';
 
 interface Item {
@@ -14,6 +15,14 @@ interface Item {
   imagem_url?: string;
   tipo: string;
 }
+
+const TYPE_LABEL: Record<string, string> = {
+  avatar_skin: 'Skin',
+  badge: 'Emblema',
+  poder_jogo: 'Poder',
+  recurso: 'Recurso',
+  cosmético: 'Cosmético',
+};
 
 interface InventarioItem {
   item_id: string;
@@ -140,137 +149,119 @@ export default function LojaPage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
-      {/* Header */}
-      <div className="flex justify-between items-center flex-wrap gap-4">
-        <div>
-          <p className="eyebrow on-creme">Loja Gamellito</p>
-          <h1 className="h-md text-ink">
-            Cuidou, <span className="hl-orange">ganhou moedas</span>
-          </h1>
-          <p className="text-ink/60 font-body">Compre itens especiais com suas moedas</p>
-        </div>
-        <div className="flex items-center gap-2 bg-cream border-[3px] border-ink rounded-full shadow-pop px-4 py-2">
-          <span className="coin-ico big" />
-          <div className="leading-none">
-            <p className="font-display font-extrabold text-xl text-ink">{moedas}</p>
-            <p className="text-[11px] font-body font-bold text-ink/60">moedas</p>
+    <>
+      <Navbar />
+
+      {/* ===== HERO ===== */}
+      <section className="loja-hero">
+        <div className="wrap">
+          <div>
+            <h1>Loja Gamellito</h1>
+            <p>
+              Troque moedas por skins e mimos digitais, ou leve o Gamellito pra vida real — pelúcias, roupinhas e
+              materiais educativos.
+            </p>
+          </div>
+          <div className="flex items-center gap-5">
+            <div className="balance-pill">
+              <span className="coin-ico big" />
+              <div>
+                <div className="bv">{moedas.toLocaleString('pt-BR')}</div>
+                <div className="bl">moedas disponíveis</div>
+              </div>
+            </div>
+            <img className="mascote" src="/assets/gamellito-contente.svg" alt="Gamellito contente" />
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Tabs */}
-      <div className="flex gap-2">
-        <button
-          onClick={() => setTab('recompensas')}
-          className={`px-5 py-2 rounded-full border-2 font-display font-bold text-sm transition-all ${
-            tab === 'recompensas'
-              ? 'bg-ink text-white border-ink shadow-pop-sm'
-              : 'bg-white text-ink border-ink/20 hover:border-ink'
-          }`}
-        >
-          Recompensas · moedas
-        </button>
-        <button
-          onClick={() => setTab('produtos')}
-          className={`px-5 py-2 rounded-full border-2 font-display font-bold text-sm transition-all ${
-            tab === 'produtos'
-              ? 'bg-ink text-white border-ink shadow-pop-sm'
-              : 'bg-white text-ink border-ink/20 hover:border-ink'
-          }`}
-        >
-          Produtos · loja física
-        </button>
-      </div>
+      <div className="wrap">
+        {/* ===== TABS ===== */}
+        <div className="tabs-row">
+          <button
+            className={`tab-btn ${tab === 'recompensas' ? 'is-on' : ''}`}
+            onClick={() => setTab('recompensas')}
+          >
+            Recompensas · moedas
+          </button>
+          <button
+            className={`tab-btn ${tab === 'produtos' ? 'is-on' : ''}`}
+            onClick={() => setTab('produtos')}
+          >
+            Produtos · loja física
+          </button>
+        </div>
 
-      {tab === 'produtos' && <ProdutosFisicosTab />}
+        {tab === 'produtos' && <ProdutosFisicosTab />}
 
-      {tab === 'recompensas' && (
-      <>
-      {/* Items Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {items.map((item) => {
-          const temItem = inventario.has(item.id);
-          return (
-            <GamCard key={item.id} surface="white">
-              <div className="space-y-4">
-                {/* Icon */}
-                <div className="text-6xl text-center">
-                  {getTypeEmoji(item.tipo)}
-                </div>
-
-                {/* Info */}
-                <div>
-                  <h3 className="text-xl font-bold text-ink">{item.nome}</h3>
-                  <p className="text-sm text-ink opacity-70 mt-1">
-                    {item.descricao}
-                  </p>
-                  <p className="text-xs text-ink opacity-50 mt-2">
-                    Tipo: {item.tipo}
-                  </p>
-                </div>
-
-                {/* Price */}
-                <div className="bg-lilac-soft p-3 rounded-[16px] border-[3px] border-ink">
-                  <p className="text-center text-lg font-bold text-ink flex items-center justify-center gap-2">
-                    <span className="coin-ico" />{item.custo_moedas}
-                  </p>
-                </div>
-
-                {/* Button */}
-                {temItem ? (
-                  <div className="bg-game-green/15 border-2 border-game-green rounded-[16px] p-3 text-center">
-                    <p className="text-sm font-bold text-game-green">
-                      Você tem este item!
-                    </p>
+        {tab === 'recompensas' && (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" style={{ marginBottom: 64 }}>
+              {items.map((item) => {
+                const temItem = inventario.has(item.id);
+                const podeComprar = moedas >= item.custo_moedas;
+                return (
+                  <div key={item.id} className="prod">
+                    <div className={`thumb ${!item.imagem_url ? 'ph' : ''}`}>
+                      <span className="cat-badge">{TYPE_LABEL[item.tipo] || item.tipo}</span>
+                      {item.imagem_url ? (
+                        <img src={item.imagem_url} alt={item.nome} />
+                      ) : (
+                        <span style={{ fontSize: 44 }}>{getTypeEmoji(item.tipo)}</span>
+                      )}
+                    </div>
+                    <div className="pname">{item.nome}</div>
+                    <div className="pdesc">{item.descricao}</div>
+                    {temItem ? (
+                      <div className="price">
+                        <span className="text-[13px] font-display font-bold text-game-green">
+                          ✅ Você tem este item!
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="price">
+                        <span className="coin-ico" />
+                        <span className="pv">{item.custo_moedas.toLocaleString('pt-BR')}</span>
+                        <button
+                          className="trocar"
+                          disabled={!podeComprar || comprando === item.id}
+                          onClick={() => handleComprar(item)}
+                        >
+                          {comprando === item.id ? 'Trocando...' : 'Trocar'}
+                        </button>
+                      </div>
+                    )}
                   </div>
-                ) : (
-                  <GamButton
-                    onClick={() => handleComprar(item)}
-                    disabled={moedas < item.custo_moedas || comprando === item.id}
-                    variant={moedas >= item.custo_moedas ? 'primary' : 'secondary'}
-                    className="w-full"
-                  >
-                    {comprando === item.id
-                      ? 'Comprando...'
-                      : moedas >= item.custo_moedas
-                        ? '🛒 Comprar'
-                        : '❌ Moedas insuficientes'}
-                  </GamButton>
-                )}
+                );
+              })}
+            </div>
+
+            {/* Empty State */}
+            {items.length === 0 && (
+              <GamCard surface="cream" className="mb-16">
+                <div className="text-center py-12">
+                  <p className="text-ink opacity-70 mb-4">A loja está vazia no momento</p>
+                  <p className="text-sm text-ink opacity-50">Volte em breve para novas ofertas!</p>
+                </div>
+              </GamCard>
+            )}
+
+            {/* Info */}
+            <GamCard surface="lilac" className="mb-16">
+              <div className="p-4">
+                <p className="text-sm font-medium text-ink mb-2">💡 Como ganhar moedas</p>
+                <ul className="text-xs text-ink opacity-80 space-y-1">
+                  <li>✅ +10 moedas ao registrar glicemia</li>
+                  <li>✅ +5 moedas ao marcar humor (1x por dia)</li>
+                  <li>✅ Bônus especiais em datas comemorativas</li>
+                </ul>
               </div>
             </GamCard>
-          );
-        })}
+          </>
+        )}
       </div>
 
-      {/* Empty State */}
-      {items.length === 0 && (
-        <GamCard surface="cream">
-          <div className="text-center py-12">
-            <p className="text-ink opacity-70 mb-4">
-              A loja está vazia no momento
-            </p>
-            <p className="text-sm text-ink opacity-50">
-              Volte em breve para novas ofertas!
-            </p>
-          </div>
-        </GamCard>
-      )}
-
-      {/* Info */}
-      <GamCard surface="lilac">
-        <div className="p-4">
-          <p className="text-sm font-medium text-ink mb-2">💡 Como ganhar moedas</p>
-          <ul className="text-xs text-ink opacity-80 space-y-1">
-            <li>✅ +10 moedas ao registrar glicemia</li>
-            <li>✅ +5 moedas ao marcar humor (1x por dia)</li>
-            <li>✅ Bônus especiais em datas comemorativas</li>
-          </ul>
-        </div>
-      </GamCard>
-      </>
-      )}
-    </div>
+      <Footer />
+    </>
   );
 }
