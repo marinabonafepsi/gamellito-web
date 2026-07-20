@@ -5,7 +5,7 @@ import s from '../DashboardShell.module.css';
 import { PDF_A10 } from '@/lib/modulos-content';
 import { useConcluirModulo } from './ModuloCompletionContext';
 
-export function PdfModulo({ voltarHref: _voltarHref }: { voltarHref: string }) {
+export function PdfModulo() {
   const [baixado, setBaixado] = useState(false);
   const { concluir, concluindo } = useConcluirModulo();
 

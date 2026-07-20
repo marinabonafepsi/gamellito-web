@@ -323,3 +323,62 @@
   }
   .fab:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--color-ink)}
 }
+
+/* ---------- Missão do dia: registro gamificado (quest) ---------- */
+.qtrail{display:flex;align-items:center;gap:6px;margin-bottom:20px}
+.qstep{width:34px;height:34px;border-radius:50%;border:2.5px solid var(--color-ink);display:flex;align-items:center;justify-content:center;
+  font-family:'Baloo 2';font-weight:800;font-size:14px;background:#fff;color:var(--color-ink-60);flex:none;transition:transform 150ms var(--ease-bounce),background 150ms,color 150ms}
+.qstepActive{background:var(--color-orange);color:#fff;box-shadow:3px 3px 0 var(--color-ink);transform:scale(1.1)}
+.qstepDone{background:var(--game-green);color:#fff}
+.qline{flex:1;height:4px;background:rgba(43,34,51,.15);border-radius:2px}
+.qlineDone{background:var(--game-green)}
+.qtitle{font-size:19px;color:var(--color-ink);margin-bottom:2px}
+.qsub{font-family:'Nunito';font-weight:700;font-size:12.5px;color:var(--color-orange);margin-bottom:16px}
+
+.dialwrap{display:flex;flex-direction:column;align-items:center;gap:16px;padding:2px 0 6px}
+.dial{width:172px;height:172px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:4px solid var(--color-ink);transition:background 200ms;position:relative;cursor:grab;touch-action:none}
+.dialknob{position:absolute;inset:0;pointer-events:none}
+.dialknobDot{position:absolute;top:-7px;left:50%;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--color-ink);box-shadow:2px 2px 0 var(--color-ink)}
+.dialhint{font-family:'Nunito';font-weight:700;font-size:11px;color:var(--color-ink-60);margin:0}
+.dialInner{width:132px;height:132px;border-radius:50%;background:#fff;border:3px solid var(--color-ink);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.dv{font-family:'Baloo 2';font-weight:800;font-size:38px;color:var(--color-ink);line-height:1}
+.du{font-family:'Nunito';font-weight:800;font-size:11px;color:var(--color-ink-60);margin-top:1px}
+.dtag{margin-top:6px;font-family:'Baloo 2';font-weight:700;font-size:11.5px;padding:3px 10px;border-radius:999px;border:2px solid var(--color-ink);color:#fff}
+.dialbtns{display:flex;align-items:center;gap:20px}
+.roundbtn{width:50px;height:50px;border-radius:50%;border:3px solid var(--color-ink);background:#fff;font-family:'Baloo 2';font-weight:800;
+  font-size:24px;color:var(--color-ink);cursor:pointer;box-shadow:3px 3px 0 var(--color-ink);display:flex;align-items:center;justify-content:center;
+  transition:transform 120ms var(--ease-out),box-shadow 120ms}
+.roundbtn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--color-ink)}
+.roundbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--color-ink)}
+.quickchips{display:flex;gap:7px;flex-wrap:wrap;justify-content:center}
+.qchip{font-family:'Baloo 2';font-weight:700;font-size:12.5px;padding:6px 13px;border-radius:999px;border:2px solid var(--color-ink);background:var(--color-cream);color:var(--color-ink);cursor:pointer}
+.momtiles{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:18px}
+.momtile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:11px 4px;border-radius:16px;border:2.5px solid var(--color-ink);
+  background:#fff;cursor:pointer;font-family:'Baloo 2';font-weight:700;font-size:11px;color:var(--color-ink);transition:transform 120ms var(--ease-bounce),box-shadow 120ms}
+.momtile .mi{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--color-ink);color:#fff}
+.momtileOn{background:var(--color-sun);box-shadow:3px 3px 0 var(--color-ink);transform:translateY(-2px)}
+
+.medcards{display:flex;flex-direction:column;gap:10px}
+.medcard{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:18px;border:2.5px solid var(--color-ink);background:#fff;
+  cursor:pointer;transition:transform 120ms var(--ease-bounce),box-shadow 120ms}
+.medcardOn{background:rgba(141,198,63,.16);box-shadow:3px 3px 0 var(--color-ink)}
+.mci{width:44px;height:44px;border-radius:12px;border:2px solid var(--color-ink);display:flex;align-items:center;justify-content:center;flex:none;color:#fff;font-family:'Baloo 2';font-weight:800}
+.mct{font-family:'Baloo 2';font-weight:700;font-size:14.5px;color:var(--color-ink)}
+.mcs{font-family:'Nunito';font-weight:700;font-size:11.5px;color:var(--color-ink-60);margin-top:1px}
+.mcheck{margin-left:auto;width:30px;height:30px;border-radius:50%;border:2.5px solid var(--color-ink);display:flex;align-items:center;justify-content:center;flex:none;background:#fff;color:transparent;font-family:'Baloo 2';font-weight:800}
+.medcardOn .mcheck{background:var(--game-green);color:#fff}
+.medplus{font-family:'Baloo 2';font-weight:800;font-size:11px;color:var(--game-green);margin-left:auto;opacity:0}
+.medcardOn .medplus{opacity:1}
+.medskip{text-align:center;margin-top:6px;font-family:'Nunito';font-weight:700;font-size:12px;color:var(--color-ink-60);text-decoration:underline;cursor:pointer;background:none;border:0;width:100%}
+
+.whotiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:2px}
+.whotile{display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:16px;border:2.5px solid var(--color-ink);background:#fff;
+  cursor:pointer;font-family:'Baloo 2';font-weight:700;font-size:13.5px;color:var(--color-ink);transition:transform 120ms var(--ease-bounce),box-shadow 120ms}
+.wi{width:32px;height:32px;border-radius:50%;border:2px solid var(--color-ink);display:flex;align-items:center;justify-content:center;color:#fff;flex:none;font-family:'Baloo 2';font-weight:800;font-size:13px}
+.whotileOn{background:var(--color-purple-soft);color:#fff;box-shadow:3px 3px 0 var(--color-ink)}
+
+.recap{background:var(--color-cream);border:2px solid var(--color-ink);border-radius:16px;padding:14px 16px;margin-top:16px;display:flex;flex-direction:column;gap:6px}
+.rrow{display:flex;align-items:center;gap:8px;font-family:'Nunito';font-weight:700;font-size:12.5px;color:var(--color-ink)}
+.rrow b{font-family:'Baloo 2';font-weight:700}
+.modalnav{display:flex;gap:10px;margin-top:22px}
+.modalnav .btn{flex:1}

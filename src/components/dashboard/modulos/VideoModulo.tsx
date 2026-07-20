@@ -3,10 +3,11 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import s from '../DashboardShell.module.css';
-import { VIDEO_A3 } from '@/lib/modulos-content';
+import { VIDEO_CONTENT } from '@/lib/modulos-content-registry';
 import { useConcluirModulo } from './ModuloCompletionContext';
 
-export function VideoModulo({ voltarHref: _voltarHref }: { voltarHref: string }) {
+export function VideoModulo({ moduloId }: { moduloId: string }) {
+  const { caption, poster } = VIDEO_CONTENT[moduloId];
   const [playing, setPlaying] = useState(false);
   const [assistido, setAssistido] = useState(false);
   const { concluir, concluindo } = useConcluirModulo();
@@ -19,7 +20,7 @@ export function VideoModulo({ voltarHref: _voltarHref }: { voltarHref: string })
   return (
     <>
       <div className={s.videoPlayer} onClick={togglePlay}>
-        <Image src={VIDEO_A3.poster} alt="" fill style={{ objectFit: 'cover', opacity: 0.5 }} />
+        <Image src={poster} alt="" fill style={{ objectFit: 'cover', opacity: 0.5 }} />
         <div className={s.videoPlayBtn}>
           <span>{playing ? '❚❚' : '▶'}</span>
         </div>
@@ -27,7 +28,7 @@ export function VideoModulo({ voltarHref: _voltarHref }: { voltarHref: string })
           <i style={{ width: playing ? '62%' : '0%' }} />
         </div>
       </div>
-      <p className={s.videoCaption}>{VIDEO_A3.caption}</p>
+      <p className={s.videoCaption}>{caption}</p>
       <button
         className={`${s.btn} ${s.btnOrange}`}
         style={{ marginTop: 22 }}
