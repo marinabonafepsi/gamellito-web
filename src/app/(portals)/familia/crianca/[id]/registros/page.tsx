@@ -8,6 +8,13 @@ import { GamCard } from '@/components/ds/GamCard';
 import { RegistroModal } from '@/components/familia/RegistroModal';
 import { RewardModal } from '@/components/familia/RewardModal';
 
+const CONTEXTO_INFO: Record<string, { label: string; glyph: string }> = {
+  exercicio: { label: 'Fez exercício', glyph: '🏃' },
+  doente: { label: 'Não tá bem / doente', glyph: '🤒' },
+  estresse: { label: 'Dia estressante', glyph: '⚡' },
+  comida: { label: 'Comida diferente', glyph: '🍽️' },
+};
+
 interface Registro {
   id: string;
   valor: number;
@@ -15,6 +22,7 @@ interface Registro {
   rotulo: string;
   observacao?: string;
   lancado_por?: string;
+  contexto?: string | null;
 }
 
 export default function RegistrosPage() {
@@ -58,6 +66,9 @@ export default function RegistrosPage() {
     valor: number;
     rotulo: string;
     observacao?: string;
+    lancado_por?: string;
+    medicamentos_tomados?: string[];
+    contexto?: string;
   }) => {
     try {
       const response = await fetch('/api/registros', {
@@ -175,6 +186,12 @@ export default function RegistrosPage() {
                   {registro.observacao && (
                     <p className="text-sm text-ink opacity-60 mt-2">
                       💬 {registro.observacao}
+                    </p>
+                  )}
+                  {registro.contexto && CONTEXTO_INFO[registro.contexto] && (
+                    <p className="text-sm text-ink opacity-60 mt-2">
+                      {CONTEXTO_INFO[registro.contexto].glyph}{' '}
+                      {CONTEXTO_INFO[registro.contexto].label}
                     </p>
                   )}
                   {registro.lancado_por && (

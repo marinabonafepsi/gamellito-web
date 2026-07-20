@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body = await request.json();
-    const { valor, rotulo, observacao, lancado_por, medicamentos_tomados } = body;
+    const { valor, rotulo, observacao, lancado_por, medicamentos_tomados, contexto } = body;
 
     // Validate input
     if (!valor || !rotulo) {
@@ -127,6 +127,7 @@ export async function POST(request: NextRequest) {
         observacao,
         lancado_por: lancado_por || 'Mãe',
         medicamentos_tomados: medsTomados,
+        contexto: typeof contexto === 'string' ? contexto : null,
         data_hora: new Date().toISOString(),
       })
       .select()
