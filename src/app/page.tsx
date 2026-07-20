@@ -2,13 +2,107 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
+import { ScrollToHash } from '@/components/ScrollToHash';
+
+interface Feature {
+  icon: string;
+  title: string;
+  desc: string;
+}
+
+interface Persona {
+  id: string;
+  tag: string;
+  dotColor: string;
+  art: string;
+  surface: 'surface-creme' | 'surface-purple';
+  title: string;
+  description: string;
+  features: Feature[];
+  cta: string;
+  href: string;
+}
+
+const personas: Persona[] = [
+  {
+    id: 'familia',
+    tag: 'Família & DM1',
+    dotColor: 'bg-game-pink',
+    art: '/assets/gamellito-e-amigos.svg',
+    surface: 'surface-creme',
+    title: 'Pra quem cuida em casa',
+    description:
+      'Um diário que celebra o hábito de registrar — nunca o valor da glicemia. Cada registro vira moeda, e moeda vira recompensa de verdade.',
+    features: [
+      { icon: '/assets/gamellito-glicosimetro.svg', title: 'Diário sem julgamento', desc: 'Glicemia, alimentação e insulina, sem rótulos de "alto/baixo/normal"' },
+      { icon: '/assets/gamellito-badge-circle.svg', title: 'Moedas Gamellito', desc: 'Cada registro rende moedas, trocáveis na Loja' },
+      { icon: '/assets/balao-pensamento.svg', title: 'Compartilhamento por convite', desc: 'Dados visíveis pro profissional ou educador só com seu consentimento' },
+      { icon: '/assets/controle-videogame.svg', title: 'Jogos e trilhas', desc: 'Aprendizado lúdico junto com o Gamellito' },
+    ],
+    cta: 'Entrar como família',
+    href: '/auth/signup/familia',
+  },
+  {
+    id: 'profissional',
+    tag: 'Sou da Saúde',
+    dotColor: 'bg-game-blue',
+    art: '/assets/medico-mae-gamellito.svg',
+    surface: 'surface-purple',
+    title: 'Pra quem acompanha o cuidado clínico',
+    description:
+      'Visão dos pacientes que compartilharam dados com você, biblioteca de artigos científicos e materiais validados pro consultório.',
+    features: [
+      { icon: '/assets/gamellito-glicosimetro.svg', title: 'Painel de pacientes', desc: 'Dados dos pacientes e grupos que compartilharam acesso com você' },
+      { icon: '/assets/gamellito-diary-scene.svg', title: 'Biblioteca de artigos', desc: 'Produção científica sobre DM1, curada e pesquisável' },
+      { icon: '/assets/gamellito-seringa.svg', title: 'Materiais clínicos', desc: 'Recursos validados pra apoiar orientações no consultório' },
+      { icon: '/assets/gamellito-badge-small.svg', title: 'Relatórios', desc: 'Acompanhamento de evolução por paciente' },
+    ],
+    cta: 'Entrar como saúde',
+    href: '/auth/signup/profissional',
+  },
+  {
+    id: 'educador',
+    tag: 'Sou Educador',
+    dotColor: 'bg-game-green',
+    art: '/assets/gamellito-board-game.svg',
+    surface: 'surface-creme',
+    title: 'Pra quem educa em grupo',
+    description:
+      'Ferramentas pra levar o método Gamellito pra escola: turmas, atividades prontas e espaço pra trocar experiência com outros educadores.',
+    features: [
+      { icon: '/assets/gamellito-e-amigos.svg', title: 'Grupos e alunos', desc: 'Acompanhamento de alunos com DM1 na turma' },
+      { icon: '/assets/gamellito-board-game.svg', title: 'Atividades prontas', desc: 'Recursos e materiais do método, prontos pra aplicar' },
+      { icon: '/assets/balao-pensamento.svg', title: 'Fórum de educadores', desc: 'Espaço pra trocar experiência com outros educadores' },
+    ],
+    cta: 'Entrar como educador',
+    href: '/auth/signup/educador',
+  },
+  {
+    id: 'instituicao',
+    tag: 'Sou de uma Instituição',
+    dotColor: 'bg-orange',
+    art: '/assets/gamellito-contente.svg',
+    surface: 'surface-purple',
+    title: 'Pra escolas e clínicas',
+    description:
+      'Implemente o método Gamellito com toda a sua equipe — gestão de grupos, equipe e relatórios agregados num só lugar.',
+    features: [
+      { icon: '/assets/gamellito-badge-circle.svg', title: 'Grupos e equipe', desc: 'Gestão centralizada da escola ou clínica' },
+      { icon: '/assets/gamellito-glicosimetro.svg', title: 'Relatórios agregados', desc: 'Visão consolidada de uso e impacto' },
+      { icon: '/assets/gamellito-contente.svg', title: 'Suporte à implementação', desc: 'Ajuda pra colocar o método em prática com a equipe' },
+    ],
+    cta: 'Entrar como instituição',
+    href: '/auth/signup/instituicao',
+  },
+];
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-cream">
+      <ScrollToHash />
       <Navbar />
 
-      {/* ===== HERO (espaço) ===== */}
+      {/* ===== HERO ===== */}
       <section className="hero surface relative min-h-screen md:min-h-[calc(100vh-90px)] flex items-center overflow-hidden bg-gamellito-space pt-[110px] md:pt-0 md:-mt-[90px]">
         <div className="absolute inset-0 z-0">
           <Image src="/assets/hero-space-bg.jpg" alt="" fill className="object-cover" priority />
@@ -23,13 +117,13 @@ export default function Home() {
 
         <div className="wrap relative z-[2] flex items-center gap-12 flex-wrap py-10">
           <div className="flex-1 min-w-[440px]">
-            <h1 className="h-xl text-white">A gente transforma a rotina em <span className="hl-sun">aventura</span>.</h1>
+            <h1 className="h-xl text-white">Aprender a se cuidar pode ser uma <span className="hl-sun">aventura</span>.</h1>
             <div className="relative bg-purple-deep border-[3px] border-ink rounded-[22px] shadow-pop text-white font-body text-lg leading-relaxed max-w-[560px] my-5 px-5 py-4">
-              A gente transforma o cuidado de crianças, adolescentes e famílias que convivem com o diabetes tipo 1.
+              Trilhas de aprendizado, diário de glicemia e conquistas. Para crianças, adolescentes, pais, educadores e equipe de saúde, cada um na sua jornada com o diabetes.
             </div>
             <div className="flex gap-3.5 flex-wrap">
-              <Link className="btn btn-orange" href="/sobre">Conheça os programas</Link>
-              <Link className="btn btn-cream" href="/contato">Seja um parceiro</Link>
+              <Link className="btn btn-orange" href="/auth/select-role">Criar conta grátis</Link>
+              <a className="btn btn-cream" href="#ecossistema">Ver o ecossistema ↓</a>
             </div>
           </div>
           <div className="flex-1 min-w-[360px] flex justify-center">
@@ -45,200 +139,135 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ===== CREME: o problema ===== */}
-      <section className="surface surface-creme dots dots-purple sec-pad">
-        <div className="cluster" style={{ top: 40, right: 60 }}>
-          <span className="d bg-game-pink" />
-          <span className="d bg-game-blue" />
-          <span className="d bg-sun" />
-        </div>
-        <div className="wrap">
-          <div className="grid md:grid-cols-2 items-center gap-14">
-            <div>
-              <p className="eyebrow on-creme">O problema</p>
-              <h2 className="h-lg">Informação não muda comportamento. <span className="hl-orange">Experiência sim.</span></h2>
-              <p className="lead muted mt-5">
-                Viver com diabetes na infância é lidar, todos os dias, com escolhas que assustam adultos. A informação existe — o que falta é{' '}
-                <strong className="text-ink">vontade de cuidar</strong>. E vontade não nasce do medo.
-              </p>
-              <p className="lead muted mt-4">
-                Crianças e adolescentes precisam de adesão sustentada ao cuidado. A gente transforma isso em algo afetivo, leve e — principalmente — duradouro.
-              </p>
-              <div className="flex gap-3.5 flex-wrap mt-6">
-                <Link className="btn btn-orange" href="/sobre">Nossa proposta</Link>
-                <Link className="btn btn-cream" href="/sobre">Ver o método</Link>
-              </div>
-            </div>
-            <div className="flex justify-center">
-              <div className="relative bg-lilac-soft border-[3px] border-ink rounded-[28px] shadow-pop-lg pt-[34px] px-[30px] pb-0 w-full max-w-[440px] overflow-hidden">
-                <div className="cluster" style={{ top: 18, left: 20 }}>
-                  <span className="d bg-game-pink" style={{ width: 14, height: 14 }} />
-                  <span className="d bg-sun" style={{ width: 14, height: 14 }} />
-                </div>
-                <Image src="/assets/gamellito-e-amigos.svg" alt="Gamellito e amigos" width={440} height={360} className="w-full h-auto block" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== ROXO: a virada + jornada + stats ===== */}
-      <section className="surface surface-purple dots dots-cream sec-pad on-purple">
+      {/* ===== ECOSSISTEMA ===== */}
+      <section id="ecossistema" className="surface surface-purple dots dots-cream sec-pad on-purple scroll-mt-24">
         <div className="wrap">
           <div className="text-center max-w-[820px] mx-auto">
-            <p className="eyebrow on-purple">Nossa proposta de valor</p>
+            <p className="eyebrow on-purple">Ecossistema Gamellito</p>
             <h2 className="h-lg text-white">
-              A gente não ensina sobre diabetes. <span className="hl-sun">A gente faz a criança querer cuidar de si.</span>
+              Um app <span className="hl-sun">pra cada papel</span> no cuidado da criança.
             </h2>
             <p className="lead muted-c mt-4">
-              Do susto do diagnóstico à adaptação: unimos jogo, narrativa e ilustração a uma base psicológica real para atravessar cada fase junto com a família.
+              Família, profissional de saúde, educador e instituição — cada um entra por uma porta diferente, mas todos trabalham com os mesmos dados, compartilhados por consentimento.
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-3.5">
-            <div className="jcard">
-              <Image src="/assets/gamellito-diagnostico-medo.svg" alt="" width={96} height={96} className="mx-auto" />
-              <div className="jt">Medo</div>
-              <div className="jd">o diagnóstico assusta</div>
-            </div>
-            <div className="jcard">
-              <Image src="/assets/gamellito-diagnostico-raiva.svg" alt="" width={96} height={96} className="mx-auto" />
-              <div className="jt">Raiva</div>
-              <div className="jd">"por que comigo?"</div>
-            </div>
-            <div className="jcard">
-              <Image src="/assets/gamellito-diagnostico-tristeza.svg" alt="" width={96} height={96} className="mx-auto" />
-              <div className="jt">Tristeza</div>
-              <div className="jd">a rotina pesa</div>
-            </div>
-            <div className="jcard">
-              <Image src="/assets/gamellito-diagnostico-adaptacao.svg" alt="" width={96} height={96} className="mx-auto" />
-              <div className="jt">Adaptação</div>
-              <div className="jd">o cuidado vira jogo</div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-[18px] mt-[34px]">
-            <div className="stat"><div className="num">2.000+</div><div className="lbl">crianças impactadas</div></div>
-            <div className="stat"><div className="num">77%</div><div className="lbl">menos idas à emergência</div></div>
-            <div className="stat"><div className="num">5</div><div className="lbl">prêmios internacionais</div></div>
-            <div className="stat"><div className="num">12+</div><div className="lbl">anos de pesquisa</div></div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-[18px] mt-10">
+            <div className="stat"><div className="num">+2.000</div><div className="lbl">famílias acompanhadas</div></div>
+            <div className="stat"><div className="num">12 anos</div><div className="lbl">de pesquisa e método</div></div>
+            <div className="stat"><div className="num">USP + UEL</div><div className="lbl">validação científica</div></div>
+            <div className="stat"><div className="num">3 prêmios</div><div className="lbl">internacionais</div></div>
           </div>
         </div>
       </section>
 
-      {/* ===== CREME: soluções ===== */}
-      <section className="surface surface-creme dots dots-purple sec-pad">
-        <div className="cluster" style={{ top: 50, left: 56 }}>
-          <span className="d bg-game-green" />
-          <span className="d bg-game-red" />
-        </div>
-        <div className="wrap">
-          <div className="text-center max-w-[760px] mx-auto mb-11">
-            <p className="eyebrow on-creme">O que fazemos</p>
-            <h2 className="h-lg">Soluções para <span className="hl-orange">saúde pública</span></h2>
-            <p className="lead muted mt-4">
-              Promoção do autocuidado e educação em saúde para crianças e adolescentes com Diabetes Mellitus Tipo 1, com atividades semanais desde 2023.
-            </p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-[26px]">
-            <div className="card">
-              <div className="flex items-start justify-between gap-3.5 mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="chip-ico bg-game-pink"><Image src="/assets/geladeira.svg" alt="" width={30} height={30} className="w-[30px] h-[30px] object-contain" /></span>
-                  <span className="tag">Oficinas</span>
-                </div>
-                <Image src="/assets/geladeira.svg" alt="" width={88} height={88} className="w-[88px] h-auto" />
-              </div>
-              <h3 className="h-md">Oficinas culinárias e alimentação</h3>
-              <p className="muted font-body mt-2 leading-relaxed">Aprendizado prático sobre alimentação saudável e contagem de carboidratos, com participação ativa das crianças.</p>
-              <div className="bullet"><span className="bd bg-game-pink" />Contagem de carboidratos na prática</div>
-              <div className="bullet"><span className="bd bg-game-blue" />Melhora comprovada em parâmetros clínicos</div>
-            </div>
+      {personas.map((persona) => {
+        const onPurple = persona.surface === 'surface-purple';
+        return (
+          <section
+            key={persona.id}
+            className={`surface ${persona.surface} dots ${onPurple ? 'dots-cream on-purple' : 'dots-purple'} sec-pad`}
+          >
+            <div className="wrap">
+              <div className="grid md:grid-cols-2 items-center gap-14">
+                <div>
+                  <div className="flex items-center gap-2.5 mb-3">
+                    <span className={`bd w-2.5 h-2.5 rounded-full border-2 border-ink ${persona.dotColor}`} />
+                    <span className="tag" style={onPurple ? { color: 'var(--color-sun)' } : undefined}>{persona.tag}</span>
+                  </div>
+                  <h3 className={`h-lg ${onPurple ? 'text-white' : ''}`}>{persona.title}</h3>
+                  <p className={`lead mt-4 ${onPurple ? 'muted-c' : 'muted'}`}>{persona.description}</p>
 
-            <div className="card">
-              <div className="flex items-start justify-between gap-3.5 mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="chip-ico bg-orange"><Image src="/assets/controle-videogame.svg" alt="" width={30} height={30} className="w-[30px] h-[30px] object-contain" /></span>
-                  <span className="tag">Jogos</span>
-                </div>
-                <Image src="/assets/gamellito-adventures.svg" alt="" width={96} height={96} className="w-24 h-auto" />
-              </div>
-              <h3 className="h-md">Jogos educativos e método Gamellito</h3>
-              <p className="muted font-body mt-2 leading-relaxed">Recursos lúdicos e interativos que facilitam a compreensão do manejo do DM1 e estimulam a autonomia.</p>
-              <div className="bullet"><span className="bd bg-orange" />Jogo digital e de tabuleiro</div>
-              <div className="mt-4"><Link className="btn btn-orange !text-sm !py-2.5 !px-[18px]" href="/jogos">Quero conhecer o jogo</Link></div>
-            </div>
+                  <div className="mt-6">
+                    {persona.features.map((f) => (
+                      <div className="feat" key={f.title}>
+                        <span className="fic">
+                          <Image src={f.icon} alt="" width={44} height={44} />
+                        </span>
+                        <div>
+                          <div className="ft">{f.title}</div>
+                          <div className="fd">{f.desc}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
 
-            <div className="card">
-              <div className="flex items-start justify-between gap-3.5 mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="chip-ico bg-game-blue"><Image src="/assets/gamellito-glicosimetro.svg" alt="" width={30} height={30} className="w-[30px] h-[30px] object-contain" /></span>
-                  <span className="tag">Rodas de conversa</span>
+                  <div className="mt-6">
+                    <Link className="btn btn-orange" href={persona.href}>
+                      {persona.cta}
+                    </Link>
+                  </div>
                 </div>
-                <Image src="/assets/medico-mae-gamellito.svg" alt="" width={96} height={96} className="w-24 h-auto" />
-              </div>
-              <h3 className="h-md">Rodas de conversa e equipe multidisciplinar</h3>
-              <p className="muted font-body mt-2 leading-relaxed">Nutrição, psicologia, enfermagem, artes cênicas e educação física integradas ao cuidado.</p>
-              <div className="bullet"><span className="bd bg-game-blue" />Apoio à adesão de longo prazo</div>
-            </div>
-
-            <div className="card">
-              <div className="flex items-start justify-between gap-3.5 mb-3">
-                <div className="flex items-center gap-3">
-                  <span className="chip-ico bg-game-green"><Image src="/assets/balao-pensamento.svg" alt="" width={30} height={30} className="w-[30px] h-[30px] object-contain" /></span>
-                  <span className="tag">Materiais digitais</span>
+                <div className="flex justify-center">
+                  <div className="relative bg-lilac-soft border-[3px] border-ink rounded-[28px] shadow-pop-lg pt-[34px] px-[30px] pb-0 w-full max-w-[420px] overflow-hidden">
+                    <Image src={persona.art} alt="" width={420} height={340} className="w-full h-auto block" />
+                  </div>
                 </div>
-                <Image src="/assets/mae-gamellito-glicemia.svg" alt="" width={96} height={96} className="w-24 h-auto" />
               </div>
-              <h3 className="h-md">Materiais educativos e alcance digital</h3>
-              <p className="muted font-body mt-2 leading-relaxed">Livros, histórias em quadrinhos, vídeos e telenovela educativa em linguagem acessível.</p>
-              <div className="bullet"><span className="bd bg-game-green" />Distribuição gratuita via canais da UEL</div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
+        );
+      })}
 
-      {/* ===== CREME: loja / troca de pontos ===== */}
-      <section className="surface surface-creme dots dots-purple sec-pad">
-        <div className="cluster" style={{ top: 46, right: 60 }}>
-          <span className="d bg-game-blue" />
-          <span className="d bg-game-pink" />
-          <span className="d bg-game-green" />
-        </div>
-        <div className="wrap">
-          <div className="text-center max-w-[760px] mx-auto mb-11">
-            <p className="eyebrow on-creme">Loja Gamellito</p>
-            <h2 className="h-lg">Cuidou, <span className="hl-orange">ganhou moedas</span>. Agora é só trocar.</h2>
-            <p className="lead muted mt-4">
-              Cada registro no diário e cada fase do jogo rendem moedas Gamellito. Troque por recompensas de verdade — e, em breve, roupinhas pro seu Gamellito.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            <div className="prod">
-              <div className="thumb"><Image src="/assets/gamellito-board-game.svg" alt="" width={140} height={118} /></div>
-              <div className="pname">Jogo de tabuleiro</div>
-              <div className="pdesc">O método Gamellito pra jogar em grupo e em família.</div>
-              <div className="price"><span className="coin-ico" /><span className="pv">1.200</span><Link className="trocar" href="/auth/login">Trocar</Link></div>
-            </div>
-            <div className="prod">
-              <div className="thumb"><Image src="/assets/gamellito-badge-circle.svg" alt="" width={140} height={118} /></div>
-              <div className="pname">Kit de adesivos</div>
-              <div className="pdesc">Cartela com o Gamellito em várias poses.</div>
-              <div className="price"><span className="coin-ico" /><span className="pv">300</span><Link className="trocar" href="/auth/login">Trocar</Link></div>
-            </div>
-            <div className="prod">
-              <div className="thumb"><Image src="/assets/gamellito-diary-scene.svg" alt="" width={140} height={118} /></div>
-              <div className="pname">Livro de aventuras</div>
-              <div className="pdesc">"As Aventuras de Gamellito" ilustrado.</div>
-              <div className="price"><span className="coin-ico" /><span className="pv">800</span><Link className="trocar" href="/auth/login">Trocar</Link></div>
-            </div>
-            <div className="prod">
-              <div className="thumb"><span className="soon-badge">em breve</span><Image src="/assets/gamellito-corpinho.svg" alt="" width={140} height={118} /></div>
-              <div className="pname">Roupinhas do Gamellito</div>
-              <div className="pdesc">Vista seu Gamellito e cuide dele como um bichinho.</div>
-              <div className="price"><span className="coin-ico" /><span className="pv">—</span><span className="trocar soon">em breve</span></div>
-            </div>
+      {/* ===== SOBRE ===== */}
+      <section id="sobre" className="surface surface-creme dots dots-purple sec-pad scroll-mt-24">
+        <div className="wrap max-w-4xl">
+          <p className="eyebrow on-creme">Sobre a gente</p>
+          <h2 className="h-lg mb-8">
+            Sobre <span className="hl-orange">Gamellito</span>
+          </h2>
+
+          <div className="space-y-8 text-ink">
+            <section>
+              <h3 className="h-md text-purple mb-4">Nossa Missão</h3>
+              <p className="lead leading-relaxed">
+                Gamellito é uma plataforma gamificada de saúde digital que torna o acompanhamento de crianças com Diabetes Mellitus Tipo 1 (DM1) uma experiência divertida e envolvente. Conectamos famílias, profissionais de saúde e educadores em um ecossistema colaborativo.
+              </p>
+            </section>
+
+            <section>
+              <h3 className="h-md text-purple mb-4">Como Funciona</h3>
+              <div className="card flex items-center justify-between gap-6 flex-wrap">
+                <p className="max-w-[520px]">
+                  Família, profissional de saúde, educador e instituição — cada papel tem sua própria porta de entrada e suas próprias ferramentas dentro do Gamellito.
+                </p>
+                <a className="btn btn-orange" href="#ecossistema">Ver o ecossistema completo</a>
+              </div>
+            </section>
+
+            <section>
+              <h3 className="h-md text-purple mb-4">Nossos Valores</h3>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-3 bullet !mt-0">
+                  <span className="bd w-2.5 h-2.5 rounded-full border-2 border-ink bg-orange mt-1.5" />
+                  <div>
+                    <strong className="text-purple">Saúde em Primeiro Lugar</strong>
+                    <p>Todas as funcionalidades são baseadas em evidências e diretrizes médicas.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3 bullet">
+                  <span className="bd w-2.5 h-2.5 rounded-full border-2 border-ink bg-game-blue mt-1.5" />
+                  <div>
+                    <strong className="text-purple">Colaboração</strong>
+                    <p>Famílias, profissionais e educadores trabalham juntos.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3 bullet">
+                  <span className="bd w-2.5 h-2.5 rounded-full border-2 border-ink bg-game-green mt-1.5" />
+                  <div>
+                    <strong className="text-purple">Segurança e Privacidade</strong>
+                    <p>Conformidade total com LGPD e padrões de proteção de dados.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3 bullet">
+                  <span className="bd w-2.5 h-2.5 rounded-full border-2 border-ink bg-game-pink mt-1.5" />
+                  <div>
+                    <strong className="text-purple">Diversão</strong>
+                    <p>A saúde não precisa ser chata. Gamificação torna o cuidado engajante.</p>
+                  </div>
+                </li>
+              </ul>
+            </section>
           </div>
         </div>
       </section>
@@ -247,20 +276,10 @@ export default function Home() {
       <section className="surface surface-sun py-16">
         <div className="wrap flex items-center justify-between gap-8 flex-wrap">
           <div className="flex-1 min-w-[420px]">
-            <p className="eyebrow on-sun">Bora, Gamellito!</p>
-            <h2 className="h-lg">Leve a <span className="hl-purple">aventura do cuidado</span> pra sua escola, clínica ou município.</h2>
+            <p className="eyebrow on-sun">A gente vai junto</p>
+            <h2 className="h-lg">Crie a conta e comece a <span className="hl-purple">primeira trilha</span> hoje.</h2>
           </div>
-          <div className="flex items-center gap-5">
-            <Image
-              src="/assets/gamellito-contente.svg"
-              alt="Gamellito contente"
-              width={120}
-              height={120}
-              className="w-[120px] h-auto"
-              style={{ filter: 'drop-shadow(4px 5px 0 rgba(43,34,51,.25))' }}
-            />
-            <Link className="btn btn-purple" href="/contato">Seja um parceiro</Link>
-          </div>
+          <Link className="btn btn-purple" href="/auth/select-role">Começar agora</Link>
         </div>
       </section>
 

@@ -25,6 +25,9 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
   const [loading, setLoading] = useState(true);
   const [authOpen, setAuthOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+  const isHome = pathname === '/';
 
   useEffect(() => {
     const getUser = async () => {
@@ -41,16 +44,52 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
     setMobileOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!isHome) {
+      setActiveSection('');
+      return;
+    }
+    const sectionIds = ['ecossistema', 'sobre'];
+    const onScroll = () => {
+      const offset = 140;
+      let current = '';
+      for (const id of sectionIds) {
+        const el = document.getElementById(id);
+        if (el && el.getBoundingClientRect().top - offset <= 0) {
+          current = id;
+        }
+      }
+      setActiveSection(current);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [isHome]);
+
+  useEffect(() => {
+    if (!isHome) {
+      setScrolled(true);
+      return;
+    }
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [isHome]);
+
   // Default nav items based on portal type
   const getDefaultNavItems = (): NavItem[] => {
     if (!portalType) {
-      return [
-        { label: 'Início', href: '/' },
-        { label: 'Sobre', href: '/sobre' },
-        { label: 'Ecossistema', href: '/ecossistema' },
+      const items: NavItem[] = [];
+      if (scrolled) items.push({ label: 'Início', href: '/' });
+      items.push(
+        { label: 'Ecossistema', href: '/#ecossistema' },
+        { label: 'Sobre', href: '/#sobre' },
         { label: 'Biblioteca de artigos', href: '/biblioteca' },
+        { label: 'Contato', href: '/contato' },
         { label: 'Loja', href: '/loja' },
-      ];
+      );
+      return items;
     }
 
     const navs: Record<string, NavItem[]> = {
@@ -101,17 +140,27 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
 
           <div className="hidden md:flex items-center gap-[3px]">
             {displayNavItems.map((item) => {
-              const active = pathname === item.href;
+              const [itemPath, itemHash] = item.href.split('#');
+              const samePage = isHome && !!itemHash && (itemPath || '/') === pathname;
+              const active = itemHash
+                ? activeSection === itemHash
+                : pathname === (itemPath || '/') && !activeSection;
+              const linkClassName = `font-display font-semibold text-[15px] no-underline px-[13px] py-[9px] rounded-full border-2 whitespace-nowrap transition-all duration-150 ease-bounce ${
+                active
+                  ? 'bg-sun text-ink border-ink shadow-pop-sm'
+                  : 'text-white border-transparent hover:bg-cream hover:text-ink hover:border-ink hover:shadow-pop-sm hover:-translate-x-px hover:-translate-y-px'
+              }`;
+              // Same-page section links use a native anchor: Next's <Link> doesn't
+              // reliably scroll to a hash when the route itself doesn't change.
+              if (samePage) {
+                return (
+                  <a key={item.href} href={`#${itemHash}`} className={linkClassName}>
+                    {item.label}
+                  </a>
+                );
+              }
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`font-display font-semibold text-[15px] no-underline px-[13px] py-[9px] rounded-full border-2 whitespace-nowrap transition-all duration-150 ease-bounce ${
-                    active
-                      ? 'bg-sun text-ink border-ink shadow-pop-sm'
-                      : 'text-white border-transparent hover:bg-cream hover:text-ink hover:border-ink hover:shadow-pop-sm hover:-translate-x-px hover:-translate-y-px'
-                  }`}
-                >
+                <Link key={item.href} href={item.href} className={linkClassName}>
                   {item.label}
                 </Link>
               );
@@ -169,15 +218,23 @@ export function Navbar({ portalType, navItems = [] }: NavbarProps) {
         {mobileOpen && (
           <div className="md:hidden mt-2 bg-purple-soft border-[3px] border-ink rounded-[18px] shadow-pop-lg overflow-hidden animate-dd-in">
             {displayNavItems.map((item, i) => {
-              const active = pathname === item.href;
+              const [itemPath, itemHash] = item.href.split('#');
+              const samePage = isHome && !!itemHash && (itemPath || '/') === pathname;
+              const active = itemHash
+                ? activeSection === itemHash
+                : pathname === (itemPath || '/') && !activeSection;
+              const linkClassName = `block font-display font-semibold text-[15px] no-underline px-5 py-3 transition-colors ${
+                i < displayNavItems.length - 1 ? 'border-b-2 border-white/10' : ''
+              } ${active ? 'bg-sun text-ink' : 'text-white hover:bg-cream hover:text-ink'}`;
+              if (samePage) {
+                return (
+                  <a key={item.href} href={`#${itemHash}`} className={linkClassName}>
+                    {item.label}
+                  </a>
+                );
+              }
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`block font-display font-semibold text-[15px] no-underline px-5 py-3 transition-colors ${
-                    i < displayNavItems.length - 1 ? 'border-b-2 border-white/10' : ''
-                  } ${active ? 'bg-sun text-ink' : 'text-white hover:bg-cream hover:text-ink'}`}
-                >
+                <Link key={item.href} href={item.href} className={linkClassName}>
                   {item.label}
                 </Link>
               );
