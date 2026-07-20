@@ -5,7 +5,7 @@ import s from '../DashboardShell.module.css';
 import { GLOSS_A1, A1_ACOLHIMENTO } from '@/lib/modulos-content';
 import { useConcluirModulo } from './ModuloCompletionContext';
 
-export function GlossarioFlip({ voltarHref }: { voltarHref: string }) {
+export function GlossarioFlip() {
   const [flipped, setFlipped] = useState<Record<number, boolean>>({});
   const { concluir, concluindo } = useConcluirModulo();
   const todasViradas = GLOSS_A1.every((_, i) => flipped[i]);

@@ -19,10 +19,13 @@ const EXTRA_NAV_BY_VARIANT: Record<DashboardVariant, { color: string; label: str
     { color: 'var(--game-red)', label: 'Diário de glicemia', href: '/familia/diario' },
     { color: 'var(--game-blue)', label: 'Medicamentos', href: '/familia/medicamentos' },
   ],
-  prof: [],
+  prof: [
+    { color: 'var(--game-blue)', label: 'Minhas turmas', href: '/educador/turmas' },
+  ],
   saude: [
-    { color: 'var(--game-blue)', label: 'Repositório de artigos', href: '/profissional/recursos' },
-    { color: 'var(--game-magenta)', label: 'Relatórios', href: '/profissional/relatorios' },
+    { color: 'var(--game-blue)', label: 'Grupos e pacientes', href: '/profissional/grupos' },
+    { color: 'var(--game-magenta)', label: 'Repositório de artigos', href: '/profissional/recursos' },
+    { color: 'var(--color-lilac)', label: 'Relatórios', href: '/profissional/relatorios' },
   ],
 };
 
@@ -79,8 +82,8 @@ export function PortalShell({ variant, accountHref, children }: PortalShellProps
     ...(variant === 'dm1'
       ? [{ color: 'var(--game-red)', label: 'Diário', href: '/familia/diario' }]
       : variant === 'saude'
-        ? [{ color: 'var(--game-blue)', label: 'Artigos', href: '/profissional/recursos' }]
-        : []),
+        ? [{ color: 'var(--game-blue)', label: 'Grupos', href: '/profissional/grupos' }]
+        : [{ color: 'var(--game-blue)', label: 'Turmas', href: '/educador/turmas' }]),
     { color: 'var(--color-sun)', label: 'Conquistas', href: `${basePath}/conquistas` },
     { color: 'var(--game-green)', label: 'Loja', href: '/loja' },
     { color: 'var(--color-lilac)', label: 'Conta', href: accountHref },

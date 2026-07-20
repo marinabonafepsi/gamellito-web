@@ -5,7 +5,7 @@ import s from '../DashboardShell.module.css';
 import { CHECK_A6, CHECK_A6_ALERTA } from '@/lib/modulos-content';
 import { useConcluirModulo } from './ModuloCompletionContext';
 
-export function ChecklistGame({ voltarHref: _voltarHref }: { voltarHref: string }) {
+export function ChecklistGame() {
   const [checked, setChecked] = useState<Record<string, boolean>>({});
   const [done, setDone] = useState(false);
   const { concluir, concluindo } = useConcluirModulo();

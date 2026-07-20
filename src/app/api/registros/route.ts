@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     // Parse request body
     const body = await request.json();
-    const { valor, rotulo, observacao, lancado_por } = body;
+    const { valor, rotulo, observacao, lancado_por, medicamentos_tomados } = body;
 
     // Validate input
     if (!valor || !rotulo) {
@@ -113,6 +113,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const medsTomados: string[] = Array.isArray(medicamentos_tomados)
+      ? medicamentos_tomados.filter((m: unknown): m is string => typeof m === 'string')
+      : [];
+
     // Create registro
     const { data: registro, error } = await supabase
       .from('registros')
@@ -122,6 +126,7 @@ export async function POST(request: NextRequest) {
         rotulo,
         observacao,
         lancado_por: lancado_por || 'Mãe',
+        medicamentos_tomados: medsTomados,
         data_hora: new Date().toISOString(),
       })
       .select()
@@ -135,10 +140,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Award coins (+10 moedas por registro)
+    // Award coins: 15 base por registro + 5 por medicamento marcado como
+    // tomado (mesma fórmula da "Missão do dia" no protótipo original).
+    const moedasGanhas = 15 + medsTomados.length * 5;
     const { error: coinError } = await supabase.rpc('incrementar_coins', {
       p_user_id: user.id,
-      p_quantidade: 10,
+      p_quantidade: moedasGanhas,
     });
 
     if (coinError) {
@@ -159,8 +166,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       sucesso: true,
       registro,
-      moedas_ganhas: 10,
-      saldo_novo: profile?.coins || 10,
+      moedas_ganhas: moedasGanhas,
+      saldo_novo: profile?.coins || moedasGanhas,
     });
   } catch (error) {
     console.error('API error:', error);

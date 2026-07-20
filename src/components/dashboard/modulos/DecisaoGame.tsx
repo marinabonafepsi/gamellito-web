@@ -2,17 +2,18 @@
 
 import { useState } from 'react';
 import s from '../DashboardShell.module.css';
-import { DECISAO_A5 } from '@/lib/modulos-content';
+import { DECISAO_CONTENT } from '@/lib/modulos-content-registry';
 import { useConcluirModulo } from './ModuloCompletionContext';
 
-export function DecisaoGame({ voltarHref: _voltarHref }: { voltarHref: string }) {
+export function DecisaoGame({ moduloId }: { moduloId: string }) {
+  const cenarios = DECISAO_CONTENT[moduloId];
   const { concluir, concluindo } = useConcluirModulo();
   const [step, setStep] = useState(0);
   const [choice, setChoice] = useState<number | null>(null);
   const [acertos, setAcertos] = useState(0);
 
-  const cenario = DECISAO_A5[step];
-  const isLast = step === DECISAO_A5.length - 1;
+  const cenario = cenarios[step];
+  const isLast = step === cenarios.length - 1;
   const answered = choice !== null;
 
   const next = () => {
@@ -20,7 +21,7 @@ export function DecisaoGame({ voltarHref: _voltarHref }: { voltarHref: string })
       setStep((s2) => s2 + 1);
       setChoice(null);
     } else {
-      const estrelas = acertos === DECISAO_A5.length ? 3 : acertos >= Math.ceil(DECISAO_A5.length / 2) ? 2 : 1;
+      const estrelas = acertos === cenarios.length ? 3 : acertos >= Math.ceil(cenarios.length / 2) ? 2 : 1;
       concluir(estrelas);
     }
   };
@@ -32,7 +33,7 @@ export function DecisaoGame({ voltarHref: _voltarHref }: { voltarHref: string })
 
   return (
     <>
-      <p className={s.psub} style={{ marginBottom: 18 }}>Cenário {step + 1} de {DECISAO_A5.length} — o que você faria?</p>
+      <p className={s.psub} style={{ marginBottom: 18 }}>Cenário {step + 1} de {cenarios.length} — o que você faria?</p>
       <div className={s.decisao}>
         <p className={s.decisaoSituacao}>{cenario.situacao}</p>
         {answered ? (

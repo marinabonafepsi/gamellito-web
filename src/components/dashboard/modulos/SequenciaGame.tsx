@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import s from '../DashboardShell.module.css';
-import { ROUNDS_A2, SEQ_ITEMS, SEQ_REACTIONS } from '@/lib/modulos-content';
+import { SEQUENCIA_CONTENT } from '@/lib/modulos-content-registry';
 import { useConcluirModulo } from './ModuloCompletionContext';
 
-export function SequenciaGame({ voltarHref: _voltarHref }: { voltarHref: string }) {
+export function SequenciaGame({ moduloId }: { moduloId: string }) {
+  const { items, rounds, reactions } = SEQUENCIA_CONTENT[moduloId];
   const { concluir, concluindo } = useConcluirModulo();
   const [round, setRound] = useState(0);
   const [placed, setPlaced] = useState<string[]>([]);
@@ -14,11 +15,12 @@ export function SequenciaGame({ voltarHref: _voltarHref }: { voltarHref: string 
   const [shake, setShake] = useState(false);
   const [starsTotal, setStarsTotal] = useState(0);
 
-  const roundDef = ROUNDS_A2[round];
-  const isLastRound = round === ROUNDS_A2.length - 1;
+  const roundDef = rounds[round];
+  const isLastRound = round === rounds.length - 1;
+  const slotCount = roundDef.order.length;
 
   const place = (key: string) => {
-    if (placed.length >= 3) return;
+    if (placed.length >= slotCount) return;
     setPlaced((p) => [...p, key]);
     setResult(null);
   };
@@ -29,7 +31,7 @@ export function SequenciaGame({ voltarHref: _voltarHref }: { voltarHref: string 
   };
 
   const check = () => {
-    const ok = placed.length === 3 && placed.every((k, i) => k === roundDef.order[i]);
+    const ok = placed.length === slotCount && placed.every((k, i) => k === roundDef.order[i]);
     if (ok) {
       const stars = errors === 0 ? 3 : errors <= 2 ? 2 : 1;
       setResult('ok');
@@ -59,21 +61,21 @@ export function SequenciaGame({ voltarHref: _voltarHref }: { voltarHref: string 
 
   const stars = errors === 0 ? 3 : errors <= 2 ? 2 : 1;
   const feedback = result === 'ok'
-    ? (errors === 0 ? SEQ_REACTIONS.ok3 : errors <= 2 ? SEQ_REACTIONS.ok2 : SEQ_REACTIONS.ok1)
-    : result === 'wrong' ? SEQ_REACTIONS.wrong : SEQ_REACTIONS.idle;
+    ? (errors === 0 ? reactions.ok3 : errors <= 2 ? reactions.ok2 : reactions.ok1)
+    : result === 'wrong' ? reactions.wrong : reactions.idle;
 
   return (
     <>
       <div className={s.seqRoundBar}>
-        <span className={s.seqRoundNum}>Rodada {round + 1}/{ROUNDS_A2.length}</span>
+        <span className={s.seqRoundNum}>Rodada {round + 1}/{rounds.length}</span>
         <span className={s.seqRoundTotal}>★ {starsTotal} conquistadas</span>
       </div>
       <p className={s.psub} style={{ marginBottom: 22 }}>{roundDef.label}: toque nos passos na ordem certa</p>
       <div className={s.seqWrap}>
         <div className={`${s.seqSlots} ${shake ? s.seqSlotsShake : ''}`}>
-          {[0, 1, 2].map((i) => {
+          {roundDef.order.map((_, i) => {
             const key = placed[i];
-            const chip = key ? SEQ_ITEMS[key] : null;
+            const chip = key ? items[key] : null;
             return (
               <div
                 key={i}
@@ -94,7 +96,7 @@ export function SequenciaGame({ voltarHref: _voltarHref }: { voltarHref: string 
         </div>
         <div className={s.seqPool}>
           {roundDef.order.filter((k) => !placed.includes(k)).map((k) => {
-            const chip = SEQ_ITEMS[k];
+            const chip = items[k];
             return (
               <div key={k} className={s.seqChip} onClick={() => place(k)}>
                 <span className={s.sGlyph} style={{ background: chip.color }}>{chip.glyph}</span>
@@ -119,7 +121,7 @@ export function SequenciaGame({ voltarHref: _voltarHref }: { voltarHref: string 
               <button
                 className={`${s.btn} ${s.btnOrange} ${s.btnSm}`}
                 disabled={concluindo}
-                onClick={() => concluir(Math.max(1, Math.min(3, Math.round(starsTotal / ROUNDS_A2.length))))}
+                onClick={() => concluir(Math.max(1, Math.min(3, Math.round(starsTotal / rounds.length))))}
               >
                 Concluir módulo
               </button>

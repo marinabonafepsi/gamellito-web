@@ -2,7 +2,7 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { trackEvent } from '@/lib/auth-helpers';
-import { MODULOS_DM1 } from '@/lib/modulos-content';
+import { MODULOS_TODOS } from '@/lib/modulos-content-registry';
 
 export const runtime = 'nodejs';
 
@@ -21,7 +21,7 @@ export async function POST(
   try {
     const { moduloId } = params;
 
-    if (!MODULOS_DM1[moduloId]) {
+    if (!MODULOS_TODOS[moduloId]) {
       return NextResponse.json({ error: 'Módulo desconhecido' }, { status: 404 });
     }
 

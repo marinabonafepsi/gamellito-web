@@ -2,52 +2,51 @@
 
 import { useState } from 'react';
 import s from '../DashboardShell.module.css';
-import { PRATO_FOODS, PRATO_TARGET } from '@/lib/modulos-content';
+import { PRATO_CONTENT } from '@/lib/modulos-content-registry';
 import { useConcluirModulo } from './ModuloCompletionContext';
 
-export function PratoGame({ voltarHref: _voltarHref }: { voltarHref: string }) {
-  const [items, setItems] = useState<string[]>([]);
+export function PratoGame({ moduloId }: { moduloId: string }) {
+  const { intro, foods, target } = PRATO_CONTENT[moduloId];
+  const [selecionados, setSelecionados] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
   const [tentativas, setTentativas] = useState(0);
   const { concluir, concluindo } = useConcluirModulo();
 
-  const total = items.reduce((sum, k) => sum + (PRATO_FOODS.find((f) => f.key === k)?.carbs ?? 0), 0);
-  const inRange = total >= PRATO_TARGET.min && total <= PRATO_TARGET.max;
+  const total = selecionados.reduce((sum, k) => sum + (foods.find((f) => f.key === k)?.carbs ?? 0), 0);
+  const inRange = total >= target.min && total <= target.max;
   const estrelas = tentativas <= 1 ? 3 : tentativas === 2 ? 2 : 1;
 
   const add = (key: string) => {
-    setItems((it) => [...it, key]);
+    setSelecionados((it) => [...it, key]);
     setChecked(false);
   };
   const remove = (key: string) => {
-    const idx = items.indexOf(key);
+    const idx = selecionados.indexOf(key);
     if (idx === -1) return;
-    setItems((it) => it.filter((_, i) => i !== idx));
+    setSelecionados((it) => it.filter((_, i) => i !== idx));
     setChecked(false);
   };
   const reset = () => {
-    setItems([]);
+    setSelecionados([]);
     setChecked(false);
   };
 
-  const feedback = !checked ? '' : total < PRATO_TARGET.min
-    ? `Faltam carboidratos — esse prato tem ${total}g, tente chegar entre ${PRATO_TARGET.min} e ${PRATO_TARGET.max}g.`
-    : total > PRATO_TARGET.max
-      ? `Um pouco além do ideal — esse prato tem ${total}g, tente tirar algo para chegar entre ${PRATO_TARGET.min} e ${PRATO_TARGET.max}g.`
+  const feedback = !checked ? '' : total < target.min
+    ? `Faltam carboidratos — esse prato tem ${total}g, tente chegar entre ${target.min} e ${target.max}g.`
+    : total > target.max
+      ? `Um pouco além do ideal — esse prato tem ${total}g, tente tirar algo para chegar entre ${target.min} e ${target.max}g.`
       : `Prato equilibrado! ${total}g de carboidrato — na faixa certa para essa refeição.`;
 
   return (
     <>
-      <p className={s.psub} style={{ marginBottom: 18 }}>
-        Monte um prato de almoço com carboidrato entre {PRATO_TARGET.min}g e {PRATO_TARGET.max}g
-      </p>
+      <p className={s.psub} style={{ marginBottom: 18 }}>{intro}</p>
       <div className={s.pratoWrap}>
         <div className={s.plateWrap}>
           <div className={s.plate}>
-            {items.length > 0 ? (
+            {selecionados.length > 0 ? (
               <div className={s.plateItems}>
-                {items.map((k, i) => {
-                  const f = PRATO_FOODS.find((x) => x.key === k)!;
+                {selecionados.map((k, i) => {
+                  const f = foods.find((x) => x.key === k)!;
                   return (
                     <button key={`${k}-${i}`} type="button" className={s.plateItem} title="toque para remover" onClick={() => remove(k)}>
                       {f.glyph}
@@ -65,7 +64,7 @@ export function PratoGame({ voltarHref: _voltarHref }: { voltarHref: string }) {
           </div>
         </div>
         <div className={s.foodPool}>
-          {PRATO_FOODS.map((f) => (
+          {foods.map((f) => (
             <div key={f.key} className={s.foodChip} onClick={() => add(f.key)}>
               <span className={s.fGlyph}>{f.glyph}</span>
               <span className={s.fLabel}>{f.label}</span>

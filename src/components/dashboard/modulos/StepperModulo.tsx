@@ -1,20 +1,19 @@
 'use client';
 
 import s from '../DashboardShell.module.css';
-import { STEPPER_A7 } from '@/lib/modulos-content';
+import { STEPPER_CONTENT } from '@/lib/modulos-content-registry';
 import { useConcluirModulo } from './ModuloCompletionContext';
 
 const DOT_COLORS = ['var(--game-blue)', 'var(--color-orange)', 'var(--game-green)', 'var(--color-purple)'];
 
-export function StepperModulo({ voltarHref: _voltarHref }: { voltarHref: string }) {
+export function StepperModulo({ moduloId }: { moduloId: string }) {
+  const { intro, steps } = STEPPER_CONTENT[moduloId];
   const { concluir, concluindo } = useConcluirModulo();
   return (
     <>
-      <p className={s.psub} style={{ marginBottom: 18 }}>
-        Um roteiro simples para os dias em que a família enfrenta febre ou outra doença junto com o diabetes.
-      </p>
+      <p className={s.psub} style={{ marginBottom: 18 }}>{intro}</p>
       <div className={s.stepperWrap}>
-        {STEPPER_A7.map((step, i) => (
+        {steps.map((step, i) => (
           <div key={step.title} className={s.stepperStep}>
             <span className={s.stepperDot} style={{ background: DOT_COLORS[i % DOT_COLORS.length] }}>{i + 1}</span>
             <div>
