@@ -143,17 +143,26 @@ export async function POST(request: NextRequest) {
 
     // Award coins: 15 base por registro + 5 por medicamento marcado como
     // tomado (mesma fórmula da "Missão do dia" no protótipo original).
-    const moedasGanhas = 15 + medsTomados.length * 5;
-    const { error: coinError } = await supabase.rpc('incrementar_coins', {
-      p_user_id: user.id,
-      p_quantidade: moedasGanhas,
-      p_reason: 'registro',
-    });
+    // Crédito passa por creditar_coins_registro, que aplica o teto diário
+    // anti-farm (coin_config.rule.registro_daily_coin_cap) no banco — a API
+    // nunca decide sozinha quanto creditar, e o valor pode vir menor que o
+    // calculado (ou zero) se o teto do dia já foi atingido.
+    const moedasCalculadas = 15 + medsTomados.length * 5;
+    const { data: moedasCreditadas, error: coinError } = await supabase.rpc(
+      'creditar_coins_registro',
+      {
+        p_user_id: user.id,
+        p_quantidade: moedasCalculadas,
+        p_registro_id: registro.id,
+      }
+    );
 
     if (coinError) {
       console.error('Error awarding coins:', coinError);
       // Don't fail the request, coins are bonus
     }
+
+    const moedasGanhas = coinError ? 0 : (moedasCreditadas ?? 0);
 
     // Track event
     await trackEvent('registro_salvo', { valor, rotulo });
