@@ -6,6 +6,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { GamButton } from '@/components/ds/GamButton';
 import { GamCard } from '@/components/ds/GamCard';
+import { PasswordInput } from '@/components/ds/PasswordInput';
 import { translateAuthError } from '@/lib/auth-errors';
 
 export default function LoginPage() {
@@ -95,8 +96,7 @@ export default function LoginPage() {
                   Esqueci minha senha
                 </Link>
               </div>
-              <input
-                type="password"
+              <PasswordInput
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { GamButton } from '@/components/ds/GamButton';
 import { GamCard } from '@/components/ds/GamCard';
+import { PasswordInput } from '@/components/ds/PasswordInput';
 
 type Estado = 'verificando' | 'pronto' | 'invalido' | 'sucesso';
 
@@ -101,8 +102,7 @@ export default function RedefinirSenhaPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-bold text-ink mb-2">Nova senha</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={senha}
                   onChange={(e) => setSenha(e.target.value)}
                   required
@@ -114,8 +114,7 @@ export default function RedefinirSenhaPage() {
 
               <div>
                 <label className="block text-sm font-bold text-ink mb-2">Confirmar senha</label>
-                <input
-                  type="password"
+                <PasswordInput
                   value={confirmar}
                   onChange={(e) => setConfirmar(e.target.value)}
                   required
