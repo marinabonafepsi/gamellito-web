@@ -132,12 +132,12 @@ export default function ContatoPage() {
           <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-5">
             <div className="stat">
               <div className="lbl mb-1">Email</div>
-              <p className="text-ink font-body text-sm">contato@gamellito.com</p>
+              <p className="text-ink font-body text-sm">gamellitoltda@gmail.com</p>
             </div>
 
             <div className="stat">
               <div className="lbl mb-1">WhatsApp</div>
-              <p className="text-ink font-body text-sm">+55 (11) 98765-4321</p>
+              <p className="text-ink font-body text-sm">+55 (12) 99647-5141</p>
             </div>
 
             <div className="stat">

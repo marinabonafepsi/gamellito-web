@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { NextRequest, NextResponse } from 'next/server';
 import { trackEvent } from '@/lib/auth-helpers';
 import { MODULOS_TODOS } from '@/lib/modulos-content-registry';
+import { checkAndAwardTrilhaCertificacao } from '@/lib/certifications';
 
 export const runtime = 'nodejs';
 
@@ -85,6 +86,7 @@ export async function POST(
     const { error: coinError } = await supabase.rpc('incrementar_coins', {
       p_user_id: user.id,
       p_quantidade: moedasGanhas,
+      p_reason: 'module',
     });
 
     if (coinError) {
@@ -93,6 +95,20 @@ export async function POST(
     }
 
     await trackEvent('modulo_concluido', { modulo_id: moduloId, estrelas });
+
+    // Se esse módulo era o último pendente do nível (trilha), concede o
+    // certificado "Amigos do Gamellito" do nível + coins do nível.
+    const certificacaoDesbloqueada = await checkAndAwardTrilhaCertificacao(
+      supabase,
+      user.id,
+      moduloId
+    );
+    if (certificacaoDesbloqueada) {
+      await trackEvent('certificacao_desbloqueada', {
+        certification_id: certificacaoDesbloqueada.id,
+        slug: certificacaoDesbloqueada.slug,
+      });
+    }
 
     const { data: profile } = await supabase
       .from('user_profiles')
@@ -106,6 +122,7 @@ export async function POST(
       moedas_ganhas: moedasGanhas,
       saldo_novo: profile?.coins || moedasGanhas,
       estrelas,
+      certificacao_desbloqueada: certificacaoDesbloqueada,
     });
   } catch (error) {
     console.error('API error:', error);

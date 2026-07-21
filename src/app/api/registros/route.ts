@@ -147,6 +147,7 @@ export async function POST(request: NextRequest) {
     const { error: coinError } = await supabase.rpc('incrementar_coins', {
       p_user_id: user.id,
       p_quantidade: moedasGanhas,
+      p_reason: 'registro',
     });
 
     if (coinError) {

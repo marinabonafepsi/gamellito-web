@@ -91,7 +91,7 @@ export default function TermosPage() {
                 Contato
               </h2>
               <p>
-                Se tiver dúvidas sobre estes Termos, entre em contato conosco em contato@gamellito.com
+                Se tiver dúvidas sobre estes Termos, entre em contato conosco em gamellitoltda@gmail.com
               </p>
             </section>
           </div>

@@ -97,6 +97,7 @@ export default function ProfissionalDashboardPage() {
         contTitle: 'Monitoramento de resultados',
         contMeta: 'Trilha "Método Gamellito" · módulo 3 de 4',
         contPct: '55%',
+        contHref: '/profissional/aprendizado/saude-3',
         trilhasTitle: 'Método Gamellito',
         trilhas: TRILHAS_SAUDE,
       }}

@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { GamButton } from '@/components/ds/GamButton';
+import { PasswordInput } from '@/components/ds/PasswordInput';
 
 type Role = 'familia' | 'dm1' | 'profissional' | 'educador' | 'instituicao';
 
@@ -417,8 +418,7 @@ export default function SignupPage() {
             <label className="block text-sm font-bold text-ink mb-2">
               Senha
             </label>
-            <input
-              type="password"
+            <PasswordInput
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -434,8 +434,7 @@ export default function SignupPage() {
             <label className="block text-sm font-bold text-ink mb-2">
               Confirmar Senha
             </label>
-            <input
-              type="password"
+            <PasswordInput
               name="passwordConfirm"
               value={formData.passwordConfirm}
               onChange={handleChange}

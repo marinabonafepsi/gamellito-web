@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { GamButton } from '@/components/ds/GamButton';
+import { PasswordInput } from '@/components/ds/PasswordInput';
+import { translateAuthError } from '@/lib/auth-errors';
 
 type Role = 'familia' | 'dm1' | 'educador' | 'profissional' | 'instituicao';
 type Step = 'login' | 'select-role' | 'signup';
@@ -129,7 +131,7 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
       router.push(DASHBOARD_BY_ROLE[userRole] || '/familia/dashboard');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao fazer login');
+      setError(err instanceof Error ? translateAuthError(err.message) : 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
@@ -329,7 +331,7 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
                   className={inputClass} placeholder="seu@email.com" autoFocus />
               </Field>
               <Field label="Senha">
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
+                <PasswordInput value={password} onChange={(e) => setPassword(e.target.value)} required
                   className={inputClass} placeholder="Sua senha" />
               </Field>
 
@@ -434,10 +436,10 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
               {renderRoleSpecificFields()}
 
               <Field label="Senha">
-                <input type="password" name="password" value={formData.password} onChange={handleChange} required minLength={8} className={inputClass} placeholder="Mínimo 8 caracteres" />
+                <PasswordInput name="password" value={formData.password} onChange={handleChange} required minLength={8} className={inputClass} placeholder="Mínimo 8 caracteres" />
               </Field>
               <Field label="Confirmar Senha">
-                <input type="password" name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} required className={inputClass} placeholder="Confirme sua senha" />
+                <PasswordInput name="passwordConfirm" value={formData.passwordConfirm} onChange={handleChange} required className={inputClass} placeholder="Confirme sua senha" />
               </Field>
 
               <div className="bg-white p-4 rounded-[16px] space-y-3 border-[3px] border-ink">

@@ -37,6 +37,15 @@ const TIPO_LABEL: Record<Medicamento['tipo'], string> = {
   outro: 'Outro',
 };
 
+const MOMENTOS: { key: string; label: string }[] = [
+  { key: 'jejum', label: 'Jejum' },
+  { key: 'antes', label: 'Antes de comer' },
+  { key: 'depois', label: 'Depois de comer' },
+  { key: 'dormir', label: 'Antes de dormir' },
+];
+
+type MetaForm = Record<string, { min: string; max: string }>;
+
 function formatDesde(desde?: string) {
   if (!desde) return '—';
   const d = new Date(`${desde}T00:00:00`);
@@ -53,6 +62,11 @@ export default function PacienteFichaPage() {
   const [loading, setLoading] = useState(true);
   const [notaText, setNotaText] = useState('');
   const [salvandoNota, setSalvandoNota] = useState(false);
+  const [metaForm, setMetaForm] = useState<MetaForm>(
+    Object.fromEntries(MOMENTOS.map((m) => [m.key, { min: '', max: '' }]))
+  );
+  const [salvandoMetas, setSalvandoMetas] = useState(false);
+  const [metaMsg, setMetaMsg] = useState('');
   const supabase = createClientComponentClient();
 
   useEffect(() => {
@@ -92,6 +106,17 @@ export default function PacienteFichaPage() {
         const medsData = await medsRes.json();
         setMedicamentos(medsData.medicamentos || []);
       }
+
+      // Get faixa-alvo já definida (se houver)
+      const metasRes = await fetch(`/api/metas-glicemia?paciente_id=${pacienteId}`);
+      if (metasRes.ok) {
+        const metasData = await metasRes.json();
+        const next: MetaForm = Object.fromEntries(MOMENTOS.map((m) => [m.key, { min: '', max: '' }]));
+        (metasData.metas || []).forEach((m: { momento: string; min: number; max: number }) => {
+          next[m.momento] = { min: String(m.min), max: String(m.max) };
+        });
+        setMetaForm(next);
+      }
     } catch (error) {
       console.error('Error loading paciente:', error);
     } finally {
@@ -113,6 +138,43 @@ export default function PacienteFichaPage() {
       alert('Erro ao salvar nota');
     } finally {
       setSalvandoNota(false);
+    }
+  };
+
+  const handleMetaChange = (momento: string, field: 'min' | 'max', value: string) => {
+    setMetaMsg('');
+    setMetaForm((prev) => ({ ...prev, [momento]: { ...prev[momento], [field]: value } }));
+  };
+
+  const handleSalvarMetas = async () => {
+    const metas = MOMENTOS
+      .map((m) => ({ momento: m.key, min: Number(metaForm[m.key]?.min), max: Number(metaForm[m.key]?.max) }))
+      .filter((m) => metaForm[m.momento]?.min !== '' && metaForm[m.momento]?.max !== '');
+
+    if (metas.length === 0) {
+      setMetaMsg('Preencha ao menos um momento antes de salvar.');
+      return;
+    }
+    if (metas.some((m) => !Number.isFinite(m.min) || !Number.isFinite(m.max) || m.min <= 0 || m.max <= m.min)) {
+      setMetaMsg('Confira os valores — o mínimo precisa ser maior que zero e menor que o máximo.');
+      return;
+    }
+
+    setSalvandoMetas(true);
+    setMetaMsg('');
+    try {
+      const res = await fetch('/api/metas-glicemia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ paciente_id: pacienteId, metas }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro ao salvar');
+      setMetaMsg('Faixa-alvo salva! Já aparece pra família no Diário.');
+    } catch (error) {
+      setMetaMsg(error instanceof Error ? error.message : 'Erro ao salvar a faixa-alvo');
+    } finally {
+      setSalvandoMetas(false);
     }
   };
 
@@ -186,6 +248,64 @@ export default function PacienteFichaPage() {
                   )
                 : '-'}
             </p>
+          </div>
+        </GamCard>
+      </div>
+
+      {/* Faixa-alvo de glicemia */}
+      <div>
+        <div className="flex justify-between items-baseline mb-3">
+          <h2 className="text-2xl font-display font-bold text-purple-main">Faixa-alvo de glicemia</h2>
+          <p className="text-xs text-ink/50 font-body">visível pra família no Diário</p>
+        </div>
+        <GamCard surface="white">
+          <p className="text-sm text-ink/70 mb-4">
+            Defina a faixa que você recomenda pra {nomePaciente} em cada momento do dia. O Gamellito não
+            calcula nem sugere valores — só mostra pra família o que você definir aqui.
+          </p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="text-left text-xs text-ink/50 uppercase border-b-2 border-ink/10">
+                  <th className="pb-2 pr-3">Momento</th>
+                  <th className="pb-2 pr-3">Mínimo (mg/dL)</th>
+                  <th className="pb-2">Máximo (mg/dL)</th>
+                </tr>
+              </thead>
+              <tbody>
+                {MOMENTOS.map((m) => (
+                  <tr key={m.key} className="border-b border-ink/10 last:border-0">
+                    <td className="py-2 pr-3 font-bold text-ink">{m.label}</td>
+                    <td className="py-2 pr-3">
+                      <input
+                        type="number"
+                        min={1}
+                        value={metaForm[m.key]?.min ?? ''}
+                        onChange={(e) => handleMetaChange(m.key, 'min', e.target.value)}
+                        placeholder="Ex: 70"
+                        className="w-24 px-3 py-1.5 bg-cream border-2 border-ink rounded-lg text-ink focus:outline-none focus:shadow-pop-sm"
+                      />
+                    </td>
+                    <td className="py-2">
+                      <input
+                        type="number"
+                        min={1}
+                        value={metaForm[m.key]?.max ?? ''}
+                        onChange={(e) => handleMetaChange(m.key, 'max', e.target.value)}
+                        placeholder="Ex: 180"
+                        className="w-24 px-3 py-1.5 bg-cream border-2 border-ink rounded-lg text-ink focus:outline-none focus:shadow-pop-sm"
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {metaMsg && <p className="text-sm font-bold text-ink mt-3">{metaMsg}</p>}
+          <div className="mt-4">
+            <GamButton variant="primary" onClick={handleSalvarMetas} disabled={salvandoMetas}>
+              {salvandoMetas ? 'Salvando...' : '✅ Salvar faixa-alvo'}
+            </GamButton>
           </div>
         </GamCard>
       </div>
