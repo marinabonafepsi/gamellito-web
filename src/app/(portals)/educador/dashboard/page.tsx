@@ -58,6 +58,7 @@ export default function EducadorDashboardPage() {
         contTitle: 'Agir com segurança em emergências',
         contMeta: 'Formação "Gamellito na escola" · módulo 3 de 4',
         contPct: '30%',
+        contHref: '/educador/aprendizado/prof-3',
         trilhasTitle: 'Sua formação',
         trilhas: TRILHAS_PROF,
       }}

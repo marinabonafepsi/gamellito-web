@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { GamButton } from '@/components/ds/GamButton';
+import { translateAuthError } from '@/lib/auth-errors';
 
 type Role = 'familia' | 'dm1' | 'educador' | 'profissional' | 'instituicao';
 type Step = 'login' | 'select-role' | 'signup';
@@ -129,7 +130,7 @@ export function AuthModal({ onClose }: { onClose: () => void }) {
       router.push(DASHBOARD_BY_ROLE[userRole] || '/familia/dashboard');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao fazer login');
+      setError(err instanceof Error ? translateAuthError(err.message) : 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }

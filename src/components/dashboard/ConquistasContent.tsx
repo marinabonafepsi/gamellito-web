@@ -1,6 +1,7 @@
 import s from './DashboardShell.module.css';
 import { MedalItem } from './MedalItem';
 import { MEDALS } from '@/lib/trilhas-data';
+import { CertificadosSection } from './CertificadosSection';
 
 export function ConquistasContent() {
   const unlocked = MEDALS.filter((m) => !m.locked).length;
@@ -22,6 +23,7 @@ export function ConquistasContent() {
           <MedalItem key={m.t} medal={m} />
         ))}
       </div>
+      <CertificadosSection />
     </>
   );
 }

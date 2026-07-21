@@ -6,6 +6,7 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/navigation';
 import { GamButton } from '@/components/ds/GamButton';
 import { GamCard } from '@/components/ds/GamCard';
+import { translateAuthError } from '@/lib/auth-errors';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -42,7 +43,7 @@ export default function LoginPage() {
 
       router.push(redirects[role] || '/familia/dashboard');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao fazer login');
+      setError(err instanceof Error ? translateAuthError(err.message) : 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }

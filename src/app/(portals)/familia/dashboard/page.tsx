@@ -33,6 +33,8 @@ export default function FamiliaDashboardPage() {
   const [coins, setCoins] = useState(0);
   const [streak, setStreak] = useState(0);
   const [registros, setRegistros] = useState<RegistroGlicemia[]>([]);
+  const [metas, setMetas] = useState<Record<string, { min: number; max: number }>>({});
+  const [userId, setUserId] = useState('');
   const [loading, setLoading] = useState(true);
   const supabase = createClientComponentClient();
   const router = useRouter();
@@ -41,6 +43,7 @@ export default function FamiliaDashboardPage() {
     const load = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+      setUserId(user.id);
 
       const { data: profile } = await supabase
         .from('user_profiles')
@@ -56,7 +59,7 @@ export default function FamiliaDashboardPage() {
         .select('*')
         .eq('familia_id', user.id)
         .order('data_hora', { ascending: false })
-        .limit(3);
+        .limit(7);
 
       if (regs) {
         setRegistros(
@@ -69,6 +72,17 @@ export default function FamiliaDashboardPage() {
           }))
         );
         setStreak(regs.length);
+      }
+
+      const { data: metasData } = await supabase
+        .from('metas_glicemia')
+        .select('momento, min, max')
+        .eq('familia_id', user.id);
+
+      if (metasData) {
+        const map: Record<string, { min: number; max: number }> = {};
+        metasData.forEach((m) => { map[m.momento] = { min: m.min, max: m.max }; });
+        setMetas(map);
       }
 
       setLoading(false);
@@ -84,6 +98,8 @@ export default function FamiliaDashboardPage() {
       coins={coins}
       streak={streak}
       registros={registros}
+      metas={metas}
+      pdfHref={userId ? `/imprimir/diario/${userId}` : undefined}
       onOpenRegistro={() => router.push('/familia/diario')}
       content={{
         greetEb: 'Bom te ver de novo',
@@ -94,6 +110,7 @@ export default function FamiliaDashboardPage() {
         contTitle: 'Reconhecer hipoglicemia',
         contMeta: 'Trilha "No dia a dia" · aula 3 de 6',
         contPct: '40%',
+        contHref: '/familia/aprendizado/a5',
         trilhasTitle: 'Suas trilhas',
         trilhas: TRILHAS_DM1,
       }}

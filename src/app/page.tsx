@@ -140,7 +140,7 @@ export default function Home() {
       </section>
 
       {/* ===== ECOSSISTEMA ===== */}
-      <section id="ecossistema" className="surface surface-purple dots dots-cream sec-pad on-purple scroll-mt-24">
+      <section id="ecossistema" className="surface surface-purple sec-pad on-purple scroll-mt-24">
         <div className="wrap">
           <div className="text-center max-w-[820px] mx-auto">
             <p className="eyebrow on-purple">Ecossistema Gamellito</p>
@@ -166,7 +166,7 @@ export default function Home() {
         return (
           <section
             key={persona.id}
-            className={`surface ${persona.surface} dots ${onPurple ? 'dots-cream on-purple' : 'dots-purple'} sec-pad`}
+            className={`surface ${persona.surface} sec-pad ${onPurple ? 'on-purple' : ''}`}
           >
             <div className="wrap">
               <div className="grid md:grid-cols-2 items-center gap-14">
@@ -210,7 +210,7 @@ export default function Home() {
       })}
 
       {/* ===== SOBRE ===== */}
-      <section id="sobre" className="surface surface-creme dots dots-purple sec-pad scroll-mt-24">
+      <section id="sobre" className="surface surface-creme sec-pad scroll-mt-24">
         <div className="wrap max-w-4xl">
           <p className="eyebrow on-creme">Sobre a gente</p>
           <h2 className="h-lg mb-8">

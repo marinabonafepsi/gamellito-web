@@ -75,6 +75,36 @@ export interface NovoArtigo {
   pdf_url?: string;
 }
 
+const MOMENTO_LABEL: Record<string, string> = {
+  jejum: 'Jejum',
+  antes: 'Antes de comer',
+  depois: 'Depois de comer',
+  dormir: 'Antes de dormir',
+};
+
+const SPARK_VMIN = 40;
+const SPARK_VMAX = 400;
+
+function buildSparkline(registros: RegistroGlicemia[]) {
+  if (registros.length === 0) return null;
+  // registros vem do mais recente pro mais antigo — inverte pra plotar
+  // da esquerda (mais antigo) pra direita (mais recente), como um gráfico normal.
+  const ordered = [...registros].reverse();
+  const left = 8;
+  const right = 312;
+  const top = 16;
+  const bottom = 74;
+  const toXY = (i: number, valor: number): [number, number] => {
+    const x = ordered.length === 1 ? (left + right) / 2 : left + (i / (ordered.length - 1)) * (right - left);
+    const clamped = Math.max(SPARK_VMIN, Math.min(SPARK_VMAX, valor));
+    const y = bottom - ((clamped - SPARK_VMIN) / (SPARK_VMAX - SPARK_VMIN)) * (bottom - top);
+    return [Math.round(x), Math.round(y)];
+  };
+  const dots = ordered.map((r, i) => toXY(i, r.valor));
+  const points = dots.map(([x, y]) => `${x},${y}`).join(' ');
+  return { points, dots };
+}
+
 interface DashboardShellProps {
   variant: DashboardVariant;
   coins: number;
@@ -88,12 +118,17 @@ interface DashboardShellProps {
     contTitle: string;
     contMeta: string;
     contPct: string;
+    contHref: string;
     trilhasTitle: string;
     trilhas: Trilha[];
   };
   // DM1-only
   registros?: RegistroGlicemia[];
   onOpenRegistro?: () => void;
+  // Faixa-alvo por momento, definida pelo profissional — ausente = ainda
+  // não definida (o dashboard não inventa uma faixa no lugar)
+  metas?: Record<string, { min: number; max: number }>;
+  pdfHref?: string;
   // PROF-only
   atividades?: Recurso[];
   alunos?: PacienteResumo[];
@@ -113,6 +148,8 @@ export function DashboardShell({
   content,
   registros = [],
   onOpenRegistro,
+  metas = {},
+  pdfHref,
   atividades = [],
   alunos = [],
   alunoHref,
@@ -235,7 +272,7 @@ export function DashboardShell({
             <i style={{ width: content.contPct }} />
           </div>
         </div>
-        <a className={`${s.btn} ${s.btnSun}`} href="#">Continuar</a>
+        <Link className={`${s.btn} ${s.btnSun}`} href={content.contHref}>Continuar</Link>
       </div>
 
       {/* trilhas (preview) */}
@@ -251,29 +288,48 @@ export function DashboardShell({
           <div className={s.panel}>
             <h3>Diário de glicemia</h3>
             <p className={s.psub}>Últimos registros · organize para levar à consulta</p>
-            <div className={s.spark}>
-              <svg viewBox="0 0 320 90" width="100%" height="90" preserveAspectRatio="none">
-                <line x1="0" y1="30" x2="320" y2="30" stroke="rgba(43,34,51,.12)" strokeWidth="1" />
-                <line x1="0" y1="66" x2="320" y2="66" stroke="rgba(43,34,51,.12)" strokeWidth="1" />
-                <polyline
-                  points="8,52 60,40 112,58 164,34 216,48 268,30 312,44"
-                  fill="none"
-                  stroke="#F26A00"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-                {[[8, 52], [60, 40], [112, 58], [164, 34], [216, 48], [268, 30], [312, 44]].map(
-                  ([cx, cy]) => (
-                    <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="5" fill="#fff" stroke="#2B2233" strokeWidth="3" />
-                  )
-                )}
-              </svg>
-              <div className={s.srange}>
-                <span>faixa alvo 70–180 mg/dL</span>
-                <span>últimos registros</span>
-              </div>
-            </div>
+            {(() => {
+              const spark = buildSparkline(registros);
+              const metaEntries = Object.entries(metas).filter(([k]) => MOMENTO_LABEL[k]);
+              return (
+                <div className={s.spark}>
+                  {spark ? (
+                    <svg viewBox="0 0 320 90" width="100%" height="90" preserveAspectRatio="none">
+                      <line x1="0" y1="30" x2="320" y2="30" stroke="rgba(43,34,51,.12)" strokeWidth="1" />
+                      <line x1="0" y1="66" x2="320" y2="66" stroke="rgba(43,34,51,.12)" strokeWidth="1" />
+                      {spark.dots.length > 1 && (
+                        <polyline
+                          points={spark.points}
+                          fill="none"
+                          stroke="#F26A00"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      )}
+                      {spark.dots.map(([cx, cy], i) => (
+                        <circle key={`${cx}-${cy}-${i}`} cx={cx} cy={cy} r="5" fill="#fff" stroke="#2B2233" strokeWidth="3" />
+                      ))}
+                    </svg>
+                  ) : (
+                    <p className={s.psub} style={{ margin: '18px 0' }}>
+                      Assim que você registrar, o gráfico com os valores reais aparece aqui.
+                    </p>
+                  )}
+                  <div className={s.srange}>
+                    {metaEntries.length > 0 ? (
+                      <span>
+                        faixa alvo (definida pelo seu médico):{' '}
+                        {metaEntries.map(([k, m]) => `${MOMENTO_LABEL[k]} ${m.min}–${m.max}`).join(' · ')}
+                      </span>
+                    ) : (
+                      <span>faixa-alvo ainda não definida pelo seu médico</span>
+                    )}
+                    <span>últimos registros</span>
+                  </div>
+                </div>
+              );
+            })()}
             {registros.length > 0 ? (
               registros.map((r) => (
                 <div key={r.id} className={s.reg}>
@@ -295,7 +351,11 @@ export function DashboardShell({
               >
                 + Registrar glicemia
               </button>
-              <a className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href="#">Exportar PDF</a>
+              {pdfHref && (
+                <Link className={`${s.btn} ${s.btnCream} ${s.btnSm}`} href={pdfHref} target="_blank">
+                  Exportar PDF
+                </Link>
+              )}
             </div>
           </div>
           <div className={s.panel}>

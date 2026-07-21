@@ -37,16 +37,6 @@ const CONTEXTOS = [
   { key: 'comida', label: 'Comida diferente', glyph: '🍽️' },
 ];
 
-// Faixas-alvo padrão por momento — o próprio médico da família pode
-// ajustar essas metas fora do diário; aqui só comparamos o valor digitado
-// com a meta já definida, não é o app "diagnosticando" o valor.
-const TARGET_DEFAULTS: Record<string, { min: number; max: number }> = {
-  jejum: { min: 70, max: 130 },
-  antes: { min: 70, max: 130 },
-  depois: { min: 70, max: 180 },
-  dormir: { min: 90, max: 150 },
-};
-
 const WHOS = [
   { key: 'Eu mesmo', label: 'Eu mesmo', glyph: 'E', color: 'var(--game-pink)' },
   { key: 'Mãe', label: 'Mãe', glyph: 'M', color: 'var(--color-purple)' },
@@ -75,10 +65,15 @@ function valueToAngle(v: number) {
   return (shifted + GAP_CENTER) % 360;
 }
 
-function classifyGlucose(v: number) {
-  if (v < 70) return { label: 'Baixo', color: 'var(--color-sun)' };
-  if (v > 180) return { label: 'Alto', color: 'var(--color-orange)' };
-  return { label: 'No alvo', color: 'var(--game-green)' };
+// Sem faixa definida pelo médico ainda, o mostrador não julga o valor —
+// só mostra o número. Com faixa, mostra cor + carinha grande, pensado pra
+// ser lido por quem ainda não sabe ler (a Marina pediu isso: "eu não educo
+// se eu não mostro").
+function classifyGlucose(v: number, target?: { min: number; max: number }) {
+  if (!target) return null;
+  if (v < target.min) return { label: 'Baixo', face: '😟', color: 'var(--color-sun)' };
+  if (v > target.max) return { label: 'Alto', face: '😅', color: 'var(--color-orange)' };
+  return { label: 'No alvo', face: '😊', color: 'var(--game-green)' };
 }
 
 export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
@@ -90,6 +85,7 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
   const [contexto, setContexto] = useState<string | null>(null);
   const [quem, setQuem] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [metas, setMetas] = useState<Record<string, { min: number; max: number }>>({});
   const dialRef = useRef<HTMLDivElement>(null);
   const draggingRef = useRef(false);
 
@@ -97,6 +93,19 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
     fetch('/api/medicamentos')
       .then((r) => (r.ok ? r.json() : { medicamentos: [] }))
       .then((data) => setMedicamentos(data.medicamentos || []))
+      .catch(() => {});
+
+    // Faixa-alvo definida pelo profissional de saúde da família — se ainda
+    // não existir, o app não inventa um valor no lugar.
+    fetch('/api/metas-glicemia')
+      .then((r) => (r.ok ? r.json() : { metas: [] }))
+      .then((data) => {
+        const map: Record<string, { min: number; max: number }> = {};
+        (data.metas || []).forEach((m: { momento: string; min: number; max: number }) => {
+          map[m.momento] = { min: m.min, max: m.max };
+        });
+        setMetas(map);
+      })
       .catch(() => {});
   }, []);
 
@@ -140,13 +149,13 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
   const coinsPreview = 15 + medsCount * 5;
   const momentLabel = MOMENTS.find((m) => m.key === rotulo)?.label || '';
   const contextoLabel = CONTEXTOS.find((c) => c.key === contexto)?.label || 'Rotina normal';
-  const dial = classifyGlucose(valor);
-  const target = TARGET_DEFAULTS[rotulo];
+  const target = metas[rotulo];
+  const dial = classifyGlucose(valor, target);
   const dialTargetNote = target
     ? valor >= target.min && valor <= target.max
       ? `dentro da meta (${target.min}–${target.max})`
       : `fora da meta desse período (meta: ${target.min}–${target.max})`
-    : '';
+    : 'Seu médico ainda não definiu a faixa-alvo pra esse momento.';
 
   const handleSave = () => {
     setLoading(true);
@@ -180,7 +189,7 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
               <div
                 ref={dialRef}
                 className={s.dial}
-                style={{ background: dial.color }}
+                style={{ background: dial ? dial.color : 'var(--color-purple-soft)' }}
                 onPointerDown={dialDown}
                 onPointerMove={dialMove}
                 onPointerUp={dialUp}
@@ -192,7 +201,14 @@ export function RegistroModal({ onSave, onClose }: RegistroModalProps) {
                 <div className={s.dialInner}>
                   <div className={s.dv}>{valor}</div>
                   <div className={s.du}>mg/dL</div>
-                  <div className={s.dtag} style={{ background: dial.color }}>{dial.label}</div>
+                  {dial && (
+                    <div className={s.dtag} style={{ background: dial.color, fontSize: '1.05em' }}>
+                      <span style={{ fontSize: '1.3em', marginRight: 4, verticalAlign: 'middle' }} aria-hidden="true">
+                        {dial.face}
+                      </span>
+                      {dial.label}
+                    </div>
+                  )}
                 </div>
               </div>
               <p className={s.dialhint}>Arraste a bolinha na borda para girar</p>
