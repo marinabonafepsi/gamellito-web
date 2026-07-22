@@ -142,7 +142,7 @@ export default function RegistrosPage() {
           onClick={() => setShowModal(true)}
           data-test="btn-novo-registro"
         >
-          ➕ Novo Registro
+          + Registrar glicemia
         </GamButton>
       </div>
 
@@ -244,7 +244,7 @@ export default function RegistrosPage() {
               Nenhum registro ainda. Comece a registrar agora!
             </p>
             <GamButton variant="primary" onClick={() => setShowModal(true)}>
-              ➕ Fazer Primeiro Registro
+              + Registrar minha primeira glicemia
             </GamButton>
           </div>
         </GamCard>

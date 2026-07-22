@@ -1,14 +1,7 @@
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
-
-const DASHBOARD_BY_ROLE: Record<string, string> = {
-  familia: '/familia/dashboard',
-  dm1: '/familia/dashboard',
-  profissional: '/profissional/dashboard',
-  educador: '/educador/dashboard',
-  instituicao: '/instituicao/dashboard',
-};
+import { DASHBOARD_BY_ROLE, type Role } from '@/lib/auth-roles';
 
 const VALID_ROLES = Object.keys(DASHBOARD_BY_ROLE);
 
@@ -45,14 +38,14 @@ export async function GET(request: Request) {
             event: 'novo_usuario',
             properties: { role: pendingRole, via: 'google' },
           });
-          return NextResponse.redirect(`${origin}${DASHBOARD_BY_ROLE[pendingRole]}`);
+          return NextResponse.redirect(`${origin}${DASHBOARD_BY_ROLE[pendingRole as Role]}`);
         }
 
         // Primeiro login via Google sem perfil escolhido: manda escolher o perfil
         return NextResponse.redirect(`${origin}/auth/select-role`);
       }
 
-      return NextResponse.redirect(`${origin}${DASHBOARD_BY_ROLE[profile.role] || '/familia/dashboard'}`);
+      return NextResponse.redirect(`${origin}${DASHBOARD_BY_ROLE[profile.role as Role] || '/familia/dashboard'}`);
     }
   }
 

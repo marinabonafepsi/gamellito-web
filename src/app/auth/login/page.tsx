@@ -8,6 +8,7 @@ import { GamButton } from '@/components/ds/GamButton';
 import { GamCard } from '@/components/ds/GamCard';
 import { PasswordInput } from '@/components/ds/PasswordInput';
 import { translateAuthError } from '@/lib/auth-errors';
+import { DASHBOARD_BY_ROLE } from '@/lib/auth-roles';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -32,17 +33,9 @@ export default function LoginPage() {
 
       // Redirect to appropriate dashboard
       const { data: { user } } = await supabase.auth.getUser();
-      const role = user?.user_metadata?.role || 'familia';
+      const role = (user?.user_metadata?.role as keyof typeof DASHBOARD_BY_ROLE) || 'familia';
 
-      const redirects: Record<string, string> = {
-        familia: '/familia/dashboard',
-        dm1: '/familia/dashboard',
-        profissional: '/profissional/dashboard',
-        educador: '/educador/dashboard',
-        instituicao: '/instituicao/dashboard',
-      };
-
-      router.push(redirects[role] || '/familia/dashboard');
+      router.push(DASHBOARD_BY_ROLE[role] || '/familia/dashboard');
     } catch (err) {
       setError(err instanceof Error ? translateAuthError(err.message) : 'Erro ao fazer login');
     } finally {
@@ -58,7 +51,7 @@ export default function LoginPage() {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     });
-    if (oauthError) setError(oauthError.message);
+    if (oauthError) setError(translateAuthError(oauthError.message));
   };
 
   return (
