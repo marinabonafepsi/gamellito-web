@@ -38,6 +38,8 @@ export default function LojaPage() {
   const [loading, setLoading] = useState(true);
   const [comprando, setComprando] = useState<string | null>(null);
   const [tab, setTab] = useState<'recompensas' | 'produtos'>('recompensas');
+  const [erro, setErro] = useState('');
+  const [itemComprado, setItemComprado] = useState<string | null>(null);
   const supabase = createClientComponentClient();
 
   useEffect(() => {
@@ -86,10 +88,10 @@ export default function LojaPage() {
   };
 
   const handleComprar = async (item: Item) => {
+    setErro('');
+
     if (moedas < item.custo_moedas) {
-      alert(
-        `Você precisa de ${item.custo_moedas} moedas, tem apenas ${moedas}`
-      );
+      setErro(`Você precisa de ${item.custo_moedas} moedas — tem ${moedas} por enquanto.`);
       return;
     }
 
@@ -112,21 +114,16 @@ export default function LojaPage() {
         inv.set(item.id, { item_id: item.id, quantidade: 1 });
         setInventario(inv);
 
-        // Celebration
-        showCelebration(item.nome);
+        setItemComprado(item.nome);
       } else {
-        alert('Erro ao comprar item');
+        setErro('Não foi possível trocar agora. Tenta de novo em instantes.');
       }
     } catch (error) {
       console.error('Error buying item:', error);
-      alert('Erro ao comprar item');
+      setErro('Não foi possível trocar agora. Tenta de novo em instantes.');
     } finally {
       setComprando(null);
     }
-  };
-
-  const showCelebration = (itemNome: string) => {
-    alert(`🎉 Parabéns! Você comprou: ${itemNome}`);
   };
 
   const getTypeEmoji = (tipo: string) => {
@@ -191,6 +188,16 @@ export default function LojaPage() {
             Produtos · loja física
           </button>
         </div>
+
+        {erro && (
+          <div
+            onClick={() => setErro('')}
+            style={{ cursor: 'pointer' }}
+            className="bg-game-red/10 border-2 border-game-red rounded-[16px] p-3 text-game-red text-sm font-bold mb-5"
+          >
+            {erro}
+          </div>
+        )}
 
         {tab === 'produtos' && <ProdutosFisicosTab />}
 
@@ -260,6 +267,24 @@ export default function LojaPage() {
           </>
         )}
       </div>
+
+      {itemComprado && (
+        <div className="reward-overlay" onClick={() => setItemComprado(null)}>
+          <div className="reward-card" onClick={(e) => e.stopPropagation()}>
+            <img src="/assets/gamellito-contente.svg" alt="" width={130} height={130} className="reward-icon" />
+            <h3>Item resgatado!</h3>
+            <p className="reward-coins">{itemComprado}</p>
+            <p className="reward-note">Já foi pro seu inventário. Bora aproveitar!</p>
+            <button
+              className="btn btn-orange"
+              style={{ padding: '9px 16px', fontSize: 13.5, boxShadow: '3px 3px 0 #2b2233' }}
+              onClick={() => setItemComprado(null)}
+            >
+              Fechar
+            </button>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </>

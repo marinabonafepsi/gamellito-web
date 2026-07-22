@@ -264,6 +264,20 @@ export function PerfilPage({ voltarHref }: PerfilPageProps) {
         </GamButton>
       </GamCard>
 
+      {(role === 'familia' || role === 'dm1') && (
+        <GamCard surface="white" className="mb-4">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h2 className="font-display font-bold text-ink mb-1">Medicamentos</h2>
+              <p className="text-ink/60 text-sm">Posologia atual: nomes, doses e horários.</p>
+            </div>
+            <Link href="/familia/medicamentos" className="btn btn-cream !py-2 !px-4 text-sm font-display flex-none">
+              Abrir
+            </Link>
+          </div>
+        </GamCard>
+      )}
+
       {role === 'dm1' && (
         <GamCard surface="cream" className="mb-4">
           <h2 className="font-display font-bold text-ink mb-1">Vincular com a família</h2>
